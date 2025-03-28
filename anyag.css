@@ -113,7 +113,7 @@ div.kepsor figure {
 }
 
 .feladatextra {
-    background-image: linear-gradient(to right, #062f4f, #540054);
+    background-image: linear-gradient(to right, #062f4f, #800080);
     color: white;
     padding: 2%;
     margin: 10% 0 0 0;
@@ -121,7 +121,7 @@ div.kepsor figure {
 }
 
 .megjegyzes {
-    background-image: linear-gradient(to right, #8cbbf4, #cbe3ff);
+    background-image: linear-gradient(to right, #8cbbf4, #4484ce);
     padding: 2%;
     border-radius: 10px;
     margin: 2% 0;
@@ -171,13 +171,17 @@ pre code {
     color: rgb(241, 241, 241);
 }
 
+pre.hidden {
+    display: none;
+}
+
 .kodkiemeles {
     font-family: 'Courier New', Courier, monospace;
     background-color: #800080;
 }
 
 details {
-    background-image: linear-gradient(to right, #2f76c6, #4c014c);
+    background-image: linear-gradient(to right, #4484ce, #800080);
     color: white;
     padding: 2%;
     border-radius: 10px;
@@ -216,20 +220,5 @@ details:hover summary{
         width: 95%;
         max-width: none;
         margin: 2% 0 2% 0;
-    }
-}
-
-@media screen and (max-width: 800px) {
-    div.kepsor figure {
-        width: 70%;
-    }
-}
-
-@media screen and (max-width: 500px) {
-    .anyag {
-        width: 90%;
-    }
-    .utmutato {
-        width: 90%;
     }
 }
