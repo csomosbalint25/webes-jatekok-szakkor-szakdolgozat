@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Emoji Pong - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Emoji Pong 😎</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Tudtad, hogy ha rákoppintasz az Instagramon&reg; egy üzenetben elküldött emojira, akkor elindul egy játék? Ma ezt <b>Pong-típusú játékot</b> készítheted el.</p>
+            
+            <a href="../7 Emoji Pong/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+            
+            <h3>HTML</h3>
+
+            <p>Induljunk ki a már jól ismert alapstruktúrából, azonban a canvas szélességét és magasságát úgy határozzuk meg, hogy egy <b>keskeny függőleges alakzat</b>ot kapjunk, ami hasonlít egy mobiltelefon kijelzőjére!</p>
+
+            <p class="feladat">Látogass el a <a href="https://viewportsizer.com/" target="_blank">viewportsizer.com</a> oldalra, és tekintsd meg az aktuális eszközöd <b>kijelzőjének méretét</b>!<br>Lépj át a <b>Devices</b> menüpontra, hogy felfedezd az egyéb eszközök kijelzőméretét!</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/pont-viewportsizer.png">
+                    <figcaption>Az aktuális eszközméret</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/pont-viewportsizer-devices.png">
+                    <figcaption>Különböző eszközök kijelzőjének szélessége és magassága</figcaption>
+                </figure>
+            </div>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Emoji Pong&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;style&gt;
+        canvas{
+            border: 1px solid black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;Emoji Pong&lt;/h1&gt;
+    &lt;!--original: &lt;canvas width="720" height="1600"&gt;&lt;/canvas&gt;--&gt;
+    &lt;canvas width="244" height="530"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            <h3>JavaScript</h3>
+
+            <p>Töltsük le a <a href="../7 Emoji Pong kiindulás/index.js">kiindulófájlt</a> és nézzük meg, mely kódrészek állnak rendelkezésünkre és melyeket kell még nekünk megírni!</p>
+
+            <h4>Időalapú animációs ciklus - ismétlés</h4>
+            
+            <p>Ahogy azt a Szent Mihály napi terelést szimuláló játék kapcsán említettük, az egyes számítógépek más-más erősségűek, sebességűek és néha akadozhatnak. Játék közben ezek a <b>megakadások</b> zavaróak lehetnek, de szerencsére van rá <b>megoldás</b>!</p>
+
+            <p>Biztosan megfigyelted már internetes játékoknál, hogy hiába "fagyott le" a képernyő egy időre, amikor helyreállt, a karakterek a megfelelő helyen jelentek meg újra, vagyis nem ott, ahol megálltak. Vegyünk egy példát.</p>
+            
+            <p>Képzelj el egy autót, ami a játéktér bal szélétől tart a jobb széle felé egyenletes sebességgel. Ehhez 5 másodpercre van szüksége. Indulás után 1 másodperccel lefagy a képernyő és az autó egy helyben marad a képernyőn. Azonban 2 másodperc múlva helyreáll a játék. Hol van most az autó? Erre kétféle válasz adható. Vagy onnan folytatja az útját, ahol megakadt (ahol 1 mp elteltével járt), vagy onnan, ahol lennie kellene az egyenletes sebességéből adódóan (ahol 3 mp elteltével járna). A kettő közül egyértelműen a második adja a jó felhasználói élményt. Ez annak köszönhető, hogy a <b>játékfejlesztők</b> a karakterek mozgását <b>az előző frissítés óta eltelt időtől teszik függővé</b>.</p>
+
+            <p>Mit jelent ez? Röviden azt, hogy kiszámoljuk, mennyi idő telt el két képernyőfrissítés között, majd ezzel az értékkel beszorozzuk a szereplők mozgását.</p>
+            
+            <p>Elsőként, fontos tudni, hogy a <span class="kodreszlet">performance.now()</span> paranccsal lekérdezhetjük, mennyi idő telt el a játék elindítása óta.</p>
+
+            <p>Másodsorban, fontos tárolnunk az előző képkocka óta eltelt időt mp-ben, amihez az animációs ciklus előtt el kell tárolnunk az <span class="kodreszlet">előzőIdő</span>t, majd minden ciklusban meghatározzuk az <span class="kodreszlet">aktuálisIdő</span>t is. Ebből számoljuk ki a delta time-ot, röviden <span class="kodreszlet">dt</span>-t. Fontos gondoskodni arról, hogy ezután az <span class="kodreszlet">előzőIdő</span> lesz az <span class="kodreszlet">aktuálisIdő</span>.</p>
+
+            <pre>
+                <code>
+/* === ANIMÁCIÓS CIKLUS === */
+
+<span class="kodkiemeles">let előzőIdő = performance.now()</span>
+
+function következő() {
+    <span class="kodkiemeles">let aktuálisIdő = performance.now()
+    let dt = (aktuálisIdő - előzőIdő) / 1000 // az előző képkocka óta eltelt idő mp-ben
+    előzőIdő = aktuálisIdő</span>
+    frissítés(<span class="kodkiemeles">dt</span>)
+    rajzolás()
+    requestAnimationFrame(következő)
+}
+
+következő()
+                </code>
+            </pre>
+
+
+            <h4>Objektumok (<span class="kodreszlet">játékos</span> és <span class="kodreszlet">emoji</span>) létrehozása</h4>
+
+            <p>A <span class="kodreszlet">játékos</span> szereplőt fogjuk tudni irányítani, amivel játékban kell tartani az <span class="kodreszlet">emoji</span>t. Mindkét szereplő adatait (tulajdonságait) zárjuk egységbe, vagyis objektumként tároljuk el a szereplőket! Az ütközés vizsgálata miatt mindegyiket a téglalap tulajdonságaival (<span class="kodreszlet">x</span>, <span class="kodreszlet">y</span>, <span class="kodreszlet">szélesség</span>, <span class="kodreszlet">magasság</span>) írjuk le! A szereplők tulajdonságainak értékét az alábbiaknak megfelelően állítsuk be:</p>
+
+            <p><span class="kodreszlet">játékos</span></p>
+            <ul>
+                <li>vízszintesen középről induljon</li>
+                <li>függőlegesen alul helyezkedjen el (pl. 500px)</li>
+                <li>30px-es szélességgel és</li>
+                <li>20px-es magassággal.</li>
+            </ul>
+
+            <p><span class="kodreszlet">emoji</span></p>
+            <ul>
+                <li>vízszintesen középről induljon</li>
+                <li>függőlegesen középről induljon</li>
+                <li>30px-es szélességgel és</li>
+                <li>30px-es magassággal, valamint</li>
+                <li>vízszintes sebessége legyen véletlen 50 és 100 között</li>
+                <li>függőleges sebessége legyen véletlen 100 és 150 között</li>
+            </ul>
+
+            <p><span class="kodreszlet">gomb</span> - Már kész. Ha a játéknak vége, akkor:</p>
+            <ul>
+                <li>vízszintesen középen,</li>
+                <li>függőlegesen alul jelenik meg</li>
+                <li>100px-es szélességgel és</li>
+                <li>40px-es magassággal.</li>
+            </ul>
+
+            <p>További változók:</p>
+
+            <ul>
+                <li><span class="kodreszlet">játék</span>: logikai változó annak tárolására, hogy megy-e a játék (ha megy, akkor igaz)</li>
+                <li><span class="kodreszlet">rekord</span>: a legmagasabb pont tárolására szolgáló változó</li>
+                <li><span class="kodreszlet">pont</span>: az aktuális játék aktuális pontszámát nyilvántartó változó</li>
+                <li><span class="kodreszlet">elteltIdő</span>: a játék kezdete óta eltelt idő mp-ben, egészre kerekítve (nem egyezik meg a <span class="kodreszlet">dt</span>-vel)</li>
+            </ul>
+
+            <h4>A <span class="kodreszlet">rajzolás()</span> függvény kidolgozása</h4>
+
+            <p>A játéknak alapvetően két megjelenése van: (1) a <b>játék közbeni</b> megjelenés és a (2) <b>játék végét</b> jelző megjelenés. Ezért a legtöbb megjelenési beállítás a <span class="kodreszlet">játék</span> nevű logikai változótól függ. Például, ha a <span class="kodreszlet">játék</span> <b>igaz</b>, akkor a háttér búza (<span class="kodreszlet">"wheat"</span>) színű, különben lila-rózsaszín színátmenetes.</p>
+
+            <p class="feladat"><b>✅Feladat</b><br>Alakítsuk ki a játék közbeni hátteret a fenti leírás alapján, valamint jelenítsük meg a <span class="kodreszlet">játékos</span>t és az <span class="kodreszlet">emoji</span>t! Utóbbihoz importáljuk a <span class="kodreszlet">cool.png</span> képet!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+/* === ÁLLAPOTTÉR === */
+
+/*Konstansok*/
+<span class="kodkiemeles">const emojikép = new Image();
+emojikép.src = 'cool.png';</span>
+
+/*Változók*/
+                    </code>
+                </pre>
+
+                <pre>
+                    <code>
+function rajzolás() {
+    // háttér
+    if(játék){
+        <span class="kodkiemeles">ctx.fillStyle = 'wheat';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);</span>
+    } else {
+        // Átmenet előállítása
+        const átmenet=ctx.createLinearGradient(0, 0, 240, 533);
+        átmenet.addColorStop(0, "darkOrchid");
+        átmenet.addColorStop(1, "deepPink");
+
+        // Téglalap kitöltése az átmenettel
+        ctx.fillStyle = átmenet;
+        ctx.fillRect(0,0, canvas.width, canvas.height);
+    }
+    
+    // játékos
+    if(játék) {
+        <span class="kodkiemeles">ctx.fillStyle = 'black';
+        ctx.fillRect(játékos.x, játékos.y, játékos.szélesség, játékos.magasság);</span>
+    }
+
+    ...
+
+    // emoji
+    <span class="kodkiemeles">ctx.drawImage(emojikép, emoji.x, emoji.y, emoji.szélesség, emoji.magasság);</span>
+}
+                    </code>
+                </pre>
+            </details>
+
+            <p>A feladat elvégzése után a következőt kell látnunk:</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/emoji-kirajzolas-hatter-jatekos-emoji.png">
+                    <figcaption>Az aktuális állapot a háttér beállítása, valamint a <span class="kodreszlet">játékos</span> és az <span class="kodreszlet">emoji</span> szereplők kirajzolása után</figcaption>
+                </figure>
+            </div>
+
+            <h4>Az <span class="kodreszlet">emoji</span> mozgatása</h4>
+
+            <p>Fentebb, az <span class="kodreszlet">emoji</span> objektum kialakításakor hozzáadtunk egy <span class="kodreszlet">sebX</span> és egy <span class="kodreszlet">sebY</span> adattagot (tulajdonságot, összetevőt, stb.), ami az emoji vízszintes és függőleges elmozdulásának mértékét adja meg. Ha csak az egyiket adnánk meg, akkor csak vízszintesen vagy függőlegesen mozdulna el az <span class="kodreszlet">emoji</span>, de ha mindkettőt változtatjuk, akkor bármilyen irányba képes haladni a szereplő. Számunkra ez lesz az ideális, mivel az emoji mozgása véletlenszerű kell, hogy legyen. Forduljunk most, tehát a <span class="kodreszlet">frissítés(dt)</span> függvényhez és mozdítsuk el az <span class="kodreszlet">emoji</span>t!</p>
+
+            <p>A szereplőket (így az <span class="kodreszlet">emoji</span>t is) az <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> pozíciója alapján rajzoljuk ki, így ezeket az adattagokat kell módosítani a mozgatás érdekében. Erre hoztuk létre a <span class="kodreszlet">sebX</span> és a <span class="kodreszlet">sebY</span> változókat: ezeknek az értékével mozdítjuk el az <span class="kodreszlet">emoji</span>t:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    //gyorsabb mozgás
+    
+
+    // emoji mozgása
+    <span class="kodkiemeles">emoji.y += emoji.sebY * dt;</span>
+    
+    <span class="kodkiemeles">emoji.x += emoji.sebX * dt;</span>
+        
+
+    // ütközés
+    
+
+    // játék vége
+    
+}
+                </code>
+            </pre>
+
+            <p>Sikerült megoldani az <span class="kodreszlet">emoji</span> mozgatását, de ennek még vannak hiányosságai, mivel elhagyja a játékteret, nem pattan vissza a játéktér széléről.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/emoji-jatekter-elhagyasa-jobb-oldalon.png">
+                    <figcaption>Az <span class="kodreszlet">emoji</span> elhagyja a játékteret a jobb oldalon</figcaption>
+                </figure>
+            </div>
+
+            <p>Gondoskodjunk arról, hogy az <span class="kodreszlet">emoji</span> ne mehessen ki a játéktér jobb és bal oldalán, valamint felül. (Alul elhagyhatja a játékteret, ez alapján lesz vége a játéknak.)</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    //gyorsabb mozgás
+    
+
+    // emoji mozgása
+    emoji.y += emoji.sebY * dt;
+    <span class="kodkiemeles">if(emoji.y &lt; 0) {
+        emoji.y = 1;
+        emoji.sebY *= (-1);
+    }</span>
+    emoji.x += emoji.sebX * dt;
+    <span class="kodkiemeles">if(emoji.x > canvas.width - emoji.szélesség) {
+        emoji.sebX *= (-1);
+    }
+    if(emoji.x &lt; 0) {
+        emoji.sebX *= (-1);
+    }</span>
+
+    // ütközés
+    
+
+    // játék vége
+    
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/emoji-visszapattan-jobb-oldalrol-1.png">
+                    <figcaption>Az <span class="kodreszlet">emoji</span> a játéktér jobb oldala felé tart</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/emoji-visszapattan-jobb-oldalrol-2.png">
+                    <figcaption>Az <span class="kodreszlet">emoji</span> visszapattan a játéktér jobb oldaláról</figcaption>
+                </figure>
+            </div>
+
+            <h4>A <span class="kodreszlet">játékos</span> mozgatása az egérmutató pozíciója alapján</h4>
+
+            <p>A Meghívó c. játéknál már megoldottuk az egérmutató pozíciójának lekérdezését - oda generáltunk pontot, ahol az egérmutató a kattintás pillanatában volt. Most annyi módosításra lesz szükség, hogy a <span class="kodreszlet">játékos</span>t kell az egérmutatóhoz tenni. Ezt azonban csak akkor tegyük meg, ha még tart a játék és az egérmutató a játéktéren van. Ezek alapján egészítsük ki a <span class="kodreszlet">"mousemove"</span> eseményt.</p>
+
+            <pre>
+                <code>
+/* === ESEMÉNYEK === */
+
+// játékos mozgatása egérrel
+document.addEventListener('mousemove', function(e) {
+    <span class="kodkiemeles">if(játék && e.offsetX &lt; canvas.width && e.offsetX > 0) {
+        játékos.x = e.offsetX - játékos.szélesség / 2;
+    }</span>
+})
+...
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/emoji-jatekos-mozgatasa-1.png">
+                    <figcaption>A <span class="kodreszlet">játékos</span> követi az egérmutatót (bal oldalon)</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/emoji-jatekos-mozgatasa-2.png">
+                    <figcaption>A <span class="kodreszlet">játékos</span> követi az egérmutatót (középen)</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/emoji-jatekos-mozgatasa-3.png">
+                    <figcaption>A <span class="kodreszlet">játékos</span> követi az egérmutatót (jobb oldalon)</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/emoji-jatekos-mozgatasa-4.png">
+                    <figcaption>Amikor az egérmutató elhagyja a játékteret valamelyik oldalon, a <span class="kodreszlet">játékos</span> megáll.</figcaption>
+                </figure>
+            </div>
+
+            <h4>Az <span class="kodreszlet">emoji</span> játéktéren tartása</h4>
+
+            <p>Már mozog az <span class="kodreszlet">emoji</span>nk, és tudjuk irányítani a <span class="kodreszlet">játékos</span>t. Adja magát a következő lépés, az <span class="kodreszlet">emoji</span> levegőben tartása.</p>
+
+            <p>Ez nem más, mint az <span class="kodreszlet">emoji</span> irányának (függőleges sebességének) megfordítása, vagyis <span class="kodreszlet">-1</span>-gyel való megszorzása akkor, ha az a <span class="kodreszlet">játékos</span>sal ütközik. Ekkor kapjunk egy pontot is!</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    //gyorsabb mozgás
+    
+
+    // emoji mozgása
+    emoji.y += emoji.sebY * dt;
+    if(emoji.y &lt; 0) {
+        emoji.y = 1;
+        emoji.sebY *= (-1);
+    }
+    emoji.x += emoji.sebX * dt;
+    if(emoji.x > canvas.width - emoji.szélesség) {
+        emoji.sebX *= (-1);
+    }
+    if(emoji.x &lt; 0) {
+        emoji.sebX *= (-1);
+    }
+
+    // ütközés
+    <span class="kodkiemeles">if(ütköznek(emoji, játékos)) {
+        emoji.sebY *= (-1);
+        pont += 1;
+    }</span>
+
+    // játék vége
+    
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/emoji-visszapattan-jatekosrol-1.png">
+                    <figcaption>Az <span class="kodreszlet">emoji</span> jobbra lefelé mozog a <span class="kodreszlet">játékos</span> felé</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/emoji-visszapattan-jatekosrol-2.png">
+                    <figcaption>Az <span class="kodreszlet">emoji</span> ütközik a <span class="kodreszlet">játékos</span>sal</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/emoji-visszapattan-jatekosrol-3.png">
+                    <figcaption>Az ütközés után az <span class="kodreszlet">emoji</span> függőleges sebessége (és így az iránya is) megváltozik: jobbra fölfelé halad tovább</figcaption>
+                </figure>
+            </div>
+
+            <h4>A játék vége</h4>
+
+            <p>A játéknak akkor van vége, ha az <span class="kodreszlet">emoji</span>t nem tudjuk visszaütni, vagyis az <b>elhalad mellettünk</b>. Már akkor is vége van a játéknak, ha az <span class="kodreszlet">emoji</span> alja a <span class="kodreszlet">játékos</span> tetejénél lentebb megy, más szóval a <span class="kodreszlet">játékos</span> legfelső pontja magasabban van, mint az <span class="kodreszlet">emoji</span> legalsó pontja. Világos, hogy ez csak akkor fordulhat elő, ha vízszintesen nincs köztük átfedés, különben visszapattanna az <span class="kodreszlet">emoji</span>. Emlékezzünk vissza, hogy milyen alakzatként tároljuk az <span class="kodreszlet">emoji</span>t és a <span class="kodreszlet">játékos</span>t: téglalapokként. Az alábbi képsorozaton a piros szaggatott téglalapok jelzik az objektumok által leírt téglalapokat, vagyis a szereplők tényleges kiterjedését. A zöld sáv az <span class="kodreszlet">emoji</span> és a <span class="kodreszlet">játékos</span> objektum közötti függőleges távolságot jelenti. A zöld sáv jelenléte egyben azt is jelzi, hogy még menthető az <span class="kodreszlet">emoji</span>.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/emoji-elmulaszt-1.png">
+                    <figcaption>Az <span class="kodreszlet">emoji</span> lefelé mozog</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/emoji-elmulaszt-2.png">
+                    <figcaption>Az <span class="kodreszlet">emoji</span> továbbra is lefelé mozog. Ha nem toljuk alá a <span class="kodreszlet">játékos</span>t, akkor alul elhagyja a játékteret.</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/emoji-elmulaszt-3.png">
+                    <figcaption>Az <span class="kodreszlet">emoji</span> alja lentebb került, mint a <span class="kodreszlet">játékos</span> teteje, ezért vége a játéknak</figcaption>
+                </figure>
+            </div>
+
+            <p>A játék végének ellenőrzéséhez (vagyis az ütközés elmulasztásához) tudnunk kéne, mi az <span class="kodreszlet">emoji</span> aljának pozíciója. Mivel ismerjük ezeknek a téglalapoknak a bal felső sarkát (<span class="kodreszlet">x</span>, <span class="kodreszlet">y</span>), valamint a <span class="kodreszlet">szélesség</span>ét és a <span class="kodreszlet">magasság</span>át, ez könnyen kiszámítható.</p>
+
+            <p>A játék végét tároljuk el a <span class="kodreszlet">játék</span> nevű változóban (állítsuk azt hamisra)! Továbbá, ha több pontot szereztünk ebben a menetben, mint valaha, akkor a <span class="kodreszlet">rekord</span>ot állítsuk át az aktuálisan szerzett <span class="kodreszlet">pont</span>ra.</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    //gyorsabb mozgás
+    
+
+    // emoji mozgása
+    emoji.y += emoji.sebY * dt;
+    if(emoji.y &lt; 0) {
+        emoji.y = 1;
+        emoji.sebY *= (-1);
+    }
+    emoji.x += emoji.sebX * dt;
+    if(emoji.x > canvas.width - emoji.szélesség) {
+        emoji.sebX *= (-1);
+    }
+    if(emoji.x &lt; 0) {
+        emoji.sebX *= (-1);
+    }
+
+    // ütközés
+    if(ütköznek(emoji, játékos)) {
+        emoji.sebY *= (-1);
+        pont += 1;
+    }
+
+    // játék vége
+    <span class="kodkiemeles">if(emoji.y + emoji.magasság > játékos.y) {
+        játék = false;
+        if(pont > rekord) {
+            rekord = pont;
+        }
+    }</span>
+}
+                </code>
+            </pre>
+
+            <p>A játék végén az <span class="kodreszlet">emoji</span> kiúszik a játéktérről alul, a háttér a színátmenetesre vált, és amennyiben rekordot döntöttünk, azt is látjuk a jobb felső sarokban:</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/emoji-vege-kep-1.png">
+                    <figcaption>A játék végén megjelenő grafika</figcaption>
+                </figure>
+            </div>
+
+            <h4>A <span class="kodreszlet">pont</span> kiírása</h4>
+
+            <p>Az aktuális pontot nagy betűkkel középre írjuk ki, az <span class="kodreszlet">emoji</span> mögé. Azonban fontos látni, hogy minél többjegyű a pontszám, annál balrább kell kezdeni a kiírást, hogy látszólag továbbra is középen maradjon a szöveg. Egy számjegynél a szöveg <span class="kodreszlet">x</span> pozíciója <span class="kodreszlet">canvas.width / 2 - 25</span>, két számjegynél <span class="kodreszlet">canvas.width / 2 - 60</span>. A felhasználóbarát, ergonomikus és esztétikus megjelenítés miatt a pontszám színét a háttértől függően (vagyis a <span class="kodreszlet">játék</span> változó értékétől függően) módosítanunk kell.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ...
+
+    // játékos
+    ...
+
+    // ÚJRA gomb
+    ...
+
+    // újra szöveg
+    ...
+    
+    // rekord
+    ...
+
+    // pont
+    <span class="kodkiemeles">ctx.font = '100px Arial';
+    if(játék){
+        ctx.fillStyle = '#BBA156';
+    } else {
+        ctx.fillStyle = 'lightgray';
+    }
+    if(pont &lt; 10) {
+        ctx.fillText(pont, canvas.width / 2 - 25, canvas.height / 2);
+    } else {
+        ctx.fillText(pont, canvas.width / 2 - 60, canvas.height / 2);
+    }</span>
+
+    // emoji
+    ...
+}
+                </code>
+            </pre>
+
+            <h4>A játék újrakezdése</h4>
+
+            <p>A játékot úgy kezdhetjük újra, hogy megjelenítünk egy "gombot", amire teszünk egy "ÚJRA" feliratot, és ha rákattintunk, akkor újraindul a játék, hogy újabb rekordokat döntsünk. A "gomb" azért van idézőjelben, mert ez nem lesz ténylegesen gomb, hanem csak egy téglalap alakú objektum (ez már létre van hozva), amire a szokásos módon elhelyezzük a feliratot, majd ellenőrizzük, hogy a kattintás pillanatában a gomb területén volt-e az egérmutató.</p>
+
+            <p>A <span class="kodreszlet">rajzolás()</span> függvényben jelenítsük meg ezt a "gombot" és a hozzá tartozó feliratot (utóbbit kb. a gomb közepére próbáljuk meg helyezni), de csak akkor, ha vége van a játéknak (vagyis a <span class="kodreszlet">játék</span> értéke hamis)! Ezzel elkészült a teljes <span class="kodreszlet">rajzolás()</span> függvény:</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    if(játék){
+        ctx.fillStyle = 'wheat';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    } else {
+        // Átmenet előállítása
+        const átmenet=ctx.createLinearGradient(0, 0, 240, 533);
+        átmenet.addColorStop(0, "darkOrchid");
+        átmenet.addColorStop(1, "deepPink");
+
+        // Téglalap kitöltése az átmenettel
+        ctx.fillStyle = átmenet;
+        ctx.fillRect(0,0, canvas.width, canvas.height);
+    }
+
+    // játékos
+    if(játék) {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(játékos.x, játékos.y, játékos.szélesség, játékos.magasság);
+    }
+
+    // ÚJRA gomb
+    if(!játék) {
+        <span class="kodkiemeles">ctx.fillStyle = 'white';
+        ctx.fillRect(gomb.x, gomb.y, gomb.szélesség, gomb.magasság);</span>
+    }
+
+    // újra szöveg
+    <span class="kodkiemeles">if(!játék){
+        ctx.font = '30px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('ÚJRA', gomb.x + gomb.szélesség / 9, gomb.y + gomb.magasság / 5 * 4);
+    }</span>
+    
+    // rekord
+    ctx.font = '10px Arial';
+    if(játék){
+        ctx.fillStyle = '#8F692A';
+    } else {
+        ctx.fillStyle = 'lightgray';
+    }
+    ctx.fillText('REKORD: ' + rekord, 170, 20);
+
+    // pont
+    ctx.font = '100px Arial';
+    if(játék){
+        ctx.fillStyle = '#BBA156';
+    } else {
+        ctx.fillStyle = 'lightgray';
+    }
+    if(pont &lt; 10) {
+        ctx.fillText(pont, canvas.width / 2 - 25, canvas.height / 2);
+    } else {
+        ctx.fillText(pont, canvas.width / 2 - 60, canvas.height / 2);
+    }
+
+    // emoji
+    ctx.drawImage(emojikép, emoji.x, emoji.y, emoji.szélesség, emoji.magasság);
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/emoji-vege-kep-gombbal-1.png">
+                    <figcaption>Az ÚJRA gomb megjelenik</figcaption>
+                </figure>
+            </div>
+
+            <p>Ugyan megjelent az ÚJRA gomb, még le kell kezelnünk a fölötte történő kattintást. A kattintás esemény már rendelkezésre áll a forráskód alján, de még nincs megfogalmazva, hogy "ha már vége a játéknak, és a gomb területén kattintunk egyet, akkor hívjuk meg a <span class="kodreszlet">kezdes()</span> függvényt". A <span class="kodreszlet">kezdes()</span> függvényben fogjuk visszaállítani a játék egyes változóit a kezdőértékekre, hogy újrainduljon a játék. Görgessünk le, tehát, a <span class="kodreszlet">kezdes()</span> függvényhez, és egészítsük ki a következőképpen:</p>
+
+            <ul>
+                <li>a <span class="kodreszlet">játékos</span>t helyezzük vissza középen alulra,</li>
+                <li>az <span class="kodreszlet">emoji</span>t helyezzük vissza a játéktér közepére, és</li>
+                <li>a sebességét ismét generáljuk lassabbra a játék elején megadott intervallumokat használva,</li>
+                <li>a <span class="kodreszlet">játék</span> változót állítsuk igazra (tudjátok, ettől függ sok más szereplő feladata és megjelenése), valamint</li>
+                <li>a <span class="kodreszlet">pont</span> és az <span class="kodreszlet">elteltIdő</span> legyen <span class="kodreszlet">0</span>.</li>
+            </ul>
+
+            <h4>A játék továbbfejlesztése - gyorsuló <span class="kodreszlet">emoji</span></h4>
+
+            <p>A feladat, hogy az <span class="kodreszlet">emoji</span> 5 mp-enként legyen gyorsabb. Onnan tudjuk, hogy eltelt 5 másodperc, hogy a játék kezdete óta eltelt idő egész másodpercre kerekítve maradék nélkül osztható öttel. Másképp fogalmazva, ha az eltelt idő 5-tel való osztási maradéka 0, akkor növeljük az emoji sebességét.</p>
+
+            <p>A sebesség növelése azonban nem teljesen triviális, ugyanis nem mindegy, hogy az <span class="kodreszlet">emoji</span> merre halad a sebességnövelés pillanatában. Ha ugyanis a sebessége pozitív, akkor növelni kell a sebességét, azonban ha a sebesség negatív, akkor tovább kell csökkenteni azt, hogy gyorsabban haladjon. A sebességet bármilyen értékkel növelhetjük attól függően, hogy mennyire szeretnénk nehéz játékot készíteni. Próbáljunk ki több sebességet is!</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    //gyorsabb mozgás
+    <span class="kodkiemeles">elteltIdő = Math.round(Math.round(performance.now()) / 1000);
+    if(elteltIdő &gt; 0 && elteltIdő % 5 == 0) {
+        if(emoji.sebX &lt; 0) { emoji.sebX -= dt * 10 } else { emoji.sebX += dt * 10 };
+        if(emoji.sebY &lt; 0) { emoji.sebY -= dt * 10} else { emoji.sebY += dt * 10 };
+    }</span>
+
+    // emoji mozgása
+    ...
+    ...
+}
+                </code>
+            </pre>
+
+            Ezzel elkészültünk a teljes játékkal, <b>gratulálok</b>! 😎
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladatok</b></p>
+                <p>Módosítsd a <span class="kodreszlet">játékos</span> szélességét és az <span class="kodreszlet">emoji</span> sebességnövelését attól függően, milyen nehéz játékot szeretnél!</p>
+                <p>Használj más emojit!</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

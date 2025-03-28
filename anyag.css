@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("alapstilus.css");
+
+div.cim {
+    background-color: rgb(245, 245, 245);
+}
+
+.anyag {
+    background-image: linear-gradient(to right, #f19f4d, #f9cf00);
+    color: white;
+}
+
+.informacio-ido, .informacio-szint {
+    background-color: #f19f4d;
+    box-shadow: inset -2px -2px 3px #ffbeac, inset 2px 2px 3px #651802;
+    color: white;
+}
+
+.kartya {
+    background-color: white;
+    border-radius: 20px;
+    padding: 2%;
+    width: 650px;
+    margin-top: 1%;
+}
+
+.utmutato {
+    width: 75%;
+    max-width: 1000px;
+    margin: 5% auto;
+    background-color: rgb(245, 245, 245);
+    border-radius: 50px;
+    position: relative;
+    padding: 5%;
+}
+
+.utmutato h2 {
+    font-size: 250%;
+    font-weight: lighter;
+    margin: 4% 0 2% 0;
+}
+
+.utmutato h3:before, .utmutato h3:after {
+    content: '🔹';
+}
+
+.utmutato h4:before {
+    content: '🔸';
+}
+
+.utmutato h3 {
+    font-size: 150%;
+    font-weight: lighter;
+    margin: 4% 0 2% 0;
+}
+
+.utmutato h4 {
+    font-weight: bold;
+    margin: 4% 0 2% 0;
+}
+
+span.kodreszlet {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: #D63384;
+}
+
+.utmutato ul, .utmutato ol {
+    margin: 3%;
+}
+
+.utmutato p {
+    margin-bottom: 2%;
+}
+
+figure {
+    margin: 0;
+    padding: 0;
+    width: 50%;
+    max-width: 700px;
+}
+
+.utmutato figure img{
+    width: 100%;
+    max-width: 700px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.utmutato figure.keskeny img {
+    max-width: 40%;
+}
+
+figure figcaption {
+    font-style: italic;
+    font-size: 90%;
+}
+
+div.kepsor {
+    margin: 2% 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+div.kepsor figure {
+    width: 30%;
+}
+
+.feladat {
+    background-image: linear-gradient(to right, #f19f4d, #f9cf00);
+    padding: 2%;
+    border-radius: 10px;
+}
+
+.feladatextra {
+    background-image: linear-gradient(to right, #062f4f, #540054);
+    color: white;
+    padding: 2%;
+    margin: 10% 0 0 0;
+    border-radius: 10px;
+}
+
+.megjegyzes {
+    background-image: linear-gradient(to right, #8cbbf4, #cbe3ff);
+    padding: 2%;
+    border-radius: 10px;
+    margin: 2% 0;
+}
+
+.anyag a {
+    width: 30%;
+}
+
+.megtekintes-gomb {
+    position: relative;
+    width: 95%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: 2% auto 0 auto;
+}
+
+.megtekintes-gomb:hover {
+    background-color: rgba(68, 132, 206, 0.1);
+    width: 95%;
+}
+
+.megtekintes-gomb p {
+    margin: 0;
+}
+
+a, a:visited {
+    text-decoration: none;
+}
+
+pre {
+    background-color: rgb(41, 41, 41);
+    padding: 2%;
+    border: 1px solid gray;
+    border-radius: 10px;
+    max-width: 70%;
+    max-height: 300px;
+    overflow-x: auto;
+    overflow-y: auto;
+    margin: 2% 0 2% 0;
+}
+
+pre code {
+    font-family: 'Courier New', Courier, monospace;
+    color: rgb(241, 241, 241);
+}
+
+.kodkiemeles {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #800080;
+}
+
+details {
+    background-image: linear-gradient(to right, #2f76c6, #4c014c);
+    color: white;
+    padding: 2%;
+    border-radius: 10px;
+    transition: linear 0.1s;
+    margin: 2% 0 2% 0;
+}
+
+summary {
+    transition: linear 0.1s;
+}
+
+details:hover summary{
+    font-weight: bold;
+}
+
+.utmutato a {
+    font-weight: bold;
+    color: #800080;
+}
+
+.utmutato a:hover {
+    color: #4484ce;
+    text-decoration: underline;
+}
+
+.utmutato a:visited {
+    color: #4484ce;
+}
+
+@media screen and (max-width: 1000px) {
+    figure {
+        width: 100%;
+    }
+
+    pre {
+        width: 95%;
+        max-width: none;
+        margin: 2% 0 2% 0;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    div.kepsor figure {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .anyag {
+        width: 90%;
+    }
+    .utmutato {
+        width: 90%;
+    }
+}

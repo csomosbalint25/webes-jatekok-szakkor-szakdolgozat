@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Hopposaurus - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Hopposaurus 🦖</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Készítsd el ezt a <b>híres webes játékot</b>, és gyakorold a <b>tömb</b>ök használatát, valamint a <b>dínók klónozását</b>! Te vajon hány <b>kaktusz</b>t tudsz átugrani úgy, hogy közben <b>gyorsul</b> a játék? Próbáld ki!</p>
+            
+            <a href="../9 Hopposaurus/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+            <h3>HTML</h3>
+
+            <p>Induljunk ki a már jól ismert alapstruktúrából, a canvas szélessége legyen <b>600 px</b>, magassága <b>400 px</b>.</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="hu"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;<span class="kodkiemeles">Hopposaurus</span>&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;style&gt;
+        canvas{
+            border: 1px solid black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;<span class="kodkiemeles">Hopposaurus</span>&lt;/h1&gt;
+    &lt;canvas width="<span class="kodkiemeles">600</span>" height="<span class="kodkiemeles">400</span>" id="vaszon"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+            
+            <h3>JavaScript</h3>
+
+            <p>Másoljuk ki az alábbi kiindulófájlt és dolgozzunk ebben.</p>
+
+            <pre>
+                <code>
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* === ÁLLAPOTTÉR === */
+
+/*Konstansok*/
+const M = 40;
+
+/*Képek*/
+let dínókép = new Image();
+dínókép.src = 'dínó.png';
+
+let kaktuszkép = new Image();
+kaktuszkép.src = 'kaktusz.png';
+
+/*Változók*/
+// dínó
+
+
+// egyéb változók
+let pont = 0;
+
+// nem eshetünk rögtön kaktuszba, ezért a játék kezdetén 10 db 0 típusú elemekkel kell feltölteni a tömböt - ciklussal is megvalósítható
+
+
+/* === ANIMÁCIÓS CIKLUS === */
+
+let előzőIdő = performance.now()
+function következő() {
+    let aktuálisIdő = performance.now()
+    let dt = (aktuálisIdő - előzőIdő) / 1000 // az előző képkocka óta eltelt idő mp-ben
+    előzőIdő = aktuálisIdő
+    frissítés(dt)
+    rajzolás()
+    requestAnimationFrame(következő)
+}
+
+következő(); // az animáció elindítása
+
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // talaj
+    ctx.fillStyle = 'gray';
+    ctx.fillRect(0, canvas.height - M, canvas.width, M);
+
+    // kaktuszok
+    
+
+    // dínó
+    
+
+    // felirat
+    ctx.font = '15px Courier New';
+    ctx.fillStyle = 'black';
+    ctx.fillText(pont, 0, 15);
+}
+
+function frissítés(dt) {
+    // dínó irányítása
+    
+
+    // ugrás
+    
+
+    // új kaktusz
+    
+
+    // kaktuszok mozgása és törlése
+
+
+    // játék vége
+    
+}
+
+/* === ESEMÉNYEK === */
+
+// lenyomott billentyűk lekérdezése
+document.addEventListener('keydown', e => {
+    billentyűk[e.key] = true;
+})
+
+document.addEventListener('keyup', e => {
+    billentyűk[e.key] = false;
+})
+
+/* === SEGÉDFÜGGVÉNYEK === */
+
+function újKaktusz() {
+    /*  - a kaktuszok nem lehetnek túl sűrűn: két kaktusz között legalább 3 üres hely legyen,
+        - maximum 2 kaktusz lehet egymás mellett, hogy át tudjuk ugrani  */
+    
+}
+
+// véletlen egész
+function véletlenEgész(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+// ütközés
+function ütköznek(téglalap1, téglalap2) {
+    return ! (
+        téglalap2.x + téglalap2.szélesség &lt;= téglalap1.x ||
+        téglalap2.y + téglalap2.magasság &lt;= téglalap1.y ||
+        téglalap2.x >= téglalap1.x + téglalap1.szélesség ||
+        téglalap2.y >= téglalap1.y + téglalap1.magasság
+    )
+}
+                </code>
+            </pre>
+            
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-kiindulas-kepernyo.png">
+                    <figcaption>A kiindulófájl futtatásának eredménye</figcaption>
+                </figure>
+            </div>
+
+            <p>A kiindulófájlban <b>rendelkezésre áll</b>:</p>
+            <ul>
+                <li>a canvas elérése,</li>
+                <li>az <span class="kodreszlet">M</span> konstans, mely a szereplők méretét és a távolságokat határozza meg,</li>
+                <li>a dínó és a kaktusz képe (<span class="kodreszlet">dínókép</span>, <span class="kodreszlet">kaktuszkép</span>),</li>
+                <li>az időalapú animációs ciklus</li>
+                <li>a háttér, a talaj és a pontszám kiírása,</li>
+                <li>a lenyomott billentyűk lekérdezése és eltárolása, valamint</li>
+                <li>egyéb segédfüggvények (<span class="kodreszlet">véletlenEgész(min, max)</span>, <span class="kodreszlet">ütköznek(téglalap1, téglalap2)</span>).</li>
+            </ul>
+
+            <p>Látszólag sok minden ki van dolgozva, de a lényegi rész, vagyis <b>a játék megalkotása még kialakításra vár</b>:</p>
+
+            <ul>
+                <li><span class="kodreszlet">dínó</span> objektum,</li>
+                <li>egyéb változók,</li>
+                <li>újabb és újabb kaktuszok generálása és mozgatása,</li>
+                <li>a <span class="kodreszlet">dínó</span> gravitációs ugrásának megírása, és</li>
+                <li>a játék végének kezelése.</li>
+            </ul>
+
+            <p>Kezdjük a játékot a <span class="kodreszlet">dínó</span>val.</p>
+
+            <h4>Dínó</h4>
+
+            <p>Hozzuk létre a <span class="kodreszlet">dínó</span> objektumot a téglalap tulajdonságaival, majd rajzoljuk ki a dínót:</p>
+            
+            <pre>
+                <code>
+/*Változók*/
+// dínó
+let dínó = {
+    x: M,
+    y: M * 6,
+    szélesség: M,
+    magasság: M
+}
+                </code>
+            </pre>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ...
+
+    // talaj
+    ...
+
+    // kaktuszok
+    
+
+    // dínó
+    <span class="kodkiemeles">ctx.drawImage(dínókép, dínó.x, dínó.y, dínó.szélesség, dínó.magasság);</span>
+
+    // felirat
+    ...
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-dino-kirajzolas.png">
+                    <figcaption>A <span class="kodreszlet">dínó</span> kirajzolása</figcaption>
+                </figure>
+            </div>
+
+            <p>A <span class="kodreszlet">dínó</span>t csak a kezdeti animáció miatt helyeztük el ilyen magasan, hogy az indulás pillanatában innen essen le a gravitáció hatásársa.</p>
+            
+            <p>Készítsük is el ezt a gravitációt!</p>
+
+            <h4>Dínó gravitáció</h4>
+
+            <p class="feladat"><b>✅Feladat</b><br>Mi történik a tollal, ha egy űrhajós a Holdon elengedi azt?</p>
+            <details>
+                <summary>Megoldás</summary>
+                <p>Ha egy űrhajós a Holdon elengedi a tollat, az a Hold gravitációjának hatására lassan elkezd esni a felszín felé. A Hold gravitációs gyorsulása körülbelül <b>1,62 m/s²</b>, ami jóval kisebb, mint a Földön (9,8 m/s²). Emiatt az esés lassabb lesz, mint amit a Földön megszoktunk.</p>
+            </details>
+
+            <div class="megjegyzes">
+                <p><b>💭Megjegyzés - Emlékeztető fizikából</b></p>
+                
+                <p>A mozgás leírásához két képletre lesz szükségünk, melyek fizikából ismerősek lehetnek.</p>
+
+                <ol>
+                    <li><b>Sebességváltozás képlete:</b></li>
+                    <p><i>v′=v+a⋅Δt</i></p>
+                    <ul>
+                        <li><b>v′</b>: az új sebesség</li>
+                        <li><b>v</b>: az előző sebesség</li>
+                        <li><b>a</b>: gyorsulás</li>
+                        <li><b>Δt</b>: eltelt idő</li>
+                    </ul>
+                    <p>Egy test új sebessége egyenlő az előző sebesség és a gyorsulás szorzata az eltelt idővel.</p>
+
+                    <li><b>Helyváltozás képlete:</b></li>
+                    <p><i>Δs=v′⋅Δt</i></p>
+                    <ul>
+                        <li><b>Δs</b>: egy test által megtett távolság</li>
+                        <li><b>v′</b>: új sebesség</li>
+                        <li><b>Δt</b>: eltelt idő</li>
+                    </ul>
+                    <p>Egy test által megtett távolság egyenlő az új sebesség és az eltelt idő szorzatával.</p>
+                </ol>
+
+                <p>Például egy test kezdetben 5 m/s sebességgel halad 2 m/s gyorsulással 1 mp-ig:</p>
+                <ul>
+                    <li><b>Sebesség:</b> v′ = 5 m/s + 2 m/s * 1 s = 7 m/s</li>
+                    <li><b>Távolság:</b> Δs = 7 m/s * 1 s = 7 m</li>
+                </ul>
+                <p>A test 7 métert tesz meg 1 mp alatt, valamint a sebessége 5 m/s-ról 7 m/s-ra növekszik.</p>
+            </div>
+
+            <p>A fenti megjegyzés alapján a <span class="kodreszlet">frissítés(dt)</span> függvényben kezelnünk kell a <span class="kodreszlet">dínó</span> esését. Azonban az ennek kiszámításához szükséges változók a <span class="kodreszlet">dínó</span> tulajdonságai, vagyis bővítenünk kell a <span class="kodreszlet">dínó</span> objektumot újabb adattagokkal: tárolnunk kell a függőleges sebességét (<span class="kodreszlet">vy</span>), valamint a függőleges gyorsulását (<span class="kodreszlet">ay</span>):</p>
+
+            <pre>
+                <code>
+/*Változók*/
+// dínó
+let dínó = {
+    x: M,
+    y: M * 6,
+    szélesség: M,
+    magasság: M,
+    <span class="kodkiemeles">vy: 0,
+    ay: 400</span>
+}
+                </code>
+            </pre>
+
+            <p>A <span class="kodreszlet">frissítés(dt)</span> függvényben már csak alkalmaznunk kell a fenti két képletet:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // dínó irányítása
+    <span class="kodkiemeles">dínó.vy = dínó.vy + dínó.ay * dt;
+    dínó.y = dínó.y + dínó.vy * dt;</span>
+
+    ...
+}
+                </code>
+            </pre>
+
+            <p>Ezzel megoldottuk a gyorsuló esést. Ez viszont olyan jól sikerült, hogy a <span class="kodreszlet">dínó</span> <b>kiesik a játéktérről</b>.</p>
+            
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-dino-kiesik-alul.png">
+                    <figcaption>A <span class="kodreszlet">dínó</span> elhagyja a játékteret alul</figcaption>
+                </figure>
+            </div>
+            
+            <p>Ezért kellene egy <b>megállási feltétel</b>: logikusan következne az a feltétel, hogy addig zuhanjon, amíg a <span class="kodreszlet">dínó</span> nem ütközik a talajjal. Ezt viszont nem tehetjük meg, mert a talajt nem téglalapként tároljuk. Marad a megállás pontjának kiszámítása:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // dínó irányítása
+    <span class="kodkiemeles">if(dínó.y + dínó.magasság &lt;= canvas.height - M) {</span>
+        // Emlékeztető fizikából: v' = v + a * dt; illetve ds = v' * dt.
+        dínó.vy = dínó.vy + dínó.ay * dt;
+        dínó.y = dínó.y + dínó.vy * dt;
+    <span class="kodkiemeles">}</span>
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-dino-megall.png">
+                    <figcaption>A <span class="kodreszlet">dínó</span> megáll amint eléri a talajt</figcaption>
+                </figure>
+            </div>
+
+            <h4>A dínó ugrik</h4>
+
+            <p>A ugrás nem más, mint a <span class="kodreszlet">dínó</span> függőleges sebességének (<span class="kodreszlet">vy</span>) átírása egy negatív értékre, ami egy gomblenyomásra (pl. szóköz) történik. A lenyomott és felengedett billentyűk tárolását kezelő függvények már rendelkezésre állnak, de a <span class="kodreszlet">billentyűk[]</span> tömb még hiányzik. Honnan tudjuk ezt? A console-on látható hibaüzenetből: amikor lenyomunk egy billentyűt, a böngésző figyelmeztet.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-billentyuk-hianyzik-a-tomb.png">
+                    <figcaption>Bármelyik gomb lenyomására hibaüzenetet kapunk a <span class="kodreszlet">billentyűk[]</span> tömb hiányáról</figcaption>
+                </figure>
+            </div>
+                
+            <p>Hozzuk létre ezt a tömböt az <span class="kodreszlet">// egyéb változók</span>nál az <span class="kodreszlet">ugrásmagasság</span> változóval együtt. Ezutóbbi jelenti azt az értéket, amire átírjuk a <span class="kodreszlet">dínó</span> függőleges sebességét.</p>
+
+            <pre>
+                <code>
+// egyéb változók
+<span class="kodkiemeles">let billentyűk = [];
+let ugrásmagasság = 300;</span>
+let pont = 0;
+                </code>
+            </pre>
+
+            <p>A szóköz gomb lenyomására írjuk át a függőleges sebességet -300-ra, vagyis az <span class="kodreszlet">ugrásmagasság</span> -1-szeresére. Ha most kipróbáljuk a játékot, még nem fog ugrani a <span class="kodreszlet">dínó</span>, mert a lába átlóg azon a határon, aminél meg kell állnia. Emlékeztetőül, a megállás feltétele: <span class="kodreszlet">if(dínó.y + dínó.magasság &lt;= canvas.height - M)</span>.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-ugras-atlog.png">
+                    <figcaption>A <span class="kodreszlet">dínó</span> lába és a talaj átfedésben van, ezért nem ugrik</figcaption>
+                </figure>
+            </div>
+
+            <p>Tehát a megállási feltétel érvényben van a szóköz lenyomásának pillanatában, ezért először ki kell mozgatnunk onnan a <span class="kodreszlet">dínó</span>t:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // dínó irányítása
+    ...
+    
+    // ugrás
+    <span class="kodkiemeles">if(billentyűk[' ']) {
+        dínó.y = canvas.height - M - dínó.magasság;
+        dínó.vy = -ugrásmagasság;
+    }</span>
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-ugras-kihoz.png">
+                    <figcaption>A <span class="kodreszlet">dínó</span>t a talajjal egy vonalba mozgatjuk</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/hoppo-ugras-ugrik.png">
+                    <figcaption>A <span class="kodreszlet">dínó</span> ugrik, majd visszaesik a talajra.</figcaption>
+                </figure>
+            </div>
+
+            <p>Most nyomjuk le egymás után többször a szóköz gombot úgy, hogy <b>ne várjuk meg</b>, amíg a <span class="kodreszlet">dínó</span> visszaesik a talajra. Azt tapasztaljuk, hogy a szóköz lenyomására a szereplőnk visszateleportál a talaj szintjére és újra megkezdi az ugrás műveletet. Természetesen ez nem életszerű - csak akkor tudunk ugrani, ha a lábunk a talajon van, ezért be kell vezetnünk egy újabb logikai változót annak tárolására, hogy éppen ugrunk-e (a levegőben vagyunk-e). Legyen ez az <span class="kodreszlet">ugrik</span> változót, melyet hozzunk létre az <span class="kodreszlet">// egyéb változók</span> között <span class="kodreszlet">false</span> értékkel és állítsunk <span class="kodreszlet">true</span>-ra az ugrás művelet megkezdésekor. Az ugrás műveletet csak akkor kezdjük meg, ha az <span class="kodreszlet">ugrik</span> hamis. Ebből következik, hogy amikor leértünk a talajra, állítsuk vissza <span class="kodreszlet">false</span>-ra, hogy megkezdhessük a következő ugrást.</p>
+
+            <pre>
+                <code>
+// egyéb változók
+let billentyűk = [];
+let ugrásmagasság = 300;
+<span class="kodkiemeles">let ugrik = false;</span>
+let pont = 0;
+                </code>
+            </pre>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // dínó irányítása
+    if(dínó.y + dínó.magasság &lt;= canvas.height - M) {
+        // Emlékeztető fizikából: v' = v + a * dt; illetve ds = v' * dt.
+        dínó.vy = dínó.vy + dínó.ay * dt;
+        dínó.y = dínó.y + dínó.vy * dt;
+    } <span class="kodkiemeles">else {
+        ugrik = false;
+    }</span>
+    
+    // ugrás
+    if(billentyűk[' ']) {
+        <span class="kodkiemeles">if(!ugrik) {
+            ugrik = true;</span>
+            dínó.y = canvas.height - M - dínó.magasság;
+            dínó.vy = -ugrásmagasság;
+        <span class="kodkiemeles">}</span>
+    }
+
+    ...
+}
+                </code>
+            </pre>
+
+            <h4>Kaktuszok</h4>
+
+            <p>A kaktuszok folyamatosan érkeznek úgy, ahogy az almák az Almaszüret feladatban. A különbség csak a mozgásukban van: jobbról balra jönnek, mind ugyanabban a magasságban (a talaj szintjén), futószalagszerűen.</p>
+            
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-kaktusz-futoszalag-abra.png">
+                    <figcaption>A kirajzolt tömb ("futószalag") kaktuszokkal</figcaption>
+                </figure>
+            </div>
+
+            <p>A kaktszok szélessége a <span class="kodreszlet">dínó</span> szélességének fele, de minden kaktusz <span class="kodreszlet">M</span> (40 px) távolságra van egymástól. Vagyis a 600 px széles játéktéren egyszerre 15 kaktusz fér el. Képzeljük el, hogy ez a 15 elem hosszú tömb elkezd mozogni balra. Az első elem szépen lassan kiúszik, de a jó felhasználói élmény érdekében már látnunk kell a következőt a sor végén szépen beúszni. Ezért a tömb hossza <b>16</b> lesz. Ezt jelzi a játéktéren kívüli kérdőjel, melynek helyén vagy kaktusz lesz vagy üresen marad.</p>
+            
+            <p>Mivel vizsgálnunk kell a velük való ütközést (játék vége), ezért a kaktuszokat <b>objektumként</b> kell tárolnunk a <span class="kodreszlet">kaktuszok[]</span> tömbben. A tömböt tényleg futószalgként képzeljük el, amin a kaktuszok a következőképpen helyezkednek el: a futószalag (tömb) első 10 helyén ne legyenek kaktuszok, mert akkor előfordulhat, hogy rögtön kaktuszba esünk, ami hamar véget vetne a játéknak. Ezt jelzi az ábrán a kis vonal a 10. tömbelem után.</p>
+
+            <p>A fentiek értelmében hozzuk létre a tömböt.</p>
+
+            <pre>
+                <code>
+// egyéb változók
+<span class="kodkiemeles">let kaktuszok = [];</span>
+let billentyűk = [];
+let ugrásmagasság = 300;
+let ugrik = false;
+let pont = 0;
+                </code>
+            </pre>
+
+            <p>Ezután töltsük fel 10 üres elemmel. Minden tömbelem (és így kaktusz) tulajdonságai a következők lesznek:</p>
+
+            <ol>
+                <li><b>x</b></li>
+                <li><b>y</b></li>
+                <li><b>szélesség</b></li>
+                <li><b>magasság</b></li>
+                <li><b>t</b> - típus, ha <b>0</b>, akkor nem rajzolunk ki kaktuszt, ha <b>1</b>, akkor kirajzolunk egy kaktuszt</li>
+            </ol>
+
+            <p>Az első elem kivételes, mert ennek konkrétan meg kell adnunk az <span class="kodreszlet">x</span> pozícióját, ami 0. Minden további elem az előtte lévő elem <span class="kodreszlet">x</span> pozíciójához viszonyul: <span class="kodreszlet">M</span> távolságra van tőle.</p>
+
+            <pre>
+                <code>
+// egyéb változók
+let kaktuszok = [];
+let billentyűk = [];
+let ugrásmagasság = 300;
+let ugrik = false;
+let pont = 0;
+
+<span class="kodkiemeles">kaktuszok.push({x: 0, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});</span>
+// nem eshetünk rögtön kaktuszba, ezért a játék kezdetén 10 db 0 típusú elemekkel kell feltölteni a tömböt - ciklussal is megvalósítható
+<span class="kodkiemeles">kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});
+kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});
+kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});
+kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});
+kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});
+kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});
+kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});
+kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});
+kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});
+kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: 0});</span>
+                </code>
+            </pre>
+
+            <p>Kíváncsiságból rajzoljuk ki ezeket a tömbelemeket szürke négyzetekként.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ...
+
+    // talaj
+    ...
+
+    // kaktuszok
+    <span class="kodkiemeles">kaktuszok.forEach(kaktusz => {
+        ctx.fillStyle = 'grey';
+        ctx.fillRect(kaktusz.x, kaktusz.y, kaktusz.szélesség, kaktusz.magasság);
+    });</span>
+}
+                </code>
+            </pre>
+
+            <p>Az alábbi ábrán látható az eredmény, ami azt is jól mutatja, hogy a kaktusz fele akkora, mint a <span class="kodreszlet">dínó</span>.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-kaktusz-elso-10-szurke.png">
+                    <figcaption>A tömb első 11 eleme</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/hoppo-kaktusz-dino-meret.png">
+                    <figcaption>Minden kaktusz szélessége a <span class="kodreszlet">dínó</span> szélességének fele</figcaption>
+                </figure>
+            </div>
+
+            <h4>Új kaktusz generálása véletlenszerűen</h4>
+            
+            <p>Minden további helyen két opció lehetséges: kaktusz (1) vagy üres (0). A zárójelben lévő számok jelentsék azt, hogy ha 1-est sorsolunk ki, akkor kaktusz lesz az adott helyen, ha 0-t, akkor üres marad az adott hely. De mi van, ha véletlenül egymás után 34 kaktuszt generálunk le? Ezt nyilván lehetetlen átugrani azzal a képességgel, amivel a dínónk rendelkezik. Ezért újabb szabályokat kell bevezetnünk a kaktuszgeneráláshoz:</p>
+
+            <ol>
+                <li>a kaktuszok nem lehetnek túl sűrűn: két kaktusz között legalább 3 üres hely legyen,</li>
+                <li>maximum 2 kaktusz lehet egymás mellett, hogy át tudjuk ugrani</li>
+            </ol>
+
+            <p>Ennek megvalósítását írjuk meg egy erre szolgáló függvényben, melynek neve legyen <span class="kodreszlet">újKaktusz()</span>.</p>
+
+            <pre>
+                <code>
+/* === SEGÉDFÜGGVÉNYEK === */
+
+function újKaktusz() {
+    /*  - a kaktuszok nem lehetnek túl sűrűn: két kaktusz között legalább 3 üres hely legyen,
+        - maximum 2 kaktusz lehet egymás mellett, hogy át tudjuk ugrani  */
+    <pan class="kodkiemeles">let típus = 0;
+    if(kaktuszok[kaktuszok.length - 2].t == 0 && kaktuszok[kaktuszok.length - 3].t == 0) {
+        típus = véletlenEgész(0, 1);
+    }
+    kaktuszok.push({x: kaktuszok[kaktuszok.length - 1].x + M, y: canvas.height - M * 2, szélesség: M / 2, magasság: M, t: típus});</pan>
+}
+
+// véletlen egész
+...
+                </code>
+            </pre>
+
+            <p>Először létrehozzuk a <span class="kodreszlet">típus</span> változót. Ebbe sorsoljuk bele a véletlen típust, vagyis hogy üres legyen-e vagy kaktusz. De ezt csak akkor tesszük meg, ha a tömb utolsó előtti és az azelőtti elemek üresek voltak, mert három üres helynek kell lennie két kaktusz között és kettőnél több kaktusz nem követheti egymást. Nézzük meg a következő eseteket:</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-kaktusz-uj-eset-1.png">
+                    <figcaption>üres - üres - kaktusz</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/hoppo-kaktusz-uj-eset-2.png">
+                    <figcaption>üres - kaktusz - kaktusz</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/hoppo-kaktusz-uj-eset-3.png">
+                    <figcaption>kaktusz - üres - üres</figcaption>
+                </figure>
+            </div>
+
+            <p>Az első esetben az új tömbelem akármi lehet (üres vagy kaktusz), míg a 2. és 3. esetben csak üres, hiszen három kaktusz nem lehet egymás mellett (2. ábra), és két kaktusz között három üres helynek kell lenni (3. ábra).</p>
+
+            <p>Végül hozzáfűzzük a következő elemet a tömbhöz.</p>
+
+            <p>És hogy mikor kell új kaktuszt generálni? Mivel egyszerre 16 db kaktusz kell, ezért akkor, <b>ha aktuálisan 16-nál kevesebb kaktusz van</b>, amit a tömb hosszából tudunk lekérdezni. A szükséges kaktuszok számát tároljuk el a <span class="kodreszlet">hossz</span> változóban, majd ezt kezeljük le a <span class="kodreszlet">frissítés(dt)</span> függvényben.</p>
+
+            <pre>
+                <code>
+// egyéb változók
+let kaktuszok = [];
+let billentyűk = [];
+<span class="kodkiemeles">let hossz = 16;</span>
+let ugrásmagasság = 300;
+let ugrik = false;
+let pont = 0;
+                </code>
+            </pre>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // dínó irányítása
+    ...
+    
+    // ugrás
+    ...
+
+    // új kaktusz
+    <span class="kodkiemeles">if(kaktuszok.length &lt; hossz) {
+        újKaktusz();
+    }</span>
+
+    // kaktuszok mozgása és törlése
+
+
+    // játék vége
+    
+}
+                </code>
+            </pre>
+
+            <p>Az eredmény pedig:</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-kaktusz-16-kaktusz.png">
+                    <figcaption>A pálya teljes hosszában el vannak helyezve a kaktuszok</figcaption>
+                </figure>
+            </div>
+
+            <h4>Kaktuszok kirajzolása</h4>
+
+            <p><b>Módosítsuk a kirajzolást</b> úgy, hogy ahol kaktusz van, oda rajzoljuk ki a <span class="kodreszlet">kaktuszkép</span>et, máskülönben ne rajzoljunk ki semmit.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ...
+
+    // talaj
+    ...
+
+    // kaktuszok
+    <span class="kodkiemeles">kaktuszok.forEach(kaktusz => {
+        if(kaktusz.t == 1) {
+            ctx.drawImage(kaktuszkép, kaktusz.x, kaktusz.y, kaktusz.szélesség, kaktusz.magasság);
+        }
+    });</span>
+
+    // dínó
+    ctx.drawImage(dínókép, dínó.x, dínó.y, dínó.szélesség, dínó.magasság);
+
+    // felirat
+    ctx.font = '15px Courier New';
+    ctx.fillStyle = 'black';
+    ctx.fillText(pont, 0, 15);
+}
+                </code>
+            </pre>
+
+            <p>A véletlengenerálás miatt ekkor többféle állapottal találkozhatunk, de az első 10 helyen biztosan nincs kaktusz.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-kaktusz-16-kaktusz-keppel-1.png">
+                    <figcaption>A pálya teljes hosszában el vannak helyezve és ki vannak rajzolva a kaktuszok</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/hoppo-kaktusz-16-kaktusz-keppel-2.png">
+                    <figcaption>A pálya teljes hosszában el vannak helyezve és ki vannak rajzolva a kaktuszok</figcaption>
+                </figure>
+            </div>
+
+            <h4>Kaktuszok mozgatása</h4>
+
+            <p>Indítsuk el a futószalagot!</p>
+
+            <p>A futószalag egy bizonyos sebességgel fog menni, amit tároljunk el a <span class="kodreszlet">kaktuszsebesség</span> változóban.</p>
+
+            <pre>
+                <code>
+// egyéb változók
+let kaktuszok = [];
+let billentyűk = [];
+<span class="kodkiemeles">let kaktuszsebesség = 100;</span>
+let hossz = 16;
+let ugrásmagasság = 300;
+let ugrik = false;
+let pont = 0;
+                </code>
+            </pre>
+            
+            <p>A <span class="kodreszlet">frissítés(dt)</span> függvényben mozgassunk el minden kaktuszt (tömbelemet) a <span class="kodreszlet">kaktuszsebesség</span>nek megfelelően. Ha az első tömbelem (legyen az kaktusz vagy üres) teljesen elhagyta a képernyőt, akkor töröljük ki a tömbből. Ennek köszönhetően fog újabb kaktusz generálódni (<span class="kodreszlet">újKaktusz()</span>). Ha egy tömbelemet töröltünk, akkor növeljünk a <span class="kodreszlet">pont</span>on is.</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // dínó irányítása
+    ...
+    
+    // ugrás
+    ...
+
+    // új kaktusz
+    if(kaktuszok.length &lt; hossz) {
+        újKaktusz();
+    }
+
+    // kaktuszok mozgása és törlése
+    <span class="kodkiemeles">kaktuszok.forEach(kaktusz => {
+        kaktusz.x -= kaktuszsebesség * dt;
+        if(kaktusz.x &lt;= 0 - kaktusz.szélesség) {
+            kaktuszok.splice(0, 1);
+            pont += 1;
+        }
+    });</span>
+
+    // játék vége
+    
+}
+                </code>
+            </pre>
+
+            <h4>A játék vége</h4>
+
+            <p>A játék végét a <span class="kodreszlet">vége</span> változó jelöli, amit kezdetben <span class="kodreszlet">false</span> értékkel hozzunk létre.</p>
+
+            <pre>
+                <code>
+// egyéb változók
+let kaktuszok = [];
+let billentyűk = [];
+let kaktuszsebesség = 100;
+let hossz = 16;
+let ugrásmagasság = 300;
+let ugrik = false;
+<span class="kodkiemeles">let vége = false;</span>
+let pont = 0;
+                </code>
+            </pre>
+
+            <p>Ezután vizsgáljuk meg, hogy van-e olyan (ténylegesen kirajzolt, vagyis 1-es típusú) kaktusz, amelyik ütközik a <span class="kodreszlet">dínó</span>val. Ha van, a <span class="kodreszlet">vége</span> legyen <span class="kodreszlet">true</span>.</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // dínó irányítása
+    ...
+    
+    // ugrás
+    ...
+
+    // új kaktusz
+    ...
+
+    // kaktuszok mozgása és törlése
+    ...
+
+    // játék vége
+    <span class="kodkiemeles">kaktuszok.forEach(kaktusz => {
+        if(ütköznek(kaktusz, dínó) && kaktusz.t == 1) {
+            vége = true;
+        }
+    });</span>
+}
+                </code>
+            </pre>
+
+            <p><b>Álljon le a játék</b>, amikor érintkezünk egy kaktusszal.</p>
+
+            <pre>
+                <code>
+/* === ANIMÁCIÓS CIKLUS === */
+
+let előzőIdő = performance.now()
+function következő() {
+    let aktuálisIdő = performance.now()
+    let dt = (aktuálisIdő - előzőIdő) / 1000 // az előző képkocka óta eltelt idő mp-ben
+    előzőIdő = aktuálisIdő
+    frissítés(dt)
+    rajzolás()
+    <span class="kodkiemeles">if(!vége) {</span>
+        requestAnimationFrame(következő)
+    <span class="kodkiemeles">}</span>
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/hoppo-jatek-vege-1.png">
+                    <figcaption>Belemegyünk egy kaktuszba</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/hoppo-jatek-vege-2.png">
+                    <figcaption>Ráugrunk egy kaktuszra</figcaption>
+                </figure>
+            </div>
+
+            <p><b>Elkészültünk</b> az alapjátékkal, de ebben még nincs sok izgalom... Nézd meg az <b>✨EXTRA Feladatokat</b> a nagyobb kihívást jelentő játékért!👇</p>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladat</b><br>A játék legyen egyre gyorsabb! ⚡⏩⏩⏩</p>
+
+                <p>Amikor egy kaktusz (tényleges, kirajzolt kaktusz) elhagyja a játékteret bal oldalon, gyorsítsunk a játékon a <span class="kodreszlet">kaktuszsebesség</span> változó növelésével.</p>
+
+                <details>
+                    <summary>Megoldás</summary>
+                    <pre>
+                        <code>
+function frissítés(dt) {
+    // dínó irányítása
+    ...
+    
+    // ugrás
+    ...
+
+    // új kaktusz
+    ...
+
+    // kaktuszok mozgása és törlése
+    kaktuszok.forEach(kaktusz => {
+        kaktusz.x -= kaktuszsebesség * dt;
+        if(kaktusz.x &lt;= 0 - kaktusz.szélesség) {
+            <span class="kodkiemeles">if(kaktusz.x &lt;= 0 - kaktusz.szélesség && kaktusz.t == 1) {
+                kaktuszsebesség += 2;
+            }</span>
+            kaktuszok.splice(0, 1);
+            pont += 1;
+        }
+    });
+
+    // játék vége
+    ...
+}
+                        </code>
+                    </pre>
+                </details>
+
+                <p>Rövidesen a játék kezdete után az tapasztalható, hogy a <span class="kodreszlet">dínó</span> ugrása nem gyorsul arányosan, vagyis egyre inkább azt kezdjük érezni, mintha a <span class="kodreszlet">dínó</span> a Holdon ugrálna. Megoldásként növeljük a <span class="kodreszlet">dínó</span> függőleges gyorsulását (<span class="kodreszlet">ay</span>) és <span class="kodreszlet">ugrásmagasság</span>át.</p>
+
+                <details>
+                    <summary>Megoldás</summary>
+                    <pre>
+                        <code>
+function frissítés(dt) {
+    // dínó irányítása
+    ...
+    
+    // ugrás
+    ...
+
+    // új kaktusz
+    ...
+
+    // kaktuszok mozgása és törlése
+    kaktuszok.forEach(kaktusz => {
+        kaktusz.x -= kaktuszsebesség * dt;
+        if(kaktusz.x &lt;= 0 - kaktusz.szélesség) {
+            if(kaktusz.x &lt;= 0 - kaktusz.szélesség && kaktusz.t == 1) {
+                kaktuszsebesség += 2;
+                <span class="kodkiemeles">dínó.ay += 10;
+                ugrásmagasság += 2;</span>
+            }
+            kaktuszok.splice(0, 1);
+            pont += 1;
+        }
+    });
+
+    // játék vége
+    ...
+}
+                        </code>
+                    </pre>
+                </details>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

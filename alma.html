@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Almaszüret - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Almaszüret 🍎</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Indulhat az almaszüret? Kapj el annyi <b>piros almát</b>, amennyit csak tudsz, <b>ne hagyj ki</b> egyet se! Szerezz minél több pontot, de vigyázz, mert a <b>romlott alma</b> véget vet a játéknak...</p>
+            <p>Ebben a projektben megismerkedhetsz a <b>klónozás</b>sal, hogy végtelen sok almát tudj elkapni.</p>
+            
+            <a href="../8 Almaszüret/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+            
+            <h3>HTML</h3>
+
+            <p>Induljunk ki a már jól ismert alapstruktúrából. A canvas szélességét és magasságát úgy határozzuk meg, hogy egy <b>600px széles és 400px magas játékteret</b> kapjunk!</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="hu"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;<span class="kodkiemeles">Szüret</span>&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;style&gt;
+        canvas{
+            border: 1px solid black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;<span class="kodkiemeles">Szüret</span>&lt;/h1&gt;
+    &lt;canvas width="<span class="kodkiemeles">600</span>" height="<span class="kodkiemeles">400</span>" id="vaszon"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+            
+            <h3>JavaScript</h3>
+
+            <p>Töltsük le a <a href="../8 Almaszüret kiindulás/index.js">kiindulófájlt</a> és nézzük meg, mely kódrészek állnak rendelkezésünkre és melyeket kell még nekünk megírni!</p>
+
+            <p>Rendelkezésre áll:</p>
+
+            <ul>
+                <li>a canvas elérése</li>
+                <li>a szereplők és objektumok méretének alapjául szolgáló konstans (<span class="kodreszlet">32</span> px)</li>
+                <li>a képek importálása</li>
+                <li>néhány változó</li>
+                <li>az időalapú animációs ciklus</li>
+                <li>a háttér, a talaj, a fatörzs, és a felhő kirajzolása</li>
+                <li>a véletlen egészt generáló függvény</li>
+                <li>az ütközés ellenőrzését vizsgáló függvény</li>
+            </ul>
+
+            <p>Ki kell dolgozni:</p>
+
+            <ul>
+                <li><b>a <span class="kodreszlet">kosár</span> objektumot és annak kirajzolását</b></li>
+                <li><b>az éppen hulló almákat tároló tömböt</b></li>
+                <li><b>az éppen lenyomva tartott billentyűket tároló tömböt</b></li>
+                <li><b>az almák kirajzolását</b></li>
+                <li><b>a begyűjtött almák számának kiírását</b></li>
+                <li><b>a <span class="kodreszlet">frissítés(dt)</span> függvényt</b></li>
+                <li><b>a lenyomott billentyűk eltárolását</b></li>
+                <li><b>az új almákat létrehozó függvényt</b></li>
+            </ul>
+
+            <h4>A <span class="kodreszlet">kosár</span> objektum létrehozása és kirajzolása</h4>
+
+            <p>A <span class="kodreszlet">kosár</span> objektumot (a korábbi objektumokhoz hasonlóan) téglalapként írjuk le, hogy az ütközést könnyen tudjuk vizsgálni az <span class="kodreszlet">ütköznek(téglalap1, téglalap2)</span> függvénnyel.</p>
+
+            <pre>
+                <code>
+/*Változók*/
+// kosár objektum
+<span class="kodkiemeles">let kosár = {
+    x: 0,
+    y: M * 11,
+    szélesség: M,
+    magasság: M,
+    sebesség: 350
+}</span>
+...
+                </code>
+            </pre>
+
+            <p>Rajzoljuk ki a kosarat!</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    ...
+
+    // kosár
+    <span class="kodkiemeles">ctx.drawImage(kosárkép, kosár.x, kosár.y, kosár.szélesség, kosár.magasság);</span>
+
+    ...
+    
+}
+                </code>
+            </pre>
+
+            <p>Jelenleg az alábbi állapotot kell látnunk a canvas-en.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/szuret-kosar-kirajzolas.png">
+                    <figcaption>A <span class="kodreszlet">kosár</span> létrehozása és kirajzolása utáni állapot</figcaption>
+                </figure>
+            </div>
+
+            <div class="megjegyzes">
+
+                <p><b>💭Megjegyzés</b></p>
+
+                <h4>Tömbök</h4>
+
+                <p>Az eddigi projektekben már használtunk változókat egy bizonyos érték eltárolására, pl. pont, játék stb. Azonban a változók csak egyetlen érték tárolására alkalmasak, pl. <span class="kodreszlet">5</span>, <span class="kodreszlet">true</span>, <span class="kodreszlet">"romlott"</span> stb. Hogyan tudunk nagyon sok adatot egy változóban tárolni? Például az összes lottószámot egy változóban? <b>Tömb</b>ök használatával.</p>
+
+                <p>A tömbök olyan változók, melyekben egyszerre több adatot is tudunk tárolni. Például a lottószámokat:</p>
+
+                <pre>
+                    <code>
+let lottoszamok = [5, 12, 7, 40, 32];
+                    </code>
+                </pre>
+
+                <p>A tömböket a változókhoz hasonlóan a <span class="kodreszlet">let</span> kulcsszóval vezetjük be, majd ezután jön a tömb neve (<span class="kodreszlet">lottoszamok</span>). A tömb nevét <span class="kodreszlet">=</span> jel követi, utána <span class="kodreszlet">[ ]</span> jelek között vesszővel elválasztva felsoroljuk az adatokat. A sort <span class="kodreszlet">;</span>-vel zárjuk, bár ez nem kötelező.</p>
+
+                <p>Ellenőrizzük, hogy mi van a tömbben úgy, hogy a tömböt kiírjuk a console-ra.</p>
+
+                <pre>
+                    <code>
+let lottoszamok = [5, 12, 7, 40, 32];
+<span class="kodkiemeles">console.log(lottoszamok);</span>
+                    </code>
+                </pre>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/szuret-tomb-kiiras.png">
+                        <figcaption>A <span class="kodreszlet">lottoszamok</span> tömb kiírása a console-ra</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="képek/szuret-tomb-kiiras-2.png">
+                        <figcaption>A <span class="kodreszlet">lottoszamok</span> tömb lenyitva a console-on</figcaption>
+                    </figure>
+                </div>
+
+                <p>Az utóbbi képen az is látható, hogy az egyes számokhoz (tömbelemkhez) milyen sorszám (index) tartozik. A tömb első elemének az indexe <span class="kodreszlet">0</span>, a második elemé <span class="kodreszlet">1</span> stb., az utolsó elemé <span class="kodreszlet">4</span>. A tömb hosszát is láthatjuk: <span class="kodreszlet">length: 5</span>.</p>
+
+                <p>A tömbökben <b>más adattípust</b> is tárolhatunk: szöveget, logikai értéket, valós számokat vagy tömöket:</p>
+
+                <pre>
+                    <code>
+let lottoszamok = [5, 12, 7, 40, 32];
+console.log(lottoszamok);
+
+<span class="kodkiemeles">let vegyes = ['Anna', 'Aladár', true, 0, 12.7543, false, [0, 1, 2, 3, 4]]
+console.log(vegyes);</span>
+                    </code>
+                </pre>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/szuret-tomb-kiiras-vegyes.png">
+                        <figcaption>A <span class="kodreszlet">vegyes</span> tömb kiírva és lenyitva a console-on</figcaption>
+                    </figure>
+                </div>
+
+                <p>Most ne az egész <span class="kodreszlet">vegyes</span> tömböt írjuk ki, hanem csak az <span class="kodreszlet">1</span>. indexen lévő elemét, majd a <span class="kodreszlet">2</span>. indexen lévő elemét!</p>
+
+                <pre>
+                    <code>
+let vegyes = ['Anna', 'Aladár', true, 0, 12.7543, false, [0, 1, 2, 3, 4]]
+console.log(vegyes);
+
+<span class="kodkiemeles">console.log(vegyes[1]);
+console.log(vegyes[2]);</span>
+                    </code>
+                </pre>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/szuret-tomb-kiiras-elso-es-masodik-elem.png">
+                        <figcaption>A <span class="kodreszlet">vegyes</span> tömb első és második indexen lévő elemének kiírása</figcaption>
+                    </figure>
+                </div>
+
+                <p class="feladat"><b>✅Feladat</b><br>Hozd létre azt a tömböt, melynek megjelenése a console-on az alábbi! Írd ki ennek a tömbnek a <span class="kodreszlet">3</span>. indexen lévő elemét!</p>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/szuret-tomb-kiiras-feladat.png">
+                        <figcaption>Az <span class="kodreszlet">adatok</span> tömb kiírva és lenyitva a console-on</figcaption>
+                    </figure>
+                </div>
+
+                <details>
+                    <summary>Megoldás</summary>
+                    <pre>
+                        <code>
+let adatok = ['Alfréd', true, 1.23456789, [9, 8, 7, 6]]
+console.log(adatok);
+console.log(adatok[3]);
+                        </code>
+                    </pre>
+                </details>
+
+                <p>A tömbökben akár <b>objektumokat</b> is tárolhatunk:</p>
+
+                <pre>
+                    <code>
+let szereplok = [
+    <span class="kodkiemeles">{x: 10, y: 10, szélesség: 40, magasság: 40},
+    {x: 20, y: 10, szélesség: 40, magasság: 40},
+    {x: 30, y: 10, szélesség: 40, magasság: 40}</span>
+]
+console.log(szereplok);
+                    </code>
+                </pre>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/szuret-tomb-kiiras-objektum.png">
+                        <figcaption>A <span class="kodreszlet">szereplok</span> tömbben három téglalapszerű objektum van 4 tulajdonsággal: <span class="kodreszlet">x</span>, <span class="kodreszlet">y</span>, <span class="kodreszlet">szélesség</span> és <span class="kodreszlet">magasság</span></figcaption>
+                    </figure>
+                </div>
+
+            </div>
+
+            <h4>A <span class="kodreszlet">kosár</span> mozgatása</h4>
+
+            <p>A Szent Mihály napi terelés játékban tapasztalhattuk azt a felhasználói élményt romboló jelenséget, hogy a jobbra nyíl lenyomásakor és <b>nyomva tartásakor</b> a juh lép egyet, megtorpan egy pillanatra, majd folyamatosan mozog jobbra. Ezt a megtorpanást fogjuk kiküszöbölni azzal, hogy az éppen lenyomott billentyűt beletesszük az éppen lenyomva tartott billenytűket tartalmazó tömbbe, és a mozgást ennek a tömbnek a tartalma alapján fogjuk végezni. Vagyis, ha az <span class="kodreszlet">"ArrowRight"</span> billentyű értéke <span class="kodreszlet">true</span> (tehát lenyomtuk), akkor mozogjon jobbra a <span class="kodreszlet">kosár</span>.</p>
+
+            <p>Hozzuk létre a <span class="kodreszlet">billentyűk</span> nevű tömböt:</p>
+
+            <pre>
+                <code>
+// egyéb változók
+ // az éppen hulló almákat tároló tömb
+<span class="kodkiemeles">let billentyűk = [];</span> // az éppen lenyomva tartott billentyűket taroló tömb
+let almasebesség = 50; // almák sebessége
+let almagyakoriság = 100; // hány px legyen két alma között, mennyivel utána jöjjön a következő
+let vége = false; // vége van-e a játéknak
+let db = 0; // begyűjtött almák száma
+                </code>
+            </pre>
+
+            <p>Kezeljük le a <b>gomblenyomás</b>, valamint a <b>gombfelengedés</b> eseményt:</p>
+
+            <pre>
+                <code>
+/* === ESEMÉNYEK === */
+
+// lenyomott billentyűk eltárolása
+<span class="kodkiemeles">document.addEventListener('keydown', e => {
+    billentyűk[e.key] = true;
+})
+
+document.addEventListener('keyup', e => {
+    billentyűk[e.key] = false;
+})</span>
+                </code>
+            </pre>
+
+            <p>A tömb tartalma alapján mozgassuk a <span class="kodreszlet">kosár</span> szereplőt úgy, hogy az <b>ne mehessen ki a játéktérről</b> egyik oldalon sem:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // kosár irányítása
+    <span class="kodkiemeles">if(billentyűk['ArrowRight']) {
+        if(kosár.x &lt; canvas.width - kosár.szélesség) {
+            kosár.x += kosár.sebesség * dt;
+        }
+    }
+    if(billentyűk['ArrowLeft']) {
+        if(kosár.x > 0) {
+            kosár.x -= kosár.sebesség * dt;
+        }
+    }</span>
+
+    // új alma
+    
+
+    // almák mozgása és törlése
+    
+
+    // játék vége
+    
+}
+                </code>
+            </pre>
+
+            <p><b>Most már tudjuk mozgatni a kosarat,</b> de még nincs mit elkapni.</p>
+
+            <h4>Almák</h4>
+
+            <p>Az almák a játéktér <b>tetején</b> jelennek meg vízszintesen <b>véletlen helyen</b>, majd azonnal <b>elindulnak</b> egyenletes sebességgel lefelé. Minden alma egy külön objektum (téglalap), melyeket az <span class="kodreszlet">almák</span> tömbben fogunk tárolni. Mivel nagyon sok alma generálódik a játékban, ezeket nem fogjuk manuálisan a játék elején egyesével létrehozni, hanem egy függvény segítségével generáljuk le őket és tesszük bele az <span class="kodreszlet">almák</span> tömbbe. Hozzuk létre ezt a tömböt!</p>
+
+            <pre>
+                <code>
+// egyéb változók
+<span class="kodkiemeles">let almák = [];</span> // az éppen hulló almákat tároló tömb
+let billentyűk = []; // az éppen lenyomva tartott billentyűket taroló tömb
+let almasebesség = 50; // almák sebessége
+let almagyakoriság = 100; // hány px legyen két alma között, mennyivel utána jöjjön a következő
+let vége = false; // vége van-e a játéknak
+let db = 0; // begyűjtött almák száma
+                </code>
+            </pre>
+
+            <p>Írjuk meg az almákat generáló függvényt! Ehhez tudnunk kell, hogy mit kell tárolnunk minden almáról. Mivel téglalap alakú objektumokként fogjuk tárolni őket, ezért szükségünk lesz az <span class="kodreszlet">x</span>, <span class="kodreszlet">y</span>, <span class="kodreszlet">szélesség</span> és <span class="kodreszlet">magasság</span> tulajdonságokra, de tudnunk kell azt is, hogy az adott alma egészséges-e vagy sem (romlott). Ez lesz az alma <span class="kodreszlet">típus</span> tulajdonsága. Tehát ezt az 5 dolgot fogjuk eltárolni minden almáról. Ezekkel a tulajdonságokkal minden alma rendelkezik, azonban az egyes almák esetén ezek a tulajdonságok más-más értéket fognak felvenni. Generáljunk le egy almát a következő lépéseket követve:</p>
+
+            <ol>
+                <li>keressünk neki egy véletlen vízszintes helyet,</li>
+                <li>sorsoljuk ki a típusát (egészséges vagy romlott),</li>
+                <li>fűzzük az almát az <span class="kodreszlet">almák</span> tömb végére a <span class="kodreszlet">.push()</span> paranccsal.</li>
+            </ol>
+
+            <pre>
+                <code>
+/* === SEGÉDFÜGGVÉNYEK === */
+
+// új alma függvény
+<span class="kodkiemeles">function újAlma() {
+    let vizszinteshely = véletlenEgész(0, canvas.width - M / 2);
+    let almatípus = 0;
+    if(véletlenEgész(0, 10) &lt; 3) {
+        almatípus = 'romlott';
+    } else {
+        almatípus = 'egészséges';
+    }
+    almák.push({x: vizszinteshely, y: 0, szélesség: M / 2, magasság: M / 2, típus: almatípus});
+}</span>
+
+// véletlen egész
+...
+                </code>
+            </pre>
+
+            <p>Próbáljuk ki ezt a függvényt és generáljunk le egy almát az animációs ciklus előtt az <span class="kodreszlet">újAlma();</span> függvény megívásával. Ebben a pillanatban bekerült egy alma az <span class="kodreszlet">almák</span> tömbbe. Írjuk ki a console-ra az <span class="kodreszlet">almák</span> tömböt, hogy megbizonyosodjunk erről!</p>
+
+            <pre>
+                <code>
+// új alma függvény meghívása
+<span class="kodkiemeles">újAlma();
+console.log(almák);</span>
+
+/* === ANIMÁCIÓS CIKLUS === */
+                </code>
+            </pre>
+
+            <p>Az alábbi képrsorozat három különböző alma generálását mutatja, ami jól szemlélteti, hogy az alma <span class="kodreszlet">x</span> és <span class="kodreszlet">típus</span> tulajdonságai <b>véletlenek</b>, míg a <span class="kodreszlet">szélesség</span>e, <span class="kodreszlet">magasság</span>a és <span class="kodreszlet">y</span> pozíciója <b>állandó</b>.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/szuret-tomb-kiiras-almak-1.png">
+                    <figcaption>Az <span class="kodreszlet">almák</span> tömb tartalma a console-on egy darab alma generálása után</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/szuret-tomb-kiiras-almak-2.png">
+                    <figcaption>Az <span class="kodreszlet">almák</span> tömb tartalma a console-on egy darab alma generálása után</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/szuret-tomb-kiiras-almak-3.png">
+                    <figcaption>Az <span class="kodreszlet">almák</span> tömb tartalma a console-on egy darab alma generálása után</figcaption>
+                </figure>
+            </div>
+
+            <div class="megjegyzes">
+                <p><b>💭Megjegyzés</b></p>
+                <h4>Tömbök bejárása</h4>
+                <p>Térjünk vissza a lottószámokat tartalmazó tömbre (<span class="kodreszlet">lottoszamok</span>). Válaszoljuk meg a következő kérdést: kihúzták-e a 7-es számot? Természetesen, igen, látjuk, hogy ez a tömb 3. eleme. Honnan tudjuk? Világos, hogy ilyen kis méretű tömb esetén elég csak egy pillantást venni a tömbre. De valójában a vizsgálat lépései a következők:</p>
+                <ol>
+                    <li>megnézzük az első elemet, hogy egyenlő-e 7-tel - nem</li>
+                    <li>megnézzük a második elemet, hogy egyenlő-e 7-tel - nem</li>
+                    <li>és így tovább, egészen a tömb végéig.</li>
+                </ol>
+                <p>Mire a tömb végére érünk, tudni fogjuk, hogy benne van-e a 7-es szám. Az elemek egyesével történő vizsgálatát nevezzük a <b>lista bejárásának</b>. Nézzük meg, hogyan írhatunk erre programot!</p>
+                <p>A tömbökre alkalmazható a <span class="kodreszlet">array.forEach(element => { });</span> szerkezet, amely megvizsgája a tömb összes elemét és végrehajtja rajtuk a <span class="kodreszlet">{ }</span> jelek közötti részt. A mi példánk alapján a következőt írnánk:</p>
+
+                <pre>
+                    <code>
+let lottoszamok = [5, 12, 7, 40, 32];
+let van_e = false;
+lottoszamok<span class="kodkiemeles">.forEach(szam => {</span>
+    if (szam == 7) {
+        van_e = true
+    }
+<span class="kodkiemeles">});</span>
+if (van_e) {
+    console.log('Van 7-es.');
+}
+                    </code>
+                </pre>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/szuret-tomb-kiiras-foreach.png">
+                        <figcaption>A <span class="kodreszlet">lottoszamok</span> lista bejárása után a console-on megjelenik a "Van 7-es" szöveg</figcaption>
+                    </figure>
+                </div>
+
+            </div>
+
+            <h4>Az almák kirajzolása</h4>
+
+            <p>A <span class="kodreszlet">rajzolás()</span> függvényben ki kell rajzolnunk az almákat. Mindet. Vagyis be kell járnunk az <span class="kodreszlet">almák</span> tömböt, hogy minden elemén végre tudjuk hajtani a kirajzolást. Viszont le kell kezelnünk azt, hogy éppen egészséges vagy romlott almával van-e dolgunk, mert ettől függ, hogy a <b>piros</b> vagy a <b>fekete</b> alma képét rajzoljuk-e ki:</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ...
+
+    // talaj
+    ...
+
+    // almafa
+    ...
+
+    // felhő
+    ...
+
+    // almák
+    <span class="kodkiemeles">almák.forEach(alma => {
+        if(alma.típus == 'romlott') {
+            ctx.drawImage(romlottalmakép, alma.x, alma.y, alma.szélesség, alma.magasság);
+        } else {
+            ctx.drawImage(almakép, alma.x, alma.y, alma.szélesség, alma.magasság);
+        }
+    });</span>
+
+    // kosár
+    ctx.drawImage(kosárkép, kosár.x, kosár.y, kosár.szélesség, kosár.magasság);
+
+    // begyűjtött almák számának kiírása
+    
+}
+                </code>
+            </pre>
+
+            <p>A kód megírása után minden képernyőfrissítés után azt kell látnunk, hogy megjelenik egy alma a képernyő tetején, véletlen helyen és véletlen "állapotban" (egészséges/romlott).</p>
+
+            <h4>Almák mozgatása lefelé</h4>
+
+            <p>Az almák mozgatásánál hasonló logikát kell követnünk, mint a kirajzolásuknál, mert a mozgatást minden képernyőfrissítésnél minden almán el kell végeznünk, ezért be kell járnunk az <span class="kodreszlet">almák</span> tömböt, és minden alma <span class="kodreszlet">y</span> pozícióján növelni kell egy kicsit. Az almák sebességét az <span class="kodreszlet">almasebesség</span> változó határozza meg.</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    ...
+
+    // almák mozgása és törlése
+    <span class="kodkiemeles">almák.forEach(alma => {
+        alma.y += almasebesség * dt;
+    });</span>
+
+    ...
+    
+}
+                </code>
+            </pre>
+
+            <p>A kód megírása után elkezd leesni az az egy alma, ami benne van a tömbben. Ezt mutatja az alábbi képsorozat:</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/szuret-alma-eses-kirajzolas-1.png">
+                    <figcaption>Az <span class="kodreszlet">almák</span> tömbben lévő almák lefelé mozognak</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/szuret-alma-eses-kirajzolas-2.png">
+                    <figcaption>Az <span class="kodreszlet">almák</span> tömbben lévő almák lefelé mozognak</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/szuret-alma-eses-kirajzolas-3.png">
+                    <figcaption>Az <span class="kodreszlet">almák</span> tömbben lévő almák lefelé mozognak</figcaption>
+                </figure>
+            </div>
+
+            <p>Ezen a ponton a kosarat már tudjuk irányítani és az almák már hullanak, de még nem tudjuk elkapni az almát. Következzen ez a lépés!</p>
+
+            <h4>Az almák begyűjtése</h4>
+
+            <p>Akkor tudunk almát begyűjteni (és így pontot kapni), ha a kosár és <b>valamelyik</b> alma átfedésben van, más szóval ütköznek. Fontos hangsúly van azon, hogy <b>valamelyik alma</b>, mert a kosár bármelyik almával ütközhet. Vagyis ebben a feladatban is be kell járnunk az almákat tartalmazó tömböt, hogy minden alma esetén megvizsgálhassuk, hogy ütközik-e a kosárral. Ha igen, akkor kétféle eset van: vagy romlott almát kaptunk el vagy egészségeset. Ha romlott almát kaptunk el, akkor a játéknak vége, ezért a <span class="kodreszlet">vége</span> változót <span class="kodreszlet">true</span>-ra kell állítani. Ha egészséges almát kaptunk el, akkor tűnjön el a képernyőről az adott alma, vagyis töröljük ki őt a tömbből. Mivel az új almákat később a tömb végére fogjuk fűzni, ezért a legalacsonyabban lévő alma, amit valószínűleg elkapunk, a tömb legelső, vagyis 0. indexén lévő eleme. Ezért minden elkapott alma esetén a tömb legelső elemét (almáját) kell törölni. Mindez történhet az almamozgatással egy időben, tehát bűvítsük az almák mozgatását a következőképpen:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    ...
+
+    // almák mozgása és törlése
+    almák.forEach(alma => {
+        alma.y += almasebesség * dt;
+        <span class="kodkiemeles">if(ütköznek(alma, kosár)) {
+            if(alma.típus == 'romlott') {
+                vége = true;
+            } else {
+                almák.splice(0, 1);
+                db += 1;
+            }
+        }</span>
+    });
+
+    ...
+    
+}
+                </code>
+            </pre>
+
+            <p>A <span class="kodreszlet">.splice(0, 1)</span> azt jelenti, hogy a 0. indextől kezdődően törlünk 1 elemet. A <span class="kodreszlet">.splice(2, 2)</span> azt jelenti, hogy a 2. indextől kezdve törlünk 2 elemet. A <span class="kodreszlet">db</span> változóban tároljuk az elkapott piros almák számát. A romlott almákat csak akkor töröljük a tömbből, ha azok elérik a képernyő alját:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    ...
+
+    // almák mozgása és törlése
+    almák.forEach(alma => {
+        alma.y += almasebesség * dt;
+        if(ütköznek(alma, kosár)) {
+            if(alma.típus == 'romlott') {
+                vége = true;
+            } else {
+                almák.splice(0, 1);
+                db += 1;
+            }
+        }
+        <span class="kodkiemeles">if(alma.típus == 'romlott' && alma.y + alma.magasság >= canvas.height) {
+            almák.splice(0, 1);
+        }</span>
+    });
+
+    ...
+}
+                </code>
+            </pre>
+
+            <h4>A játék vége</h4>
+
+            <p>A játéknak nemcsak akkor van vége, amikor romlott almát kapunk el, hanem akkor is, ha hagytunk leesni egy piros almát:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    ...
+
+    // almák mozgása és törlése
+    almák.forEach(alma => {
+        alma.y += almasebesség * dt;
+        if(ütköznek(alma, kosár)) {
+            if(alma.típus == 'romlott') {
+                vége = true;
+            } else {
+                almák.splice(0, 1);
+                db += 1;
+            }
+        }
+        if(alma.típus == 'romlott' && alma.y + alma.magasság >= canvas.height) {
+            almák.splice(0, 1);
+        }
+    });
+
+    // játék vége
+    <span class="kodkiemeles">almák.forEach(alma => {
+        if(alma.y > canvas.height && alma.típus == 'egészséges') {
+            vége = true;
+        }
+    });</span>
+}
+                </code>
+            </pre>
+
+            <p>Amikor a játéknak vége, minden alma álljon meg ott, ahol éppen van. Vagyis csak akkor mozogjanak, ha a játéknak még nincs vége:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    ...
+
+    // almák mozgása és törlése
+    <span class="kodkiemeles">if (!vége) {</span>
+        almák.forEach(alma => {
+            alma.y += almasebesség * dt;
+            if(ütköznek(alma, kosár)) {
+                if(alma.típus == 'romlott') {
+                    vége = true;
+                } else {
+                    almák.splice(0, 1);
+                    db += 1;
+                }
+            }
+            if(alma.típus == 'romlott' && alma.y + alma.magasság >= canvas.height) {
+                almák.splice(0, 1);
+            }
+        });
+        <span class="kodkiemeles">}</span>
+
+    // játék vége
+    almák.forEach(alma => {
+        if(alma.y > canvas.height && alma.típus == 'egészséges') {
+            vége = true;
+        }
+    });
+}
+                </code>
+            </pre>
+
+            <h4>Új almák generálása</h4>
+
+            <p>A játék lényege, hogy <b>több alma</b> elkapására van lehetőségünk. Mivel már létezik az almát létrehozó függvény, csak újra és újra meg kell hívni azt. A kérdés már csak az, hogy mikor jöjjön a következő alma? Erre több válasz is adható, a fejleszőn múlik. Én most azt javaslom, hogy akkor jöjjön a következő, amikor az előző alma már legalább 100 px-nyit (<span class="kodreszlet">almagyakoriság</span>nyit)ment lefelé:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    ...
+
+    // új alma
+    <span class="kodkiemeles">if(almák[almák.length - 1].y &gt;= almagyakoriság && !vége) {
+        újAlma();
+    }</span>
+
+    ...
+}
+                </code>
+            </pre>
+
+            <div class="megjegyzes">
+                <p><b>💭Megjegyzés</b></p>
+                <p>A <span class="kodreszlet">.length</span> paranccsal lekérdezhető egy tömb hossza. Mivel minden tömb utolsó elemének indexe eggyel kevesebb, mint a tömb hossza, ezért <span class="kodreszlet">almák[almák.length - 1]</span>.</p>
+            </div>
+
+            <h4>Pontszám kiírása</h4>
+
+            <pre>
+                <code>
+function rajzolás() {
+    ...
+
+    // begyűjtött almák számának kiírása
+    <span class="kodkiemeles">ctx.font = '20px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(db, 10, 30)</span>
+}
+                </code>
+            </pre>
+
+            <h4>Egyre gyakoribb almák</h4>
+
+            <p>Az  egyre gyakoribb almák eléréséhez csak az <span class="kodreszlet">almagyakoriság</span> változó értékét kell csökkenteni. Ennek minkéntje szintén a fejlesztő preferenciáira van bízva. Én most azt javaslom, hogy minden elkapott alma után csökkentsük ennek értékét 5-tel, de 50 px-nél kevesebb ne lehessen két alma között. Mivel az almák mozgatásán belül vizsgáljuk az elkapást, így egy plusz feltétel hozzáadásával itt kezelni tudjuk a gyakoriságot.</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    ...
+
+    // almák mozgása és törlése
+    if (!vége) {
+        almák.forEach(alma => {
+            alma.y += almasebesség * dt;
+            if(ütköznek(alma, kosár)) {
+                if(alma.típus == 'romlott') {
+                    vége = true;
+                } else {
+                    almák.splice(0, 1);
+                    db += 1;
+                    <span class="kodkiemeles">if(almagyakoriság > 50) {
+                        almagyakoriság -= 5;
+                    }</span>
+                }
+            }
+            if(alma.típus == 'romlott' && alma.y + alma.magasság >= canvas.height) {
+                almák.splice(0, 1);
+            }
+        });
+    }
+
+    ...
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/szuret-kesz.png">
+                    <figcaption>A kész játék, <span class="kodreszlet">almagyakoriság = 50</span></figcaption>
+                </figure>
+            </div>
+
+            <p>A játék <b>elkészült</b>, jó almaszüretelést! 🍎</p>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladat</b></p>
+                <p>Legyenek zöld almák is 🍏, melyek begyűjtése <b>2</b> pontot érjen!</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

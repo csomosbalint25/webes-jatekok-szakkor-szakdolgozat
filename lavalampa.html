@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Lávalámpa - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Lávalámpa 🌋</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Ismered a lávalámpát? Na és készítettél már ilyet? Ebben a projektben <b>lehetőséged lesz meganimálni</b> egy digitális lávalámpát.</p>
+            
+            <a href="../3 Lávalámpa/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+
+            <h3>HTML</h3>
+
+            <p>Induljunk ki a már jól ismert alapstruktúrából, azonban a canvas szélességét és magasságát úgy határozzuk meg, hogy egy <b>keskeny függőleges alakzat</b>ot kapjunk, ami hasonlít egy lávalámpa alakjára!</p>
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="hu"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Lávalámpa&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;style&gt;
+        canvas{
+            border: 1px solid black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;Lávalámpa&lt;/h1&gt;
+    &lt;canvas width="<span class="kodkiemeles">200</span>" height="<span class="kodkiemeles">600</span>" id="vaszon"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            <h3>JavaScript</h3>
+
+            <h4>Keretprogram és rajzolás</h4>
+            
+            <p>A JS-kód <b>keretprogramja</b> alább látható, melyben a canvas elérése és egyéb kommentek kerültek elhelyezésre.</p>
+            <pre>
+                <code>
+/* Canvas elérése */
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* === ÁLLAPOTTÉR === */
+
+/* === ANIMÁCIÓS CIKLUS === */
+                </code>
+            </pre>
+
+            <p class="feladat"><b>✅Feladat</b><br>Milyen alakzatokat vélsz felfedezni az animációban? Ezek közül melyek mozognak és melyek fixek?</p>
+            <details>
+                <summary>Megoldás</summary>
+                <ul>
+                    <li><b>téglalap</b></li>
+                    <ul>
+                        <li>háttér</li>
+                        <li>lámpa alsó és felső része</li>
+                    </ul>
+                    <li><b>kör</b></li>
+                    <ul>
+                        <li>fix láva alul és fölül</li>
+                        <li>buborékok</li>
+                    </ul>
+                </ul>
+            </details>
+
+            <p class="feladat"><b>✅Feladat</b><br>Rajzoljuk ki az imént felfedezett alakzatokat a mintán látható módon!</p>
+            <details>
+                <summary>Megoldás</summary>
+
+                <p>A téglalap rajzolásának módja a következő: <span class="kodreszlet">ctx.fillRect(balFelsőX, balFelsőX, szélesség, magasság);</span></p>
+
+                <pre>
+                    <code>
+/* HÁTTÉR */
+ctx.fillStyle = 'rgb(124, 23, 85)';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+/* FIX LÁVA */
+// alsó láva
+ctx.beginPath();
+ctx.arc(canvas.width / 2, canvas.height + 50, canvas.width, 0, 2 * Math.PI);
+
+ctx.fillStyle = 'rgb(250, 39, 81)';
+ctx.fill();
+
+// felső láva
+ctx.beginPath();
+ctx.arc(canvas.width / 2, -100, canvas.width, 0, 2 * Math.PI);
+
+ctx.fillStyle = 'rgb(250, 39, 81)';
+ctx.fill();
+
+/* MOZGÓ LÁVA */
+// mozgó láva 1
+ctx.beginPath();
+ctx.arc(60, 420, 50, 0, 2 * Math.PI);
+
+ctx.fillStyle = 'rgb(250, 39, 81)';
+ctx.fill();
+
+// mozgó láva 2
+ctx.beginPath();
+ctx.arc(150, 250, 20, 0, 2 * Math.PI);
+
+ctx.fillStyle = 'rgb(250, 39, 81)';
+ctx.fill();
+
+/* LÁMPA */
+// lámpa teteje
+ctx.fillStyle = 'rgb(30, 72, 87)';
+ctx.fillRect(0, 0, canvas.width, canvas.height / 12);
+
+// lámpa alja
+ctx.fillStyle = 'rgb(30, 72, 87)';
+ctx.fillRect(0, canvas.height - canvas.height / 5, canvas.width, canvas.height / 5);
+                    </code>
+                </pre>
+            </details>
+
+            <figure class="keskeny">
+                <img src="képek/lava-kirajzolas.png">
+                <figcaption>
+                    <p>Canvas a kirajzolás után.</p>
+                </figcaption>
+            </figure>
+
+            <p>Sikerült megrajzolnunk a <b>kiindulóképet</b>! Jöhet az <b>animáció</b>!</p>
+
+            <h4>Animáció</h4>
+
+            <p>Biztosan te is ismered az alábbi híres felvételt. De vajon azt is tudod, hogyan készült? Kíváncsiak voltak arra, hogy van-e olyan időpillanat, amikor a ló egyik lába sem érinti a talajt futás közben. Ezért egy versenypálya mellett azonos távolságokra <b>16 fényképezőgép</b>et helyeztek el, a pályán keresztben pedig zsinórokat húztak ki, melyek egyik vége a fényképezőgépekhez volt rögzítve. A ló futás közben a lábával meghúzta a zsinórt, a fényképező pedig azonnal elsült, megörökítve ezzel <b>a ló helyzetét abban az időpillanatban</b>. A jobb oldali animáción ezeket a képeket lehet látni egymás után végtelen ciklusban. Jól látszik, hogy ez csak akkor kelti animáció hatását, ha <b>elég gyorsan következnek</b> a képek egymás után. Ebből következik, hogy egy másodperc alatt több ilyen váltásnak kell történnie.</p>
+
+            <p class="feladat"><b>✅Feladat</b><br>Mi a válasz a lovakkal kapcsolatban korábban feltett kérdésre?</p>
+            <details>
+                <summary>Megoldás</summary>
+                <p>A 2. képkockán jól látszik, hogy <b>van olyan pillanat</b>, amikor a ló egyik lába sem érinti a talajt.</p>
+            </details>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/animacio-lo-sorozat.jpg">
+                    <figcaption>A ló futása közben különböző időpillanatokban készített képek<br><a href="https://en.wikipedia.org/wiki/File:Muybridge_race_horse_animated.gif" target="_blank">Forrás</a></figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/animacio-lo.gif">
+                    <figcaption>A képek gyors, egymás utáni lejátszásával készült animáció<br><a href="https://en.wikipedia.org/wiki/File:Muybridge_race_horse_animated.gif" target="_blank">Forrás</a></figcaption>
+                </figure>
+            </div>
+
+            <p>Az előző projektben már láthattuk, hogy ha valamit módosítunk a kezdeti kirajzolás után (például a kiírandó szöveget), akkor (a Scratch fejlesztői környezettel ellentétben) itt nem automatikus a módosítás frissítése, hanem <b>nekünk kell gondoskodni róla</b>.</p>
+
+            <p>Emlékeztetőül, a pontösszekötős projektben az egérmutató aktuális helyének kiírását egy animációs ciklussal oldottuk meg a <span class="kodreszlet">requestAnimationFrame()</span> utasítással egy <span class="kodreszlet">következő</span> nevű függvényen belül. Ez az utasítás megmondja a böngészőnek, hogy egy animációt szeretnénk elindítani, ezért az mindig ütemezi a következő képkocka kirajzolását. <b>Másodpercenként több alkalommal.</b> Tehát mindig egy <b>újabb képkockát</b> rajzolunk ki módosított adatok (jelen esetben buborékpozíciók) alapján.</p>
+
+            <p>A <span class="kodreszlet">következő</span> függvény alapstruktúrája az alábbi volt.</p>
+            <pre>
+                <code>
+function következő() {
+    /* egyéb teendők */
+    requestAnimationFrame(következő);
+}
+
+következő(); // az animáció elindítása
+                </code>
+            </pre>
+
+            <p>A <span class="kodreszlet">function</span> kulcsszó vezeti be azt, hogy egy függvényt fogunk definiálni (deklarálni). Ezután jön a függvény neve (<span class="kodreszlet">következő()</span>), melynek <span class="kodreszlet">()</span> jelei között felsorolhatjuk a paramétereket. Ennek a függvénynek, azonban, nem lesznek paraméterei, így üresen hagyjuk a gömbölyű zárójelet. A <span class="kodreszlet">{}</span> jelek között határozzuk meg azt, hogy mi történjen ennek a függvénynek a futásakor, vagyis mit csináljon ez a függvény. Itt egyelőre csak annyit látunk, hogy az utolsó sorban meghívja önmagát. Viszont a buborékok mozgatásához ennyi nem lesz elég. A kódrészlet utolsó sorában meghívjuk a <span class="kodreszlet">következő</span> függvényt, ami elindítja az animációt. <b>Nézzük meg, mit kell tennünk ahhoz, hogy látható legyen a változás.</b></p>
+
+            <p>Valójában, <b>az animáció már fut</b>, hiszen meghívtuk a <span class="kodreszlet">következő</span> függvényt. De mivel szinte üres ez a következő képkocka állapotát meghatározó függvény, így nincs látható jele a futásnak. Mit is kell tennünk, tehát, hogy egy újabb, módosított képkockát rajzoljunk ki?</p>
+
+            <ol>
+                <li>a buborékok helyzetének <b>frissítése</b></li>
+                <li>az új állapot <b>kirajzolása</b></li>
+            </ol>
+
+            <p>Ha mindezt a <span class="kodreszlet">következő</span> függvényben fejtenénk ki, akkor túl hosszú, átláthatatlan lenne ez a függvény, ezért a fenti két lépést egy-egy függvényben fogjuk megírni. Ezt a két függvényt <b>máshol fogjuk megírni, itt csak meghívjuk azokat</b>. Lássuk tehát, hol tartunk a kódban.</p>
+            <pre>
+                <code>
+function következő() {
+    <span class="kodkiemeles">frissítés();</span>
+    <span class="kodkiemeles">rajzolás();</span>
+    requestAnimationFrame(következő);
+}
+
+következő(); // az animáció elindítása
+
+<span class="kodkiemeles">function rajzolás() {
+    /* az animáció minden résztvevőjének kirajzolása */
+}
+
+function frissítés() {
+    /* az animációban résztvevő elemek állapotának módosítása */
+}</span>
+                </code>
+            </pre>
+
+            <p>Következő lépésként át kell másolnunk az elemek kirajzolását a <span class="kodreszlet">rajzolás</span> függvénybe.</p>
+            <pre>
+                <code>
+function rajzolás() {
+    /* HÁTTÉR */
+    ctx.fillStyle = 'rgb(124, 23, 85)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    /* FIX LÁVA */
+        // alsó láva
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height + 50, canvas.width, 0, 2 * Math.PI);
+
+    ctx.fillStyle = 'rgb(250, 39, 81)';
+    ctx.fill();
+
+        // felső láva
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, -100, canvas.width, 0, 2 * Math.PI);
+
+    ctx.fillStyle = 'rgb(250, 39, 81)';
+    ctx.fill();
+
+    /* MOZGÓ LÁVA */
+        // mozgó láva 1
+        ctx.beginPath();
+        ctx.arc(60, 450, 50, 0, 2 * Math.PI);
+    
+        ctx.fillStyle = 'rgb(250, 39, 81)';
+        ctx.fill();
+    
+            // mozgó láva 2
+        ctx.beginPath();
+        ctx.arc(150, 250, 20, 0, 2 * Math.PI);
+    
+        ctx.fillStyle = 'rgb(250, 39, 81)';
+        ctx.fill();
+
+    /* LÁMPA */
+        // lámpa teteje
+    ctx.fillStyle = 'rgb(30, 72, 87)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height / 12);
+
+        // lámpa alja
+    ctx.fillStyle = 'rgb(30, 72, 87)';
+    ctx.fillRect(0, canvas.height - canvas.height / 5, canvas.width, canvas.height / 5);
+}
+                </code>
+            </pre>
+
+            <p>Ez után az átalakítás után még mindig nincs szemmel látható eredmény, mert ugyanazt a statikus képet rajzoljuk ki - mindkét buborék függőleges pozíciója meghatározott: <span class="kodreszlet">450</span> és <span class="kodreszlet">250</span>. Mivel ezeket az értékeket változtatni szeretnénk, érdemes őket <b>változóban tárolni</b>. Ezeket a változókat hozzuk létre <span class="kodreszlet">y1</span> és <span class="kodreszlet">y2</span> néven az animációs ciklus előtt, az állapottérben. Ezek jelöljék az első buborék és a második buborék függőleges pozícióját.</p>
+            <pre>
+                <code>
+/* === ÁLLAPOTTÉR === */
+
+<span class="kodkiemeles">let y1 = 420;
+let y2 = 250;</span>
+
+/* === ANIMÁCIÓS CIKLUS === */
+
+function következő() {
+    frissítés();
+    rajzolás();
+    requestAnimationFrame(következő);
+}
+
+következő(); // az animáció elindítása
+
+function rajzolás() {
+    /* HÁTTÉR */
+    ctx.fillStyle = 'rgb(124, 23, 85)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    /* FIX LÁVA */
+        // alsó láva
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height + 50, canvas.width, 0, 2 * Math.PI);
+
+    ctx.fillStyle = 'rgb(250, 39, 81)';
+    ctx.fill();
+
+        // felső láva
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, -100, canvas.width, 0, 2 * Math.PI);
+
+    ctx.fillStyle = 'rgb(250, 39, 81)';
+    ctx.fill();
+
+    /* MOZGÓ LÁVA */
+        // mozgó láva 1
+        ctx.beginPath();
+        <span class="kodkiemeles">ctx.arc(60, y1, 50, 0, 2 * Math.PI);</span>
+    
+        ctx.fillStyle = 'rgb(250, 39, 81)';
+        ctx.fill();
+    
+            // mozgó láva 2
+        ctx.beginPath();
+        <span class="kodkiemeles">ctx.arc(150, y2, 20, 0, 2 * Math.PI);</span>
+    
+        ctx.fillStyle = 'rgb(250, 39, 81)';
+        ctx.fill();
+
+    /* LÁMPA */
+        // lámpa teteje
+    ctx.fillStyle = 'rgb(30, 72, 87)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height / 12);
+
+        // lámpa alja
+    ctx.fillStyle = 'rgb(30, 72, 87)';
+    ctx.fillRect(0, canvas.height - canvas.height / 5, canvas.width, canvas.height / 5);
+}
+                </code>
+            </pre>
+
+            <p>Próbáljuk ki, mi történik, ha kézzel <b>átírjuk</b> az <span class="kodreszlet">y1</span> változó értékét!</p>
+
+            <div class="kepsor">
+                <figure class="keskeny">
+                    <img src="képek/lava-manualisemeles-1.png">
+                    <figcaption><span class="kodreszlet">let y1 = 400</span></figcaption>
+                </figure>
+                <figure class="keskeny">
+                    <img src="képek/lava-manualisemeles-2.png">
+                    <figcaption><span class="kodreszlet">let y1 = 350</span></figcaption>
+                </figure>
+                <figure class="keskeny">
+                    <img src="képek/lava-manualisemeles-3.png">
+                    <figcaption><span class="kodreszlet">let y1 = 300</span></figcaption>
+                </figure>
+                <figure class="keskeny">
+                    <img src="képek/lava-manualisemeles-4.png">
+                    <figcaption><span class="kodreszlet">let y1 = 250</span></figcaption>
+                </figure>
+            </div>
+
+            <p>Látható, hogy ahogy csökkentjük a változó értékét, úgy kerül egyre fentebb a nagyobb buborék, ez azonban még nem nevezhető animációnak, mivel nem folyamatosan változik az <span class="kodreszlet">y1</span> értéke. A változó értékének frissítését olyan helyen kellene tenni, ahol <b>mindig lefut</b>. Pontosan erre szolgál a <span class="kodreszlet">frissítés</span> függvény.</p>
+
+            <p>Írjuk meg, tehát, a <span class="kodreszlet">frissítés</span> függvényt az alábbi módon.</p>
+            <pre>
+                <code>
+function frissítés() {
+    y1 -= 1;
+}
+                </code>
+            </pre>
+
+            <p>Ezzel elkészült az animációnk.</p>
+
+            <p>Bár sikerült megoldanunk azt, hogy felfelé haladjon a buborék, a lávalámpák sajátossága, hogy a lávabuborékok - miután elérték a lámpa tetejét - visszasüllyednek a lámpa aljára. Majd megint felemelkednek és visszasüllyednek, és így tovább. A következő cél, hogy elérjük <b>a buborék visszasüllyedését</b>. Vajon mikor kell megváltoztatnunk azt az értéket, amivel az <span class="kodreszlet">y1</span>-et változtatjuk? Egy lehetséges megoldás, hogy akkor, amikor a buborék eléri a vászon tetejét, vagyis amikor <span class="kodreszlet">y1 == 0</span>.</p>
+
+            <div class="megjegyzes">
+                <p><b>💭Megjegyzés</b><br>A <span class="kodreszlet">=</span> jel értékadást jelent, a <span class="kodreszlet">==</span> jel pedig egyenlőségvizsgálatot. Például</p>
+                <ul>
+                    <li><span class="kodreszlet">y1 = 450</span> jelentése: <i><span class="kodreszlet">y1</span> <b>legyen</b> egyenlő négyszázötvennel</i></li>
+                    <li><span class="kodreszlet">y1 == 0</span> jelentése: <i><span class="kodreszlet">y1</span> <b>egyenlő-e</b> nullával?</i></li>
+                </ul>
+            </div>
+
+            <p>Az imént felvázolt megoldás megvalósításához a <span class="kodreszlet">frissítés</span> függvényen kell módosítanunk.</p>
+            <pre>
+                <code>
+function frissítés() {
+    if (y1 > 0) {
+        y1 -= 1;
+    }
+}
+                </code>
+            </pre>
+
+            <p>Ez a kód minden frissítés során ellenőrzi az <span class="kodreszlet">y1</span> pozícióját. Azt jelenti, hogy ha az <span class="kodreszlet">y1</span> változó értéke nagyobb, mint <span class="kodreszlet">0</span>, akkor csökkenjen <span class="kodreszlet">1</span>-gyel az <span class="kodreszlet">y1</span> értéke.</p>
+
+            <div class="megjegyzes">
+                <p><b>💭Megjegyzés</b><br>A fenti kódban látható egy <b>elágazás</b>. Az elágazás egy úgynevezett <b>vezérlési szerkezet</b>, melynek általános formája a következő:</p>
+                <pre>
+                    <code>
+<span class="kodkiemeles">if (</span>ez a feltétel igaz<span class="kodkiemeles">) {</span>
+    /* akkor ez történjen */
+<span class="kodkiemeles">}</span>
+                    </code>
+                </pre>
+                <p>Ez a szerkezet bővíthető egy <b>hamis ággal</b>, ami akkor fog lefutni, ha a feltétel hamis. Az előbbi ágat <b>igaz ágnak</b> nevezzük.</p>
+                <pre>
+                    <code>
+if (ez a feltétel igaz) {
+    /* akkor ez történjen */
+}<span class="kodkiemeles"> else {</span>
+    /* különben ez történjen */
+<span class="kodkiemeles">}</span>
+                    </code>
+                </pre>
+            </div>
+
+            <p>Helyezzük át ideiglenesen a nagy buborék kirajzolását a <span class="kodreszlet">rajzolás</span> függvény végére, hogy az mindig látszódjon. Így meg tudjuk nézni, hogy megáll-e a buborék a vászon tetjén.</p>
+            <figure class="keskeny">
+                <img src="képek/lava-animacio-tetejenmegall.png">
+                <figcaption>A nagyobbik láva megáll a játéktér tetején</figcaption>
+            </figure>
+
+            <p>Megállt. 🙂</p>
+
+            <p>Most <b>fordítsuk meg</b> a lávabuborék irányát!</p>
+
+            <p>Az irány megfordítása elsőre egyszerűnek hangzik, mégis több mindent fontolóra kell venni. Szerencsés úgy gondolkodni, hogy ha elérjük a vászon tetejét, akkor az irány legyen az ellenkezője. Vagyis ha eddig <span class="kodreszlet">-1</span> volt a "sebessége", akkor most legyen <span class="kodreszlet">1</span>! Mi történt a <span class="kodreszlet">-1</span>-gyel, hogy <span class="kodreszlet">1</span> lett belőle? Megszoroztuk <span class="kodreszlet">-1</span>-gyel. Ez a logika akkor is működik, ha a sebessége <span class="kodreszlet">-5</span>: <span class="kodreszlet">-5 * -1 = 5</span>.</p>
+
+            <p>Hozzunk létre egy sebességet tároló változót az állapottérben.</p>
+            <pre>
+                <code>
+/* === ÁLLAPOTTÉR === */
+
+let y1 = 420;
+let y2 = 250;
+<span class="kodkiemeles">let sebesség1 = -1;</span>
+                </code>
+            </pre>
+
+            <p>A <span class="kodreszlet">sebesség1</span> alapján határozzuk meg a buborék mozgását úgy, hogy mindig a <span class="kodreszlet">sebesség1</span> értékével változzon az <span class="kodreszlet">y1</span> értéke, de amikor a buborék eléri a játéktér alját vagy tetejét, akkor váltsuk az ellenkezőjére a <span class="kodreszlet">sebesség1</span> értékét, vagyis szorozzuk meg <span class="kodreszlet">-1</span>-gyel!</p>
+            <pre>
+                <code>
+function frissítés() {
+    <span class="kodkiemeles">y1 += sebesség1;</span>
+    if(y1 <span class="kodkiemeles"><=</span> 0) {
+        <span class="kodkiemeles">sebesség1 *= -1;</span>
+    }
+    <span class="kodkiemeles">if(y1 >= canvas.height) {
+        sebesség1 *= -1;
+    }</span>
+}
+                </code>
+            </pre>
+
+            <p class="feladat"><b>✅Feladat</b><br>Készítsd el a kisebb buborék mozgását is! Ez a buborék lefelé induljon el és 2x olyan gyorsan haladjon, mint a nagyobb buborék!</p>
+            <details>
+                <summary>Megoldás</summary>
+                    <pre>
+                        <code>
+/* === ÁLLAPOTTÉR === */
+
+let y1 = 420;
+let y2 = 250;
+let sebesség1 = -1;
+<span class="kodkiemeles">let sebesség2 = 2;</span>
+                        </code>
+                    </pre>
+                    
+                    <pre>
+                        <code>
+function frissítés() {
+    y1 += sebesség1;
+    if(y1 &lt;= 0) {
+        sebesség1 *= -1;
+    }
+    if(y1 >= canvas.height) {
+        sebesség1 *= -1;
+    }
+    
+    <span class="kodkiemeles">y2 += sebesség2;
+    if(y2 &lt;= 0) {
+        sebesség2 *= -1;
+    }
+    if(y2 >= canvas.height) {
+        sebesség2 *= -1;
+    }</span>
+}
+                        </code>
+                    </pre>
+            </details>
+
+            <p>Ezennel el is készültünk a digitális lávalámpánkkal!</p>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladat</b><br>A lávalámpa egyre melegebb, így újabb és újabb buborékok jelennek meg. Készíts egy harmadik buborékot is, melynek mérete és sebessége a már meglévő két buborék között helyezkedjen el! Ha ezzel is kész vagy, akkor készíts még egyet. És még egyet, és még egyet... 🫧</p>
+            </div>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladat</b><br>Képzeld el, ahogy egy augusztusi estén a fűben fekszel és a Perseidák meteorraj hullócsillagait nézed. Készíts egy animációt, ami a szemed elé táruló látványt ábrázolja.</p>
+                <a href="../4 Perseidák/index.html">
+                    <div class="megtekintes-gomb">
+                        <p>Interaktív példa</p>
+                    </div>
+                </a>
+                <ul>
+                    <li>A <b>hold</b> a vászon tetején balról jobbra mozog vízszintesen.</li>
+                    <li>A <b>műhold</b> a vászon jobb alsó sarkától annak bal felső sarkáig halad.</li>
+                    <li>A <b>csillag</b> a vászon bal szélén, függőlegesen középen jelenik meg mindig. Jobbra halad, de kicsit mindig más irányba, amit a véletlenszerűen beállított függőleges sebessége határoz meg. Akkor jelenik meg újra, ha vízszintesen elhagyta a vászon szélességének kétszeresét.</li>
+                    <li>A zöld körök a képbe lógó lombokat jelölik.</li>
+                </ul>
+
+                <p><b>Töltsd le a <a href="../4 Perseidák kiindulás/index.js">kiindulófájlt</a>, ebben dolgozz!</b></p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p>FOOTER</p>
+    </footer>
+</body>
+</html>

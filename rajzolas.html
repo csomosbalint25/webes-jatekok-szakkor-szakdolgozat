@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Rajzolás - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Rajzolás ✏️</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Biztosan jól ismered a <b>pontösszekötős</b> rajzokat, ahol a számozott pontok összekötésével lehet befejezni egy rajzot. Ebben a játékban ilyen rajzokat készítünk, de nem a hagyományos módon.</p>
+            
+            <a href="../1 Rajzolás/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+            <h3>HTML</h3>
+
+            <p>Minthogy webes játékokról van szó, a Visual Studio Code alkalmazás megnyitása után elsőként létre kell hozzunk egy weboldalt <span class="kodreszlet">index.html</span> néven, ahol a játékot fogjuk elkészíteni. Ehhez az alap HTML-struktúrát fogjuk használni, amit könnyedén előhozhatunk a <b>!</b> emmet paranccsal és az <b>ENTER</b>-rel. Ekkor az alábbi kódot kapjuk:</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            <p>Állítsuk át az oldal nyelvét magyarra (<span class="kodreszlet">&lt;html lang="hu"&gt;</span>), a weboldal címét pedig a játék nevére (<span class="kodreszlet">&lt;title&gt;Kösd össze a pontokat&lt;/title&gt;</span>).</p>
+
+            <p>Ebben a feladatban (és a későbbi feladatok során is) a HTML-oldalon az alábbi elemeket fogjuk elhelyezni: </p>
+            <ul>
+                <li>játék neve</li>
+                <li>vászon</li>
+                <li>vászon stílusa</li>
+                <li>JavaScript-kód</li>
+            </ul>
+
+            <p>Ezeket a <span class="kodreszlet">&lt;body&gt;&lt;/body&gt;</span> tagek (vagyis címkék) között fogjuk elhelyezni. Kezdjük is a címmel, ami egy 1-es szintű címsor lesz:</p>
+            <pre>
+                <code>
+&lt;body&gt;
+    <span class="kodkiemeles">&lt;h1&gt;Kösd össze a pontokat!&lt;/h1&gt;</span>
+&lt;/body&gt;
+                </code>
+            </pre>
+
+            <p>A böngészőablak frissítése után megjelenik a "Kösd össze a pontokat!" szöveg.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/rajzolas-h1-cim.png">
+                    <figcaption>
+                        <p>A weboldalon megjelenik a cím</p>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <p>A cím alatt helyezkedik el a <span class="kodreszlet">&lt;canvas&gt;&lt;/canvas&gt;</span>, vagyis a vászon, melynek <b>szélessége</b> legyen 313 pixel, <b>magassága</b> 407 pixel. A <span class="kodreszlet">&lt;canvas&gt;</span> tag <span class="kodreszlet">id</span> attribútuma egyedi azonosító megadására szolgál. Később a JavaScript fájlban ezzel az azonosítóval hivatkozhatunk a vászonra.</p>
+
+            <pre>
+                <code>
+&lt;body&gt;
+    &lt;h1&gt;Kösd össze a pontokat!&lt;/h1&gt;
+    <span class="kodkiemeles">&lt;canvas width="313" height="407" id="vaszon"&gt;&lt;/canvas&gt;</span>
+&lt;/body&gt;
+                </code>
+            </pre>
+
+            <p>Ebben a pillanatban szabad szemmel még nem látható az eredmény, de a vászon már rendelkezésre áll a megadott helyen és méretben. Annak érdekében, hogy a vászon meglétét ellenőrizhessük, lássuk el a vásznat <b>vékony fekete szegéllyel</b> az alább látható módon:</p>
+            <pre>
+                <code>
+&lt;body&gt;
+    <span class="kodkiemeles">&lt;style&gt;
+        canvas{
+            border: 1px solid black;
+        }
+    &lt;/style&gt;</span>
+    &lt;h1&gt;Kösd össze a pontokat!&lt;/h1&gt;
+    &lt;canvas width="313" height="407" id="vaszon"&gt;&lt;/canvas&gt;
+&lt;/body&gt;
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/rajzolas-vaszon-szegely.png">
+                    <figcaption>
+                        <p>A weboldalon megjelenik vászon szegélye</p>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <p>Ez a vászon lehetőségek tárházát nyitja meg előttünk a játékfejlesztéshez. Azonban a vászonra csak JavaScript kódot használva tudunk rajzolni (és később játékot írni), ezért ehhez a vászonhoz hozzá kell rendelni egy kódot, vagyis scriptet. A kód forrásaként az <span class="kodreszlet">index.js</span> fog szolgálni:</p>
+            <pre>
+                <code>
+&lt;body&gt;
+    &lt;style&gt;
+        canvas{
+            border: 1px solid black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;Kösd össze a pontokat!&lt;/h1&gt;
+    &lt;canvas width="313" height="407" id="vaszon"&gt;&lt;/canvas&gt;
+    <span class="kodkiemeles">&lt;script src="index.js"&gt;&lt;/script&gt;</span>
+&lt;/body&gt;
+                </code>
+            </pre>
+
+            <p>Vigyük az egérmutatót az <span class="kodreszlet">index.js</span> szöveg (link) fölé, majd a felugró ablakban kattintsunk a <b>Follow link</b> opcióra, hogy elérjük ezt a JavaScript fájlt. Miután rákattintottunk, egy figyelmeztetést kapunk, hogy az <span class="kodreszlet">index.js</span> fájl nem létezik. Valóban nem létezik még ez a fájl, de a <b>Create File</b> opcióra kattinva a Visual Studio Code létrehozza és megnyitja nekünk ezt a fájlt.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/rajzolas-follow-link.png">
+                    <figcaption>
+                        <p>Az index.js forrásának megnyitása</p>
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/create-file.png">
+                    <figcaption>
+                        <p>A JavaScript forrásfájl létrehozása és megnyitása</p>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <p>Ebben a projektben nem egy, hanem két vásznunk (<span class="kodreszlet">&lt;canvas&gt;</span>) lesz az egyes rajzokhoz. Ennek értelmében a <b>végleges HTML-kód</b> a következő lesz:</p>
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+<span class="kodkiemeles">&lt;html lang="hu"&gt;</span>
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    <span class="kodkiemeles">&lt;title&gt;Kösd össze a pontokat&lt;/title&gt;</span>
+&lt;/head&gt;
+&lt;body&gt;
+    <span class="kodkiemeles">&lt;style&gt;
+        canvas {
+            border: solid 1px black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;Kösd össze a pontokat!&lt;/h1&gt;
+    &lt;canvas width="313" height="407" id="vaszon1"&gt;&lt;/canvas&gt;
+    &lt;canvas width="469" height="350" id="vaszon2"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/rajzolas-vaszon-ketto-darab.png">
+                    <figcaption>
+                        <p>Mindkét vászon kirajzolásra került</p>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <h3>JavaScript (JS)</h3>
+
+            <h4>Vászon elérése</h4>
+
+            <p>A canvasre rajzolás nem más, mint parancsok sorozatának alkalmazása a canvasre. Ehhez viszont valahogyan el kell érnünk a canvast, vagyis a HTML dokumentumból ki kell választanunk a <span class="kodreszlet">&lt;canvas&gt;</span> elemet, és azt el kell tárolnunk egy konstansban, hogy később könnyen tudjunk rá hivatkozni. Azért konstansban tároljuk el, mert ez a vászon nem fog változni a játékfejlesztés során, vagyis mindig ugyanzt a vásznat fogjuk használni. A JS kód első két sora tehát a következő lesz két különböző vászon eltárolása esetén:</p>
+            <pre>
+                <code>
+/*Canvas elérése*/
+<span class="kodkiemeles">const canvas1 = document.querySelector('#vaszon1');
+const canvas2 = document.querySelector('#vaszon2');</span>
+                </code>
+            </pre>
+            <p>A <span class="kodreszlet">const</span> kulcsszó vezeti be azt, hogy egy konstanst hozunk létre, majd a konstans elnevezése után (<span class="kodreszlet">"canvas1"</span>, <span class="kodreszlet">"canvas2"</span>) rögtön egy <span class="kodreszlet">=</span> jellel értéket adunk neki a <span class="kodreszlet">querySelector()</span> HTML DOM metódussal. Ez az érték a HTML dokumentum <span class="kodreszlet">#vaszon1</span> és <span class="kodreszlet">#vaszon2</span> egyedi azonosítókkal ellátott eleme, vagyis a <span class="kodreszlet">&lt;canvas&gt;</span> tagek.</p>
+
+            <div class="megjegyzes">
+                <p><b>💭 Megjegyzés</b></p>
+                <p>A <span class="kodreszlet">const</span> kulcsszóval olyan változókat hozhatunk létre, melynek értéke nem változik a program futása során.</p>
+            </div>
+
+            <p>A <span class="kodreszlet">&lt;canvas&gt;</span> csak egy <b>rajzfelület</b>, önmagában még nem ad rajzoló eszközöket a kezünkbe. Annak érdekében, hogy erre a vászonra köröket, téglalapokat, vonalakat, görbéket, képeket és szöveget tudjunk rajzolni különböző színekben, méretekben, elforgatással és egyéb transzformációkkal, le kell kérnünk a vászon 2D kontextusát a <span class="kodreszlet">getContext()</span> HTML DOM metódussal. Ez a kontextus biztosítja a játékfejlesztéshez használt rajzolási műveleteket, pl. <span class="kodreszlet">ctx1.drawImage()</span> képkirajzoláshoz, <span class="kodreszlet">ctx1.beginPath()</span> alakzatrajzolás indításához vagy <span class="kodreszlet">ctx1.arc()</span> körív rajzolásához. Ezt a két kontextust <b>ctx1</b> és <b>ctx2</b> néven tároljuk el.</p>
+            <pre>
+                <code>
+/*Canvas elérése*/
+const canvas1 = document.querySelector('#vaszon1');
+<span class="kodkiemeles">const ctx1 = canvas1.getContext('2d');</span>
+
+const canvas2 = document.querySelector('#vaszon2');
+<span class="kodkiemeles">const ctx2 = canvas2.getContext('2d');</span>
+                </code>
+            </pre>
+
+            <h4>Háttérkép</h4>
+
+            <p>A mintaként szolgáló képeket a canvas háttérképeként fogjuk használni, ezért kellett a vászon méretét a háttérképekével megegyezőre beállítani. Ha a vászon szélességének és magasságának aránya eltér a háttérkép arányaitól, akkor a háttérkép transzformálva (nyújtva) lesz kirajzolva. De hogyan lehet <b>képet beilleszteni</b>?</p>
+
+            <p>A képet el kell tárolnunk valahol, így egy konstanst hozunk létre, mely egy kép lesz, majd ennek a képnek megadjuk a forrását, vagyis a kép elérési útvonalát:</p>
+            <pre>
+                <code>
+/*Képek betöltése*/
+const giliszta = new Image();
+giliszta.src = 'worm.png';
+                </code>
+            </pre>
+
+            <p>Ezt a képet ki kell rajzolnunk a vászonra, amit az alábbi kóddal tehetünk meg. Az első paraméter a kirajzolni kívánt kép (melyet a <span class="kodreszlet">giliszta</span> konstansban tároltunk el), a második és harmadik paraméter a kép bal felső sarkának <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> koordinátája, a negyedik és ötödik paraméter pedig a kép szélessége és magassága pixelben. Ezt a képet, viszont, csak akkor rajzolhatjuk ki, ha a képek már betöltöttek.</p>
+            <pre>
+                <code>
+giliszta.onload = function() {
+    ctx1.drawImage(giliszta, 0, 0, 313, 407);
+};
+                </code>
+            </pre>
+
+            <p class="feladat"><b>Feladat ✅</b></b> <br>Ugyanezt a műveletsort hajtsuk végre a másik vásznon a másik forrásképpel!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+const hal = new Image();
+hal.src = 'fish.png';
+hal.onload = function() {
+    ctx2.drawImage(hal, 0, 0, 469, 350);
+};
+                    </code>
+                </pre>
+            </details>
+            
+            <p>A képek betöltése után a következőt kell látnunk.</p>
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/rajzolas-alap.png">
+                    <figcaption>
+                        <p>Két vászon áll rendelkezésre (<span class="kodreszlet">ctx1</span> és <span class="kodreszlet">ctx2</span>), melyeknek háttérképet állítottunk be.</p>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <h4>Egérmutató pozíciójának kiírása</h4>
+
+            <p>A pontok összekötéséhez fontos információ, hogy hol helyezkednek el a pontok. Úgy is fel lehetne tenni a kérdést, hogy mi a pontok <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> koordinátája a vásznon. Milyen jó lenne, ha ehhez az információhoz mindössze azáltal jutnánk hozzá, hogy a pontok fölé visszük az egeret! Hogyan lehet lekérdezni és kiírni az egérmutató helyzetét?</p>
+
+            <p>A következőkben megismerkedünk az <b>egérmozgással</b>, mint eseménnyel.</p>
+
+            <p>Mi számít <b>eseménynek</b>? Az egérmozgáson kívül ide tartozik többek között az kattintás és a különböző billentyűk lenyomása vagy felengedése is. A későbbi játékok során találkozni fogunk ezekkel is, de most az egérmozgás eseményre lesz szükségünk. Az imént felsorolt események bármikor megtörténhetnek, azonban alapvetően nincs hatásuk. Ha azt szeretnénk, hogy valamilyen hatásuk legyen, akkor egy eseményfigyelőt kell hozzárendelni valamelyik elemhez (mi a weboldalhoz fogjuk hozzárendelni), amelynél definiálhatjuk, hogy milyen eseményt figyeljen, és ha az bekövetkezik, akkor mi történjen. Ennek általános formája az alábbi:</p>
+            <pre>
+                <code>
+elem.addEventListener(esemény, függvény);
+                </code>
+            </pre>
+
+            <p>Az első paraméter határozza meg az esemény típusát (egérmozgás/<span class="kodreszlet">mousemove</span>, kattintás/<span class="kodreszlet">click</span>, billentyűlenyomás/<span class="kodreszlet">keydown</span>, billentyűfelengedés/<span class="kodreszlet">keyup</span>, weboldal vagy kép betöltése/<span class="kodreszlet">onload</span> stb.), a második pedig azt a függvényt, amit az esemény bekövetkeztekor meghívunk, vagyis azt mondja meg, hogy mi történjen egy adott esemény bekövetkezésekor. Egy elemhez több eseménykezelőt is rendelhetünk (akár ugyanolyan típusúakat is anélkül, hogy azok felülírnák egymást).</p>
+
+            <pre>
+                <code>
+document.addEventListener(<span class="kodkiemeles">'mousemove'</span>, function(e) {})
+                </code>
+            </pre>
+
+            <p>A fenti kód még nem teljes, hiszen a <span class="kodreszlet">{}</span> jelek között meg kell írnunk az egérmutató vízszintes és függőleges helyének eltárolását. Matematikából már tudjuk, hogy egy koordinátarendszerben a vízszintes tengely jele az <span class="kodreszlet">x</span>, a függőleges tengelyé <span class="kodreszlet">y</span>. A vászon felülete is egy koordinátarendszer, viszont itt az origó nem középen van, hanem a bal felső sarokban. Ebből a pontból az <span class="kodreszlet">x</span> tengely balra nő, jobbra csökken, viszont az <span class="kodreszlet">y</span> tengely a megszokottól eltérően lefelé nő, felfelé csökken. Az imént említett koordinátákkal az egérmutató is rendelkezik, így nincs más dolgunk, mint lekérdezni ezeket a koordinátákat.</p>
+
+            <p>Elsőként (még az eseménykezelő függvény előtt) hozzuk létre az egérmutató koordinátáit eltároló <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> nevű változókat, melyeknek adjuk a <span class="kodreszlet">0</span> kezdőértéket! Változót a <span class="kodreszlet">let</span> kulcsszóval hozhatunk létre:</p>
+            <pre>
+                <code>
+<span class="kodkiemeles">let x = 0;
+let y = 0;</span>
+document.addEventListener('click', function(e) {})
+                </code>
+            </pre>
+
+            <p>Ezután ezeknek a változóknak adjuk értékül az egér <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> koordinátáit. A függvény <span class="kodreszlet">e</span> paramétere jelöli az egérmutatót, melynek vízszintes és függőleges koordinátáját a <span class="kodreszlet">.offsetX</span> és <span class="kodreszlet">.offsetY</span> tulajdonságok tartalmazzák:</p>
+            <pre>
+                <code>
+let x = 0;
+let y = 0;
+document.addEventListener('click', function(<span class="kodkiemeles">e</span>) {
+    x = <span class="kodkiemeles">e.offsetX</span>;
+    y = <span class="kodkiemeles">e.offsetY</span>;
+})
+                </code>
+            </pre>
+
+            <p>Most már az <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> változók tartalmazzák, hogy hol van az egérmutató.</p>
+
+            <p>Hogy számunkra is egyértelmű legyen az egérmutató vízszintes és függőleges pozíciója, írjuk ki azt a vászonra. A szövegkiírás menete a következő lépésekből áll:</p>
+
+            <ul>
+                <li>betűméret (pixelben) és betűtípus beállítása (<span class="kodreszlet">.font</span>),</li>
+                <li>betűszín megadása (<span class="kodreszlet">.fillStyle</span>), és</li>
+                <li>a szöveg kiírása (<span class="kodreszlet">.fillText(mit, hovaX, hovaY)</span>). A <span class="kodreszlet">hovaX</span> és <span class="kodreszlet">hovaY</span> paraméterek mondják meg, hova kerüljön a szöveg bal alsó sarka.</li>
+            </ul>
+            <pre>
+                <code>
+/*Egérmutató pozíciójának kiírása*/
+let x = 0;
+let y = 0;
+ctx1.font = '20px Arial';
+ctx1.fillStyle = 'black';
+ctx1.fillText('(' + x + ',' + y + ')', 10, 50);
+
+/*Egérmutató X és Y koordinátájának lekérdezése és eltárolása*/
+document.addEventListener('mousemove', function(e) {
+    x = e.offsetX;
+    y = e.offsetY;
+})
+                </code>
+            </pre>
+
+            <figure>
+                <img src="képek/rajzolas-koordinata00.png">
+                <figcaption>
+                    <p>Az <span class="kodreszlet">x</span> és az <span class="kodreszlet">y</span> változók értékének kiírása</p>
+                </figcaption>
+            </figure>
+            
+            <p>A fenti kód folyamatosan frissíti az <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> változókat, mégis csak a <span class="kodreszlet">(0,0)</span> koordinátapár látható a canvas bal felső sarkában, hiába mozgatjuk az egeret a canvas fölött. Miért van ez? A programkód szekvenciálisan, vagyis sorról sorra fut le. Tehát az <span class="kodreszlet">x</span> és az <span class="kodreszlet">y</span> változók értékét beállítjuk <span class="kodreszlet">0</span>-ra, majd rögtön kiírjuk azt és csak ezután kezdjük frissíteni a változók értékét az egérmutató aktuális pozíciója alapján. Könnyen láthatjuk, hogy a kiírásnak többször meg kell történnie, hogy mindig a legfrissebbet írja ki. Mi lenne, ha a kiírást egy függvénybe helyeznénk el, ami utolsó lépésként önmagát hívja meg, vagyis folyamatosan kiírja az <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> változók értékét.</p>
+            <pre>
+                <code>
+/*Egérmutató pozíciójának kiírása*/
+let x = 0;
+let y = 0;
+<span class="kodkiemeles">function következő() {</span>
+    ctx1.font = '20px Arial';
+    ctx1.fillStyle = 'black';
+    ctx1.fillText('(' + x + ',' + y + ')', 10, 50);
+    <span class="kodkiemeles">requestAnimationFrame(következő);
+}
+következő();</span>
+
+/*Egérmutató X és Y koordinátájának lekérdezése és eltárolása*/
+document.addEventListener('mousemove', function(e) {
+    x = e.offsetX;
+    y = e.offsetY;
+})
+                </code>
+            </pre>
+
+            <p>A fenti kódban a <span class="kodreszlet">requestAnimationFrame(következő);</span> lesz az a sor, ami újrahívja a <span class="kodreszlet">következő</span> függvényt. A <span class="kodreszlet">requestAnimationFrame()</span> megmondja a böngészőnek, hogy egy animációt szeretnénk elindítani, ezért ütemezi a következő képkockát. Olyan ez, mint az ujjunkkal pörgethető, rövid történeteket bemutató könyvecskék, melyek minden oldala egy picit másabb az előzőnél, ezért az "animáció" csak gyors pörgetés esetén látványos. A <span class="kodreszlet">requestAnimationFrame()</span> paraméterébe azt a függvényt kell írnunk, ami alapján az újrarajzolást el szeretnénk végezni. A mi esetünkben az újrarajzolás, vagyis a következő képkocka a <span class="kodreszlet">következő</span> függvényben meghatározottak szerint lesz más, ezért ezt a függvényt kell meghívnunk. Erről bővebben olvashatsz a <a href="https://www.w3schools.com/jsref/met_win_requestanimationframe.asp" target="_blank">W3Schools oldalán</a>.</p>
+
+            <p>A mi kódunk jelenleg annyiban működik másképp az imént említett könyvecskéknél, hogy nem tűnnek el a korábban kirajzolt képkockák, hanem egymásra rajzolódnak...</p>
+
+            <figure>
+                <img src="képek/rajzolas-koordinatasok.png">
+                <figcaption>
+                    <p>Az <span class="kodreszlet">x</span> és az <span class="kodreszlet">y</span> változók értékének folyamatos kiírása</p>
+                </figcaption>
+            </figure>
+
+            <p>Látható, hogy még nem működik tökéletesen. Az is látszik, hogy mi a gond: az újabb és újabb kiírások egymásra kerülnek, ezért minden kiírás alatt látszik az összes korábbi koordináta-pár. Kellene egy "radír eszköz" a kezünkbe, amivel a kiírás előtt <b>letöröljük</b> a vászon bal felső sarkát minden kiírás előtt. Mivel minden kiírást egy törlés előz meg, így a törlést is a függvényben kell elhelyezni a kiírás elé az alábbi módon.</p>
+            <pre>
+                <code>
+/*Egérmutató pozíciójának kiírása*/
+let x = 0;
+let y = 0;
+function következő() {
+    <span class="kodkiemeles">ctx1.clearRect(0, 0, 140, 60);</span>  //törlés téglalap alakban
+    ctx1.font = '20px Arial';
+    ctx1.fillStyle = 'black';
+    ctx1.fillText('(' + x + ',' + y + ')', 10, 50);
+    requestAnimationFrame(következő);
+}
+következő();
+
+/*Egérmutató X és Y koordinátájának lekérdezése és eltárolása*/
+document.addEventListener('mousemove', function(e) {
+    x = e.offsetX;
+    y = e.offsetY;
+})
+                </code>
+            </pre>
+
+            <p>A törlés művelet a képkirajzoláshoz hasonló paraméterekkel rendelkezik:</p>
+            <ol>
+                <li>a törlendő terület bal felső sajkának <span class="kodreszlet">x</span> pozíciója pixelben</li>
+                <li>a törlendő terület bal felső sajkának <span class="kodreszlet">y</span> pozíciója pixelben</li>
+                <li>a törlendő terület szélessége pixelben</li>
+                <li>a törlendő terület magassága pixelben</li>
+            </ol>
+
+            <p>Az imént, tehát, egy <span class="kodreszlet">140px</span> széles és <span class="kodreszlet">60px</span> magas téglalap alakban töröltünk a canvas bal felső sarkától kezdve, hogy az alábbi eredményt kapjuk, amikor a giliszta bal felső pontja fölé visszük az egeret:</p>
+            <figure>
+                <img src="képek/rajzolas-koordinatajo.png">
+                <figcaption>
+                    <p>Az <span class="kodreszlet">x</span> és az <span class="kodreszlet">y</span> változók értékének folyamatos kiírása helyesen</p>
+                </figcaption>
+            </figure>
+
+            <p class="feladat"><b>Feladat ✅</b></b> <br>Írd ki a "<i>Giliszta</i>" és "<i>Hal</i>" szavakat a vásznak bal felső sarkába! Figyelj arra, hogy éppen melyik vászonra szeretnél írni (<span class="kodreszlet">ctx1</span> és <span class="kodreszlet">ctx2</span>)!
+            </p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+/*Szöveg kiírása*/
+ctx1.font = '30px Arial';
+ctx1.fillStyle = 'black';
+ctx1.fillText('Giliszta', 10, 100);
+
+ctx2.font = '30px Arial';
+ctx2.fillStyle = 'black';
+ctx2.fillText('Hal', 10, 50);
+                    </code>
+                </pre>
+            </details>
+
+            <h4>Töröttvonal rajzolása</h4>
+
+            <p>Jöhet a <b>vonalak rajzolása</b>!</p>
+
+            <p>Vonalat (törött vonalat) rajzolni a <span class="kodreszlet">ctx.beginPath();</span> paranccsal lehet, mely jelzi a vászonnak, hogy vonalrajzolás kezdődik. Ezután meg kell mondanunk a <span class="kodreszlet">ctx.moveTo(kezdoX, kezdoY);</span> parancssal a kezdőpontot, ahonnan az első vonalat fogjuk húzni. Ezután minden további vonalat a <span class="kodreszlet">ctx.lineTo(kovetkezoX, kovetkezoY);</span> utasítással tudunk megadni. Az <b>első két pont közötti vonal meghatározása</b> a gilisztát ábrázoló vásznon így néz ki:</p>
+            <pre>
+                <code>
+/*Vonalak megrajzolása*/
+ctx1.beginPath();
+ctx1.moveTo(72, 147);
+ctx1.lineTo(3, 236);
+                </code>
+            </pre>
+
+            <p>Tényleges vonalat azonban még nem látunk, mivel nem rendeltünk stílust ehhez a vonalhoz. Körvonalat és kitöltést mindig a legutóbb definiált alakzathoz tudunk a kör körvonalának definiálásához hasonló módon:</p>
+            <pre>
+                <code>
+/*Megrajzolt alakzat körvonalának definiálása*/
+ctx1.lineWidth = 1;
+ctx1.strokeStyle = 'black';
+ctx1.stroke();
+                </code>
+            </pre>
+
+            <p class="feladat"><b>Feladat ✅</b></b> <br>Az imént látott módon egészítsük ki mindkét rajzot!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+/*Vonalak megrajzolása*/
+ctx1.beginPath();
+ctx1.moveTo(72, 147);
+ctx1.lineTo(3, 236);
+ctx1.lineTo(8, 298);
+ctx1.lineTo(51, 368);
+ctx1.lineTo(118, 403);
+ctx1.lineTo(224, 376);
+ctx1.lineTo(272, 309);
+ctx1.lineTo(251, 222);
+ctx1.lineTo(237, 178);
+
+ctx2.beginPath();
+ctx2.moveTo(3, 183);
+ctx2.lineTo(16, 138);
+ctx2.lineTo(45, 105);
+ctx2.lineTo(84, 84);
+ctx2.lineTo(128, 69);
+ctx2.lineTo(172, 63);
+ctx2.lineTo(217, 69);
+ctx2.lineTo(261, 90);
+ctx2.lineTo(294, 115);
+ctx2.lineTo(326, 147);
+ctx2.lineTo(339, 88);
+ctx2.lineTo(367, 52);
+ctx2.lineTo(409, 34);
+ctx2.lineTo(453, 33);
+ctx2.lineTo(465, 75);
+ctx2.lineTo(458, 122);
+ctx2.lineTo(430, 158);
+ctx2.lineTo(391, 184);
+ctx2.lineTo(430, 206);
+ctx2.lineTo(458, 243);
+ctx2.lineTo(462, 287);
+ctx2.lineTo(451, 332);
+ctx2.lineTo(409, 330);
+ctx2.lineTo(367, 311);
+ctx2.lineTo(339, 275);
+ctx2.lineTo(327, 216);
+ctx2.lineTo(294, 250);
+ctx2.lineTo(256, 277);
+ctx2.lineTo(217, 294);
+ctx2.lineTo(172, 300);
+ctx2.lineTo(126, 294);
+ctx2.lineTo(80, 279);
+ctx2.lineTo(44, 258);
+ctx2.lineTo(14, 225);
+ctx2.lineTo(3, 183);
+
+/*Megrajzolt alakzatok körvonalának definiálása*/
+ctx1.lineWidth = 1;
+ctx1.strokeStyle = 'black';
+ctx1.stroke();
+
+ctx2.lineWidth = 1;
+ctx2.strokeStyle = 'black';
+ctx2.stroke();
+                    </code>
+                </pre>
+            </details>
+            
+
+            <h4>Ha marad még idő</h4>
+
+            <p class="feladat"><b>Feladat ✅</b></b> <br>Színezzük ki a halat!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+/*Alakzat kitöltése*/
+ctx2.fillStyle = 'turquoise';
+ctx2.fill();
+
+/*Hal díszítése*/
+/*1. kör*/
+ctx2.beginPath();
+ctx2.arc(234, 130, 20, 0, 2 * Math.PI);
+ctx2.fillStyle = 'salmon';
+ctx2.fill();
+/*2. kör*/
+ctx2.beginPath();
+ctx2.arc(271, 193, 20, 0, 2 * Math.PI);
+ctx2.fillStyle = 'salmon';
+ctx2.fill();
+/*3. kör*/
+ctx2.arc(213, 243, 20, 0, 2 * Math.PI);
+ctx2.fillStyle = 'salmon';
+ctx2.fill();
+                    </code>
+                </pre>
+            </details>
+
+            <p class="feladat"><b>Feladat ✅</b> <br>Hozz létre egy új <span class="kodreszlet">index.html</span> oldalt, melybe belinkelsz egy <span class="kodreszlet">index.js</span> szkript fájt. Keress az interneten egy pontösszekötős rajzot, töltsd le, majd állítsd be azt az <span class="kodreszlet">index.html</span> oldalon elhelyezett <span class="kodreszlet">&lt;canvas&gt;&lt;/canvas&gt;</span> elemnek. Egészítsd ki ezt a rajzot, majd díszítsd ki színekkel és alakzatokkal!</p>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

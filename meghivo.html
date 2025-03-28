@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Meghívó - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Meghívó ✉️</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Ez a feladat egy alapjátékból és egy továbbfejlesztésből áll. A alapjátékban az oldal betöltésekor egy <b>kör</b> jelenik meg a canvas-en véletlen helyen, véletlen méretben és véletlen színben. A továbbfejlesztésben, melyben egy <b>szülinapi meghívót</b> lehet majd kidíszíteni, előtérbe kerül a szövegek canvas-re írása, a változók használata és a kattintás mint indítóesemény.</p>
+            
+            <a href="../2 Meghívó/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+            <h3>HTML</h3>
+            
+            <p>Elsőként hozzunk létre egy weboldalt <span class="kodreszlet">index.html</span> néven, ahol a játékot fogjuk elkészíteni. Emlékeztető a HTML-alapstruktúrához: <b>!</b> emmet parancs + <b>ENTER</b>.</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            <p>Alakítsuk ki a HTML kódot úgy, hogy</p>
+
+            <ul>
+                <li>az oldal nyelve legyen magyar,</li>
+                <li>a <span class="kodreszlet">title</span> legyen "Meghívó",</li>
+                <li>írjuk ki a játék címét 1-es szintű címként,</li>
+                <li>hozzuk létre a vásznat és állítsunk be neki vékony fekete szegélyt,</li>
+                <li>végül rendeljünk hozzá egy <span class="kodreszlet">.js</span> szkriptet.</li>
+            </ul>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="<span class="kodkiemeles">hu</span>"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;<span class="kodkiemeles">Meghívó</span>&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    <span class="kodkiemeles">&lt;style&gt;
+        canvas{
+            border: 1px solid black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;Meghívó&lt;/h1&gt;
+    &lt;canvas width="600" height="400" id="vaszon"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            <figure>
+                <img src="képek/meghivo-keret.png">
+                <figcaption>
+                    <p>Cím és a canvas szegélyének megjelenítése</p>
+                </figcaption>
+            </figure>
+
+            <p>Vigyük az egérmutatót az <span class="kodreszlet">index.js</span> szöveg (link) fölé, majd a felugró ablakban kattintsunk a Follow link opcióra, hogy elérjük ezt a JavaScript fájlt. Miután rákattintottunk, egy figyelmeztetést kapunk, hogy az <span class="kodreszlet">index.js</span> fájl nem létezik. Valóban nem létezik még ez a fájl, de a <b>Create File</b> opcióra kattinva a Visual Studio Code létrehozza és megnyitja nekünk ezt a fájlt. Innentől kezdve ebben fogunk dolgozni.</p>
+
+            <h3>JavaScript (JS)</h3>
+
+            <h4>Alapjáték</h4>
+            <p>Az alapjátékban az oldal betöltésekor egy kör jelenik meg a canvas-en véletlen helyen, véletlen méretben és véletlen színben. Ez az egyszerű program gyakoroltatja a játékok alapstruktúráját és keretét (html, canvas, script, context), a canvas-re történő rajzolás alapjait (kör rajzolása, kitöltése, körvonala), valamint a függvény írását és meghívását a véletlen egész számot generáló függvényen keresztül.</p>
+
+            <p>A canvasre rajzolás nem más, mint parancsok sorozatának alkalmazása a canvasre. Ehhez viszont valahogyan el kell érnünk a canvast, vagyis a HTML dokumentumból ki kell választanunk a <span class="kodreszlet">&lt;canvas&gt;</span> elemet, és azt el kell tárolnunk egy konstansban, hogy később könnyen tudjunk rá hivatkozni. A JS kód eleje tehát a következő lesz:</p>
+            
+            <pre>
+                <code>
+/*Canvas elérése*/
+<span class="kodkiemeles">const canvas = document.querySelector('#vaszon');
+const ctx = canvas.getContext('2d');</span>
+                </code>
+            </pre>
+
+            <p>Próbaként rajzoljunk egy kört erre a vászonra!</p>
+            <p>A töröttvonal és a kör rajzolása azzal kezdődik, hogy jelezzük a kontextusnak a <span class="kodreszlet">.beginPath();</span> paranccsal, hogy most egy új vonalat fogunk húzni. Kör esetén a <span class="kodreszlet">ctx.arc(x-poz, y-poz, r, 0, 2 * Math.PI);</span> parancsot kell használnunk, melynek paraméterei rendre: a kör középpontjának vízszintes koordinátája, a kör középpontjának függőleges koordinátája, a sugár (pixelben), a körív kezdőszöge (radiánban), a körív végszöge (radiánban).</p>
+            <pre>
+                <code>
+/*Kör megrajzolása*/
+ctx.beginPath();
+ctx.arc(50, 100, 10, 0, 2 * Math.PI);
+                </code>
+            </pre>
+            <p>A fenti példa <span class="kodreszlet">50, 100</span> koordinátára teszi a kör középpontját, melynek sugara <span class="kodreszlet">10</span>, körvonala pedig <span class="kodreszlet">0</span> radiántól indul és <span class="kodreszlet">2 * Math.PI</span> radiánnál ér véget.</p>
+
+            <p>A körív körvonala akkor fog csak ténylegesen megjelenni a vásznon, ha megadjuk annak stílusát. A legutóbb definiált alakzat körvonalának vastagságát és színét az alábbi módon lehet megadni. A <span class="kodreszlet">ctx.stroke();</span> parancs a legutóbb megadott formátumok alapján megrajzolja a legutóbb definiált alakzatot.</p>
+            <pre>
+                <code>
+/*Kör körvonala*/
+ctx.lineWidth = 1;
+ctx.strokeStyle = 'black';
+ctx.stroke();
+                </code>
+            </pre>
+            
+            <figure>
+                <img src="képek/meghivo-kor.png">
+                <figcaption>
+                    <p>Kör rajzolása a vászonra</p>
+                </figcaption>
+            </figure>
+
+            <p>A kör esetén a kezdőszög (vagyis a 0 szög) a kör jobb szélső pontja, míg a <span class="kodreszlet">2 * Math.PI</span> 360 fokot, vagyis egy teljes kört jelent. Tehát a körív a 0 szögből indul és egy teljes kört tesz meg.</p>
+            <p>A <span class="kodreszlet">ctx.arc(x-poz, y-poz, r, 0, 0.5 * Math.PI);</span> parancs esetén csak egy negyedkör kerül kirajzolása a kiindulóponttól lefelé indulva, vagyis <b>az óramutató járásával megegyező irányba</b>. <span class="kodreszlet"> 1 * Math.PI</span> esetén félkör, <span class="kodreszlet"> 1.5 * Math.PI</span> esetén pedig háromnegyed kör kerül kirajzolásra.</p>
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/negyed-kor.png">
+                    <figcaption>
+                        <p>JavaScript negyed kör</p>
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/fel-kor.png">
+                    <figcaption>
+                        <p>JavaScript félkör</p>
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/haromnegyed-kor.png">
+                    <figcaption>
+                        <p>JavaScript háromnegyed kör</p>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <p>Lehetőségünk van a kör kitöltésére is. A következő példában kék színnel töltjük ki az legutóbb definiált alakzatot, vagyis jelen esetben a kört.</p>
+            <pre>
+                <code class="language-javascript">
+/*Kör kitöltése*/
+ctx.fillStyle = 'blue';
+ctx.fill();
+                </code>
+            </pre>
+
+            <p>Választhatunk előre definiált színekből (pl.: <span class="kodreszlet">'blue', 'red', 'brown'</span> stb), de saját RGB kódot is megadhatunk:</p>
+            <pre>
+                <code>
+/*Kör kitöltése*/
+ctx.fillStyle = <span class="kodkiemeles">'rgb(143, 58, 190)'</span>;
+ctx.fill();
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/meghivo-kor-kek.png">
+                    <figcaption>
+                        <p><span class="kodreszlet">ctx.fillStyle = 'blue';</span></p>
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/meghivo-kor-rgb.png">
+                    <figcaption>
+                        <p><span class="kodreszlet">ctx.fillStyle = 'rgb(143, 58, 190)';</span></p>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <p>Ha azt szeretnénk, hogy véletlenszerűen legyen kiszínezve a kör, ahhoz véletlen értékeket kell generálnunk mindhárom színösszetevőhöz, vagyis a piroshoz (R), a zöldhöz (G) és a kékhez (B). De hogyan generálhatunk <b>véletlenszámot</b> megadott intervallumban? Ehhez az alábbi JS-függvény áll rendelkezésünkre:</p>
+            <pre>
+                <code>
+/*Véletlen egész generálása*/
+Math.floor(Math.random() * (max - min + 1) ) + min;
+                </code>
+            </pre>
+
+            <p>A <span class="kodreszlet">Math.random()</span> függvény mindig egy 0 és 1 közötti véletlenszámot generál 16 tizedesjegy pontossággal, pl. <span class="kodreszlet">0.9599057642326465</span>.</p>
+            
+            <p class="feladat"><b>Feladat</b> <br> Ezt próbáljuk ki azáltal, hogy a generált számot kiírjuk a böngészőben a console-ra. Az ezt megvalósító kód: <span class="kodreszlet">console.log(Math.random());</span> Ezután, a böngészőt megnyitva az <b>F12</b> billentyűvel előhozhatjuk a DevTools ablakot, ahol a <b>Console</b> fülön láthatjuk az imént generált véletlenszámot.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/meghivo-consolelog.png">
+                    <figcaption>
+                        <p>A <span class="kodreszlet">console.log(Math.random());</span> parancs a JS-kódban</p>
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/meghivo-f12.png">
+                    <figcaption>
+                        <p>F12 billentyű hatása a böngészőben</p>
+                    </figcaption>
+                </figure>
+            </div>
+            
+            <p>Tegyük fel, hogy 5 és 10 között szeretnénk egy véletlen egész számot generálni. Ekkor a véletlenül generált 0 és 1 közötti számot meg kell szoroznunk a felső és alsó határérték különbségével plusz 1-gyel. Ekkor a részeredmény: <span class="kodreszlet">0.9599057642326465 * (10 - 5 + 1) = 5,759434585395879</span>, majd hozzáadjuk az alsó határértéket: <span class="kodreszlet">5,759434585395879 + 5 = 10,75943458539588</span>, végül pedig kerekítünk az alsó egészre a <span class="kodreszlet">Math.floor()</span> függvénnyel: <span class="kodreszlet">10</span>. Ezt a véletlenegészt generáltuk. Ha valós számot szeretnénk generálni, akkor a kerekítésre nincs szükség.</p>
+
+            <p>A fenti képlet meglehetősen hosszú, ezért gyakori használata esetén könnyen átláthatatlanná teheti a kódot. Megoldásként a véletlenszám generálását függvényként szoktuk meghívni, vagyis a kódba csak annyit írunk, hogy <span class="kodreszlet">véletlenEgész(0, 255)</span>, ami egy 0 és 255 közötti értéked ad eredményül. Így elegendő csak egyszer megírni a véletlenszám generálását a függvény definiálásánál, később pedig különböző értékekkel meghívni. A véletlen egészt generáló függvényünk az alábbi kódban látható:</p>
+            <pre>
+                <code>
+/*Véletlen egész generálása*/
+<span class="kodkiemeles">function véletlenEgész(min, max) {</span>
+    <span class="kodkiemeles">return</span> Math.floor(Math.random() * (max - min + 1) ) + min;
+<span class="kodkiemeles">}</span>
+                </code>
+            </pre>
+            
+            <p>Térjünk vissza a véletlen szín generálásához. Az RGB-kód megadását bemutató példában látható volt, hogy az RGB kódot csak szövegként (sztringként) adhatjuk meg, de a véletlenszám szám típusú lesz. Emiatt sajnos <b>nem</b> működne ez a kód:</p>
+            <pre>
+                <code>
+/*Kör kitöltése*/
+ctx.fillStyle = <span class="kodkiemeles">'rgb(véletlenEgész(0, 255), véletlenEgész(0, 255), véletlenEgész(0, 255))'</span>;
+ctx.fill();
+                </code>
+            </pre>
+
+            <p>A megoldás szövegek és számok összefűzése (konkatenációja) lesz a <span class="kodreszlet">+</span> jellel. Az első szövegelemünk az <span class="kodreszlet">'rgb('</span> lesz. Látható, hogy a szöveget jelző aposztróf lezárásra került, hiszen itt vége az első szövegelemnek. Ezután következik az első véletlenszám generálása a <span class="kodreszlet">véletlenEgész(0, 255)</span> függvénymeghívással. A következő szövegelem egy vessző és egy szóköz lesz: <span class="kodreszlet">', '</span>. Következik egy véletlenszám, és így tovább, míg meg nem kapjuk a helyes kódot:</p>
+            <pre>
+                <code>
+/*Kör kitöltése véletlen színnel*/
+ctx.fillStyle = <span class="kodkiemeles">'rgb('</span> + véletlenEgész(0, 255) + <span class="kodkiemeles">', '</span> + véletlenEgész(0, 255) + <span class="kodkiemeles">', '</span> + véletlenEgész(0, 255) + <span class="kodkiemeles">')'</span>;
+ctx.fill();
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/meghivo-veletlen-1.png">
+                    <figcaption>
+                        <p>Véletlen próbálkozás 1.</p>
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/meghivo-veletlen-2.png">
+                    <figcaption>
+                        <p>Véletlen próbálkozás 2.</p>
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/meghivo-veletlen-3.png">
+                    <figcaption>
+                        <p>Véletlen próbálkozás 3.</p>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <p>Hogyan lehet elérni, hogy a körök véletlen helyen és méretben legyenek kirajzolva, cseréljük le a körrajzolás megfelelő paramétereit (a középpont vízszintes és függőleges koordinátapontja, a kör sugara) véletlenszámokra.</p>
+
+            <p>Az eddig írt kód:</p>
+            <pre>
+                <code>
+/* ===== ALAPJÁTÉK ===== */
+
+/*Canvas elérése*/
+const canvas = document.querySelector('#vaszon');
+const ctx = canvas.getContext('2d');
+
+/*Kör megrajzolása*/
+ctx.beginPath();
+ctx.arc(<span class="kodkiemeles">véletlenEgész(50,550)</span>, <span class="kodkiemeles">véletlenEgész(50, 350)</span>, <span class="kodkiemeles">véletlenEgész(10, 50)</span>, 0, 2 * Math.PI);
+
+/*Kör körvonala*/
+ctx.lineWidth = 1;
+ctx.strokeStyle = 'black';
+ctx.stroke();
+
+/*Kör kitöltése*/
+ctx.fillStyle = 'rgb(' + véletlenEgész(0, 255) + ', ' + véletlenEgész(0, 255) + ', ' + véletlenEgész(0, 255) + ')';
+ctx.fill();
+
+function véletlenEgész(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+                </code>
+            </pre>
+
+            <h4>Továbbfejlesztés</h4>
+
+            <p>A továbbfejlesztésben szöveg hozzáadásával megalkotjuk a meghívót és elérjük azt, hogy kattintáskor a kattintás helyére tegyünk egy véletlen méretű és színű kört.</p>
+
+            <p><b>Szöveget</b> az alábbi módon lehet a canvas-re írni:</p>
+            <pre>
+                <code>
+ctx.font = '20px Arial';
+ctx.fillStyle = 'black';
+ctx.fillText('Meghívó', 0, 20);
+                </code>
+            </pre>
+            
+            <figure>
+                <img src="képek/meghivo-szoveg-meghivo.png">
+                <figcaption>
+                    <p>A '<i>Meghívó</i>' szöveg vászonra írása</p>
+                </figcaption>
+            </figure>
+
+            <p>A fenti kódban a betű mérete és típusa után megadjuk a szöveg színét, majd kiírjuk a konkrét szöveget a <span class="kodreszlet">ctx.fillText();</span> paranccsal. Ennek a parancsnak három paramétere van: 1) szöveg, 2) a szöveg bal alsó sarkának <span class="kodreszlet">x</span> pozíciója, és 3) a szöveg bal alsó sarkának <span class="kodreszlet">y</span> pozíciója.</p>
+
+            <p class="feladat"><b>Feladat</b> <br> Formázzuk a '<i>Meghívó</i>' szöveget a mintaprojekt szerint!</p>
+
+            <p class="feladat"><b>Feladat</b> <br> Adjuk hozzá és formázzuk a többi szöveget is a minta szerint!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+ctx.font = '70px Arial';
+ctx.fillStyle = 'black';
+ctx.fillText('Meghívó', 160, 120);
+
+ctx.font = '30px Arial';
+ctx.fillText('Sok szeretettel meghívlak a', 110, 230);
+
+ctx.font = '30px Arial';
+ctx.fillText('🎉SZÜLETÉSNAPI BULIMRA🎉', 70, 280);
+                    </code>
+                </pre>
+                <figure>
+                    <img src="képek/meghivo-szoveg-szovegek.png">
+                    <figcaption>
+                        <p>Mintaszövegek kiírása a vászonra</p>
+                    </figcaption>
+                </figure>
+            </details>
+
+            <p>A következőkben megismerkedünk a <b>kattintással</b>, mint eseménnyel.</p>
+
+            <p><b>ISMÉTLÉS</b> Mi számít <b>eseménynek</b>? A kattintáson kívül ide tartozik többek között az egér mozgatása és a különböző billentyűk lenyomása vagy felengedése is. A későbbi játékok során találkozni fogunk ezekkel is, de most a kattintás eseményre lesz szükségünk. Az imént felsorolt események bármikor megtörténhetnek, azonban alapvetően nincs hatásuk. Ha azt szeretnénk, hogy valamilyen hatásuk legyen, akkor egy eseményfigyelőt kell hozzárendelni valamelyik elemhez (mi a weboldalhoz fogjuk hozzárendelni), amelynél definiálhatjuk, hogy milyen eseményt figyeljen, és ha az bekövetkezik, akkor mi történjen. Ennek általános formája az alábbi:</p>
+            <pre>
+                <code>
+elem.addEventListener(esemény, függvény);
+                </code>
+            </pre>
+
+            <p>Az első paraméter határozza meg az esemény típusát (egérmozgás/<span class="kodreszlet">mousemove</span>, kattintás/<span class="kodreszlet">click</span>, billentyűlenyomás/<span class="kodreszlet">keydown</span>, billentyűfelengedés/<span class="kodreszlet">keyup</span>, weboldal vagy kép betöltése/<span class="kodreszlet">onload</span> stb.), a második pedig azt a függvényt, amit az esemény bekövetkeztekor meghívunk, vagyis azt mondja meg, hogy mi történjen egy adott esemény bekövetkezésekor. Egy elemhez több eseménykezelőt is rendelhetünk (akár ugyanolyan típusúakat is anélkül, hogy azok felülírnák egymást).</p>
+
+            <p>A mi programunkban, tehát, a kattintásra lesz szükségünk.</p>
+            <pre>
+                <code>
+document.addEventListener(<span class="kodkiemeles">'click'</span>, function(e) {})
+                </code>
+            </pre>
+
+            <p>A fenti kód még nem teljes, hiszen a <span class="kodreszlet">{}</span> jelek között ki kell fejtenünk a kör megrajzolását a kattintás helyére. Már tudunk kört rajzolni, így azt is tudjuk, hogy egy kör középpontját <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> koordinátákkal adhatjuk meg. Ezekkel a koordinátákkal az egérmutató is rendelkezik, így nincs más dolgunk, mint a kör középpontjának koordinátáit megfeleltetni az egérmutatóéval.</p>
+
+            <p>Elsőként (még az eseménykezelő függvény előtt) hozzuk létre az egérmutató koordinátáit később eltároló <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> nevű változókat, melyeknek adjuk a <span class="kodreszlet">0</span> kezdőértéket! Változót a <span class="kodreszlet">let</span> kulcsszóval hozhatunk létre:</p>
+            <pre>
+                <code>
+<span class="kodkiemeles">let x = 0;
+let y = 0;</span>
+document.addEventListener('click', function(e) {})
+                </code>
+            </pre>
+
+            <p>Ezután ezeknek a változóknak adjuk értékül az egér <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> koordinátáit. A függvény <span class="kodreszlet">e</span> paramétere jelöli az egérmutatót, melynek vízszintes és függőleges koordinátáját a <span class="kodreszlet">.offsetX</span> és <span class="kodreszlet">.offsetY</span> tulajdonságok tartalmazzák:</p>
+            <pre>
+                <code>
+let x = 0;
+let y = 0;
+document.addEventListener('click', function(<span class="kodkiemeles">e</span>) {
+    x = <span class="kodkiemeles">e.offsetX</span>;
+    y = <span class="kodkiemeles">e.offsetY</span>;
+})
+                </code>
+            </pre>
+
+            <p>Most már az <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> változók tartalmazzák, hogy hol van az egérmutató. Ezt és a korábbi ismereteinket felhasználva rajzoljunk erre a helyre egy véletlen méretű és színű kört:</p>
+            <pre>
+                <code>
+let x = 0;
+let y = 0;
+
+document.addEventListener('click', function(e) {
+    x = e.offsetX;
+    y = e.offsetY;
+
+    /*Kör megrajzolása*/
+    ctx.beginPath();
+    ctx.arc(x, y, véletlenEgész(10, 50), 0, 2 * Math.PI);
+
+    /*Kör körvonala*/
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    /*Kör kitöltése*/
+    ctx.fillStyle = 'rgb(' + véletlenEgész(0, 255) + ', ' + véletlenEgész(0, 255) + ', ' + véletlenEgész(0, 255) + ')';
+    ctx.fill();
+})
+                </code>
+            </pre>
+
+            <p>A továbbfejlesztés kódja, tehát:</p>
+            <pre>
+                <code>
+/* ===== TOVÁBBFEJLESZTÉS ===== */
+
+ctx.font = '70px Arial';
+ctx.fillStyle = 'black';
+ctx.fillText('Meghívó', 160, 120);
+
+ctx.font = '30px Arial';
+ctx.fillText('Sok szeretettel meghívlak a', 110, 230);
+
+ctx.font = '30px Arial';
+ctx.fillText('🎉SZÜLETÉSNAPI BULIMRA🎉', 70, 280);
+
+let x = 0;
+let y = 0;
+
+document.addEventListener('click', function(e) {
+    x = e.offsetX;
+    y = e.offsetY;
+
+    /*Kör megrajzolása*/
+    ctx.beginPath();
+    ctx.arc(x, y, véletlenEgész(10, 50), 0, 2 * Math.PI);
+
+    /*Kör körvonala*/
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    /*Kör kitöltése*/
+    ctx.fillStyle = 'rgb(' + véletlenEgész(0, 255) + ', ' + véletlenEgész(0, 255) + ', ' + véletlenEgész(0, 255) + ')';
+    ctx.fill();
+})
+                </code>
+            </pre>
+
+            <figure>
+                <img src="képek/meghívó-minta.png">
+                <figcaption>
+                    <p>Mintaprojekt</p>
+                </figcaption>
+            </figure>
+
+            <p class="feladat"><b>Feladat</b> <br> Alkoss egy díszes Facebook-posztot JS-tel!</p>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladat</b><br></p>
+                <p>Készíts egy <b>hirdetést</b> egy általad választott termékhez!</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

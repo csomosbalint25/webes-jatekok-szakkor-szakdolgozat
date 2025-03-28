@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Angry Birds - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Angry Birds 🐦</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Ma gyakoroljuk a billentyű és az egérmutató által kiváltott <b>eseményeket</b> egy az Angry Birds-höz hasonló játék fejlesztésén keresztül. A játék lényege, hogy minél több madarat tudjunk <b>célba dobni egyhuzamban</b>. De vigyázat, mert ha egyet kihagyunk, <b>nullázódnak</b> a pontjaink.</p>
+            
+            <a href="../10 Angry Birds/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+
+            <h3>HTML</h3>
+
+            <p>Másoljuk ki a következő HTML alapstruktúrát.</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Angry Birds&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;style&gt;
+        canvas{
+            border: 1px solid black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;Angry Birds&lt;/h1&gt;
+    &lt;canvas width="600" height="400" id="vaszon"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+            
+            <h3>JavaScript</h3>
+
+            <p>Másoljuk át az alábbi kiindulókódot egy <span class="kodreszlet">.js</span> fájlba.</p>
+
+            <pre>
+                <code>
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* === ÁLLAPOTTÉR === */
+
+/*Konstansok*/
+// [1.] Hozd létre az M konstanst, értéke legyen 40.
+
+
+/*Képek*/
+// [2.] Importáld be a képeket a következő változókba: háttér, madárkép, kalitkakép, kalitkaképzárva.
+// háttér
+
+
+// madár
+
+
+// kalitka
+
+
+// kalitka zárva
+
+
+/*Változók*/
+// [5.] Hozd létre a madár objektumot. A madár x pozíciója legyen M, y pozíciója legyen M * 9, szélessége és magassága az M 1.5-ed része, függőleges sebessége (vy), vízszintes sebessége (vx), és függőleges gyorsulása (ay) pedig 0.
+// madár objektum
+
+
+// [7.] Hozd létre a kalitka objektumot, melynek x pozíciója legyen véletlen 300 és 560 között, y pozíciója legyen az M 8.5-szöröse, szélessége és magassága legyen M.
+// kalitka objektum
+
+
+// egyéb változók
+
+
+
+/* === ANIMÁCIÓS CIKLUS === */
+
+let előzőIdő = performance.now()
+function következő() {
+    let aktuálisIdő = performance.now()
+    let dt = (aktuálisIdő - előzőIdő) / 1000 // az előző képkocka óta eltelt idő mp-ben
+    előzőIdő = aktuálisIdő
+    frissítés(dt)
+    rajzolás()
+    requestAnimationFrame(következő)
+}
+
+következő(); // az animáció elindítása
+
+function rajzolás() {
+    // [3.] Rajzold ki a hátteret a játéktér teljes méretében.
+    // háttér
+    
+
+    // [4.] Rajzold ki a talajt zöld színnel. A talaj magassága M, szélessége a játéktér szélességével egyezik meg.
+    // talaj
+    
+
+    // [6.] Rajzold ki a madarat.
+    // [16.] Módosítsd a madár kirajzolását úgy, hogy csak akkor rajzold ki, ha éppen nincs találat.
+    // madár
+    
+
+    // [8.] Rajzold ki a kalitkát.
+    // [15.] Ha nincs találat, akkor a kalitkaképet, különben a kalitkaképzárva képet rajzoljuk ki.
+    // kalitka
+    
+
+    // [10.] Írd ki az egér pozícióját a játéktér bal felső sarkába zárójelek közé, vesszővel elválasztva, 15 px-es fekete Courier New betűtípussal.
+    // felirat
+    
+
+    // [11.] Hozd létre a pont változót az "egyéb változók" között 0 kezdőértékkel, majd írd ki ezt a mintán látható formában az egérpozíció alá.
+    
+
+    // [17.] Ha a madár jóval a játéktér alatt van (vagyis az x pozíciója nagyobb vagy egyenlő mint pl. 700 px), akkor állítsuk vissza a játékot a kezdeti állapotra. A madár minden tulajdonságát állítsuk vissza az eredetire, a kalitkát tegyük egy újabb véletlen helyre. Ha volt találat, akkor növeljük egyel a pontot, de ha nem volt találat, akkor nullázzuk le azt. A találat nevű változót állítsuk vissza hamisra. Jöhet az újabb lövés!
+    // újrakezdés és pontszámítás
+    
+}
+
+function frissítés(dt) {
+    // [13.] Mozgassuk a madarat az imént beállított értékek alapján. A függőleges mozgás gravitációs mozgás, a vízszintes mozgás egyenletes. Emlékeztető fizikából: v' = v + a * dt; illetve ds = v' * dt.
+    // madár reptetése
+    
+
+    // [14.] Ha a madár és a kalitka ütközik, akkor a találat nevű változó (melyet hozzunk létre az "egyéb változók" között hamis értékkel) legyen igaz.
+    // találat
+    
+
+    // [12.] Hozd létre a billentyűk nevű tömböt az egyéb változóknál. Az egérmutató függőleges elhelyezésével lehet beállítani, hogy a madár milyen magasra repüljön. Ezért a Szóköz gomb lenyomásakor állítsuk a madár függőleges sebességét (vy) a játéktér magasságának és az egérmutató y koordinátájának a különbségének a -1-szeresére. A madár függőleges gyorsulása (ay) legyen 400. Az egérmutató x pozíciójával lehet beállítani, hogy milyen erősen lőjük ki a madarat, ezért a madár vízszintes sebessége legyen az egérmutató x pozíciója.
+    // madár kilövése
+    
+}
+
+/* === ESEMÉNYEK === */
+
+// [9.] Hozd létre az x és y változókat az "egyéb változók" között 0 értékkel. Ezek fogják tárolni az egérmutató vízszintes és függőleges koordinátáit. Kérdezd le és tárold el ezt a két adatot az alábbi függvényben.
+/*Egérmutató X és Y koordinátájának lekérdezése és eltárolása*/
+document.addEventListener('mousemove', function(e) {
+    
+})
+
+// lenyomott billentyűk lekérdezése
+document.addEventListener('keydown', e =&gt; {
+    billentyűk[e.key] = true;
+})
+
+document.addEventListener('keyup', e =&gt; {
+    billentyűk[e.key] = false;
+})
+
+/* === SEGÉDFÜGGVÉNYEK === */
+
+// véletlen egész
+function véletlenEgész(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+// ütközés
+function ütköznek(téglalap1, téglalap2) {
+    return ! (
+        téglalap2.x + téglalap2.szélesség &lt;= téglalap1.x ||
+        téglalap2.y + téglalap2.magasság &lt;= téglalap1.y ||
+        téglalap2.x &gt;= téglalap1.x + téglalap1.szélesség ||
+        téglalap2.y &gt;= téglalap1.y + téglalap1.magasság
+    )
+}
+                </code>
+            </pre>
+
+            <h3>Egyéb forrásfájlok</h3>
+
+            <ul>
+                <li><a href="../10 Angry Birds kiindulás/háttér.jpg">háttér.jpg</a></li>
+                <li><a href="../10 Angry Birds kiindulás/kalitka-zárva.png">kalitka-zárva.png</a></li>
+                <li><a href="../10 Angry Birds kiindulás/kalitka.png">kalitka.png</a></li>
+                <li><a href="../10 Angry Birds kiindulás/madár.png">madár.png</a></li>
+            </ul>
+
+            <h3>Feladatok</h3>
+
+            <p>A JavaScript fájlban számozott feladatok vannak, valamint rendelkezésre áll a program szerkezete és néhány kódrészlet / függvény.</p>
+
+            <p><b>Oldjuk meg sorrendben a <span class="kodreszlet">.js</span> fájlban lévő feladatokat!</b> Ezeket alább is megtalálod.</p>
+
+            <ol>
+                <li>Hozd létre az <span class="kodreszlet">M</span> konstanst, értéke legyen <span class="kodreszlet">40</span>.</li>
+                <li>Importáld be a képeket a következő változókba: <span class="kodreszlet">háttér</span>, <span class="kodreszlet">madárkép</span>, <span class="kodreszlet">kalitkakép</span>, <span class="kodreszlet">kalitkaképzárva</span>.</li>
+                <li>Rajzold ki a hátteret a játéktér teljes méretében.</li>
+                <li>Rajzold ki a talajt zöld színnel. A talaj magassága <span class="kodreszlet">M</span>, <span class="kodreszlet">szélesség</span>e a játéktér szélességével egyezik meg.</li>
+                <li>Hozd létre a <span class="kodreszlet">madár</span> objektumot. A madár <span class="kodreszlet">x</span> pozíciója legyen <span class="kodreszlet">M</span>, <span class="kodreszlet">y</span> pozíciója legyen <span class="kodreszlet">M * 9</span>, <span class="kodreszlet">szélesség</span>e és <span class="kodreszlet">magasság</span>a az <span class="kodreszlet">M</span> <span class="kodreszlet">1.5</span>-ed része, függőleges sebessége (<span class="kodreszlet">vy</span>), vízszintes sebessége (<span class="kodreszlet">vx</span>), és függőleges gyorsulása (<span class="kodreszlet">ay</span>) pedig <span class="kodreszlet">0</span>.</li>
+                <li>Rajzold ki a madarat.</li>
+                <li>Hozd létre a <span class="kodreszlet">kalitka</span> objektumot, melynek <span class="kodreszlet">x</span> pozíciója legyen véletlen <span class="kodreszlet">300</span> és <span class="kodreszlet">560</span> között, <span class="kodreszlet">y</span> pozíciója legyen az <span class="kodreszlet">M</span> <span class="kodreszlet">8.5</span>-szöröse, <span class="kodreszlet">szélesség</span>e és <span class="kodreszlet">magasság</span>a legyen <span class="kodreszlet">M</span>.</li>
+                <li>Rajzold ki a kalitkát.</li>
+                <li>Hozd létre az <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> változókat az "<span class="kodreszlet">egyéb változók</span>" között <span class="kodreszlet">0</span> értékkel. Ezek fogják tárolni az egérmutató vízszintes és függőleges koordinátáit. Kérdezd le és tárold el ezt a két adatot az erre szolgáló függvényben.</li>
+                <li>Írd ki az egér pozícióját a játéktér bal felső sarkába zárójelek közé, vesszővel elválasztva, <span class="kodreszlet">15</span> px-es fekete <span class="kodreszlet">Courier New</span> betűtípussal.</li>
+                <li>Hozd létre a pont változót az "<span class="kodreszlet">egyéb változók</span>" között <span class="kodreszlet">0</span> kezdőértékkel, majd írd ki ezt a mintán látható formában az egérpozíció alá.</li>
+                <li>Hozd létre a <span class="kodreszlet">billentyűk</span> nevű tömböt az <span class="kodreszlet">egyéb változók</span>nál. Az egérmutató függőleges elhelyezésével lehet beállítani, hogy a madár milyen magasra repüljön. Ezért a Szóköz gomb lenyomásakor állítsuk a madár függőleges sebességét (<span class="kodreszlet">vy</span>) a játéktér magasságának és az egérmutató <span class="kodreszlet">y</span> koordinátájának a különbségének a <span class="kodreszlet">-1</span>-szeresére. A madár függőleges gyorsulása (<span class="kodreszlet">ay</span>) legyen <span class="kodreszlet">400</span>. Az egérmutató <span class="kodreszlet">x</span> pozíciójával lehet beállítani, hogy milyen erősen lőjük ki a madarat, ezért a madár vízszintes sebessége legyen az egérmutató <span class="kodreszlet">x</span> pozíciója.</li>
+                <li>Mozgassuk a madarat az imént beállított értékek alapján. A függőleges mozgás gravitációs mozgás, a vízszintes mozgás egyenletes. Emlékeztető fizikából: <span class="kodreszlet">v' = v + a * dt</span>; illetve <span class="kodreszlet">ds = v' * dt</span>.</li>
+                <li>Ha a madár és a kalitka ütközik, akkor a <span class="kodreszlet">találat</span> nevű változó (melyet hozzunk létre az "<span class="kodreszlet">egyéb változók</span>" között hamis értékkel) legyen igaz.</li>
+                <li>Ha nincs találat, akkor a <span class="kodreszlet">kalitkakép</span>et, különben a <span class="kodreszlet">kalitkaképzárva</span> képet rajzoljuk ki.</li>
+                <li>Módosítsd a <span class="kodreszlet">madár</span> kirajzolását úgy, hogy csak akkor rajzold ki, ha éppen nincs találat.</li>
+                <li>Ha a <span class="kodreszlet">madár</span> jóval a játéktér alatt van (vagyis az <span class="kodreszlet">x</span> pozíciója nagyobb vagy egyenlő mint pl. <span class="kodreszlet">700</span> px), akkor állítsuk vissza a játékot a kezdeti állapotra. A <span class="kodreszlet">madár</span> minden tulajdonságát állítsuk vissza az eredetire, a <span class="kodreszlet">kalitká</span>t tegyük egy újabb véletlen helyre. Ha volt találat, akkor növeljük egyel a <span class="kodreszlet">pont</span>ot, de ha nem volt találat, akkor nullázzuk le azt. A <span class="kodreszlet">találat</span> nevű változót állítsuk vissza hamisra. Jöhet az újabb lövés!</li>
+            </ol>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* === ÁLLAPOTTÉR === */
+
+/*Konstansok*/
+// [1.] Hozd létre az M konstanst, értéke legyen 40.
+const M = 40;
+
+/*Képek*/
+// [2.] Importáld be a képeket a következő változókba: háttér, madárkép, kalitkakép, kalitkaképzárva.
+// háttér
+let háttér = new Image();
+háttér.src = 'háttér.jpg';
+
+// madár
+let madárkép = new Image();
+madárkép.src = 'madár.png';
+
+// kalitka
+let kalitkakép = new Image();
+kalitkakép.src = 'kalitka.png';
+
+// kalitka zárva
+let kalitkaképzárva = new Image();
+kalitkaképzárva.src = 'kalitka-zárva.png';
+
+/*Változók*/
+// [5.] Hozd létre a madár objektumot. A madár x pozíciója legyen M, y pozíciója legyen M * 9, szélessége és magassága az M 1.5-ed része, függőleges sebessége (vy), vízszintes sebessége (vx), és függőleges gyorsulása (ay) pedig 0.
+// madár objektum
+let madár = {
+    x: M,
+    y: M * 9,
+    szélesség: M / 1.5,
+    magasság: M / 1.5,
+    vy: 0,
+    vx: 0,
+    ay: 0
+}
+
+// [7.] Hozd létre a kalitka objektumot, melynek x pozíciója legyen véletlen 300 és 560 között, y pozíciója legyen az M 8.5-szöröse, szélessége és magassága legyen M.
+// kalitka objektum
+let kalitka = {
+    x: véletlenEgész(300, 560),
+    y: M * 8.5,
+    szélesség: M,
+    magasság: M
+}
+
+// egyéb változók
+let billentyűk = [];
+let x = 0;
+let y = 0;
+let találat = false;
+let pont = 0;
+
+
+/* === ANIMÁCIÓS CIKLUS === */
+
+let előzőIdő = performance.now()
+function következő() {
+    let aktuálisIdő = performance.now()
+    let dt = (aktuálisIdő - előzőIdő) / 1000 // az előző képkocka óta eltelt idő mp-ben
+    előzőIdő = aktuálisIdő
+    frissítés(dt)
+    rajzolás()
+    requestAnimationFrame(következő)
+}
+
+következő(); // az animáció elindítása
+
+function rajzolás() {
+    // [3.] Rajzold ki a hátteret a játéktér teljes méretében.
+    // háttér
+    ctx.drawImage(háttér, 0, 0, canvas.width, canvas.height);
+
+    // [4.] Rajzold ki a talajt zöld színnel. A talaj magassága M, szélessége a játéktér szélességével egyezik meg.
+    // talaj
+    ctx.fillStyle = 'green';
+    ctx.fillRect(0, canvas.height - M, canvas.width, M);
+
+    // [6.] Rajzold ki a madarat.
+    // [16.] Módosítsd a madár kirajzolását úgy, hogy csak akkor rajzold ki, ha éppen nincs találat.
+    // madár
+    if(!találat) {
+        ctx.drawImage(madárkép, madár.x, madár.y, madár.szélesség, madár.magasság);
+    }
+
+    // [8.] Rajzold ki a kalitkát.
+    // [15.] Ha nincs találat, akkor a kalitkaképet, különben a kalitkaképzárva képet rajzoljuk ki.
+    // kalitka
+    if(!találat) {
+        ctx.drawImage(kalitkakép, kalitka.x, kalitka.y, kalitka.szélesség, kalitka.magasság);
+    } else {
+        ctx.drawImage(kalitkaképzárva, kalitka.x, kalitka.y, kalitka.szélesség, kalitka.magasság);
+    }
+
+    // [10.] Írd ki az egér pozícióját a játéktér bal felső sarkába zárójelek közé, vesszővel elválasztva, 15 px-es fekete Courier New betűtípussal.
+    // felirat
+    ctx.font = '15px Courier New';
+    ctx.fillStyle = 'black';
+    ctx.fillText('(' + x + ',' + y + ')', 0, 15);
+
+    // [11.] Hozd létre a pont változót az "egyéb változók" között 0 kezdőértékkel, majd írd ki ezt a mintán látható formában az egérpozíció alá.
+    ctx.fillText('Pont: ' + pont, 0, 30);
+
+    // [17.] Ha a madár jóval a játéktér alatt van (vagyis az x pozíciója nagyobb vagy egyenlő mint pl. 700 px), akkor állítsuk vissza a játékot a kezdeti állapotra. A madár minden tulajdonságát állítsuk vissza az eredetire, a kalitkát tegyük egy újabb véletlen helyre. Ha volt találat, akkor növeljük egyel a pontot, de ha nem volt találat, akkor nullázzuk le azt. A találat nevű változót állítsuk vissza hamisra. Jöhet az újabb lövés!
+    // újrakezdés és pontszámítás
+    if(madár.y &gt;= 700) {
+        madár.x = M;
+        madár.y = M * 9;
+        madár.vy = 0;
+        madár.vx = 0;
+        madár.ay = 0;
+        kalitka.x = véletlenEgész(300, 560);
+        if(találat) {
+            pont += 1;
+        }
+        if(!találat) {
+            pont = 0;
+        }
+        találat = false;
+    }
+}
+
+function frissítés(dt) {
+    // [13.] Mozgassuk a madarat az imént beállított értékek alapján. A függőleges mozgás gravitációs mozgás, a vízszintes mozgás egyenletes. Emlékeztető fizikából: v' = v + a * dt; illetve ds = v' * dt.
+    // madár reptetése
+    madár.vy = madár.vy + madár.ay * dt;
+    madár.y = madár.y + madár.vy * dt;
+    madár.x = madár.x + madár.vx * dt;
+
+    // [14.] Ha a madár és a kalitka ütközik, akkor a találat nevű változó (melyet hozzunk létre az "egyéb változók" között hamis értékkel) legyen igaz.
+    // találat
+    if(ütköznek(madár, kalitka)) {
+        találat = true;
+    }
+
+    // [12.] Hozd létre a billentyűk nevű tömböt az egyéb változóknál. Az egérmutató függőleges elhelyezésével lehet beállítani, hogy a madár milyen magasra repüljön. Ezért a Szóköz gomb lenyomásakor állítsuk a madár függőleges sebességét (vy) a játéktér magasságának és az egérmutató y koordinátájának a különbségének a -1-szeresére. A madár függőleges gyorsulása (ay) legyen 400. Az egérmutató x pozíciójával lehet beállítani, hogy milyen erősen lőjük ki a madarat, ezért a madár vízszintes sebessége legyen az egérmutató x pozíciója.
+    // madár kilövése
+    if(billentyűk[' ']) {
+        madár.vy = -(400-y);
+        madár.ay = 400;
+        madár.vx = x;
+    }
+}
+
+/* === ESEMÉNYEK === */
+
+// [9.] Hozd létre az x és y változókat az "egyéb változók" között 0 értékkel. Ezek fogják tárolni az egérmutató vízszintes és függőleges koordinátáit. Kérdezd le és tárold el ezt a két adatot az alábbi függvényben.
+/*Egérmutató X és Y koordinátájának lekérdezése és eltárolása*/
+document.addEventListener('mousemove', function(e) {
+    x = e.offsetX;
+    y = e.offsetY;
+})
+
+// lenyomott billentyűk lekérdezése
+document.addEventListener('keydown', e =&gt; {
+    billentyűk[e.key] = true;
+})
+
+document.addEventListener('keyup', e =&gt; {
+    billentyűk[e.key] = false;
+})
+
+/* === SEGÉDFÜGGVÉNYEK === */
+
+// véletlen egész
+function véletlenEgész(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+// ütközés
+function ütköznek(téglalap1, téglalap2) {
+    return ! (
+        téglalap2.x + téglalap2.szélesség &lt;= téglalap1.x ||
+        téglalap2.y + téglalap2.magasság &lt;= téglalap1.y ||
+        téglalap2.x &gt;= téglalap1.x + téglalap1.szélesség ||
+        téglalap2.y &gt;= téglalap1.y + téglalap1.magasság
+    )
+}
+                    </code>
+                </pre>
+            </details>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

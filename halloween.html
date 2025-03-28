@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Halloween Jump - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Halloween Jump 🧙‍♀️</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Korábbi ismereteink összefoglalására ezt a Doodle Jumphoz hasonló Halloween Jump nevű játékot fogjuk elkészíteni.</p>
+            <p>Halloween éjszakáján Luna, az ifjú boszorkány, elindul, hogy összegyűjtse a varázslatos cukorkákat, amelyek csak ezen az éjszakán jelennek meg az égen. Minden begyűjtött cukorka pontot ér, de Luna-nak óvatosnak kell lennie, mert a denevérekkel való ütközés véget vethet a kalandnak. A játék végtelen, így a játékos célja, hogy minél több cukorkát gyűjtsön össze, elkerülve a veszélyeket, és folyamatosan növelve a pontszámot.</p>
+            <p><b>Segíts Lunának a végtelen éjszakai kalandban, hogy minél több cukorkát gyűjtsön és megdöntse a rekordokat!</b></p>
+            <p><i>(Forrás: ChatGPT)</i></p>
+            
+            <a href="../11-12 Halloween Jump/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+
+            <h3>HTML</h3>
+            
+            <p>Induljunk ki az alábbi HTML-alapstruktúrából.</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="<span class="kodkiemeles">hu</span>"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;<span class="kodkiemeles">Halloween Jump</span>&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;style&gt;
+        canvas{
+            border: 1px solid black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;Halloween Jump&lt;/h1&gt;
+    &lt;!--original: &lt;canvas width="720" height="1600"&gt;&lt;/canvas&gt;--&gt;
+    &lt;canvas width="<span class="kodkiemeles">244</span>" height="<span class="kodkiemeles">530</span>"&gt;&lt;/canvas&gt;
+    <span class="kodkiemeles">&lt;script src="index.js"&gt;&lt;/script&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            <p>A fenti HTML kódban <span class="kodreszlet">&lt;!-- --&gt;</span> jelek között látható vászonméretek egy mobiltelefon képernyőméretét mutatják. Azonban ezek a pixelek túl nagy vásznat eredményeznének a számítógép képernyőjén (screen), ezért arányosan lekicsinyítettük a vászonméretet. Ebből levonhatjuk azt a következtetést is, hogy <b>a mobileszközök nagyobb pixelsűrűséggel rendelkeznek</b>, mint a monitorok vagy tévék.</p>
+
+            <h3>JavaScript</h3>
+
+            <p>Induljunk ki az alábbi JavaScript kódból. Nézzük meg, a játék mely elemei állnak rendelkezésünkre.</p>
+
+            <pre>
+                <code>
+KIINDULÓFÁJL HELYE
+                </code>
+            </pre>
+
+            <h4>Képek</h4>
+
+            <p>Töltsük le a szükséges képeket is.</p>
+
+            <ul>
+                <li><a href="../11-12 Halloween Jump/cukor1.png" target="_blank">cukor1.png</a></li>
+                <li><a href="../11-12 Halloween Jump/cukor2.png" target="_blank">cukor2.png</a></li>
+                <li><a href="../11-12 Halloween Jump/denevér.png" target="_blank">denevér.png</a></li>
+                <li><a href="../11-12 Halloween Jump/háttér.png" target="_blank">háttér.png</a></li>
+                <li><a href="../11-12 Halloween Jump/játékos.png" target="_blank">játékos.png</a></li>
+                <li><a href="../11-12 Halloween Jump/kosár.png" target="_blank">kosár.png</a></li>
+                <li><a href="../11-12 Halloween Jump/platform.png" target="_blank">platform.png</a></li>
+                <li><a href="../11-12 Halloween Jump/sir.png" target="_blank">sir.png</a></li>
+            </ul>
+
+            <h4>...</h4>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

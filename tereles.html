@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Szent Mihály napi terelés - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Szent Mihály napi terelés 🐑</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Szeptember 29. Szent Mihály napja. A hagyomány szerint ezen a napon hajtják be a legelőről az állatokat haza, a téli szálláshelyre. Időjárásjósló napnak is tartották, mert ha Mihály itt találja a fecskéket, akkor kellemes meleg ősz várható. A pásztorok az állatok viselkedéséből jósoltak az időjárásra.</p>
+            <p>Ebben a feladatban <b>3 juhot kell beterelni a téli szálláshelyre</b>. Akkor sikeres a terelés, ha <b>mindhárom</b> juh a ház előtt van (ütköznek vele). Ebben a pillanatban <b>álljon meg mindegyik</b> állat.</p>
+            
+            <a href="../6 Szent Mihály napi terelés/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+            <h3>HTML</h3>
+
+            <p>Induljunk ki a már jól ismert HTML alapstruktúrából! A játéktér legyen 600px széles és 400px magas! Ha szeretnénk, a canvasnek adhatunk egy vékony keretet.</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="hu"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Szent Mihály napi terelés&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;style&gt;
+        canvas{
+            border: 1px solid black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;Szent Mihály napi terelés&lt;/h1&gt;
+    &lt;canvas width="600" height="400" id="vaszon"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            <h3>JavaScript</h3>
+
+            <h4>Kiindulás</h4>
+            
+            <p>A JS-kód <b>keretprogramja</b> alább látható, melyben a canvas elérése, az animációs ciklus, a háttér kirajzolása, és az <b>ütközés</b> segédfüggvény, valamint egyéb kommentek kerültek elhelyezésre.</p>
+            <pre>
+                <code>
+/* Canvas elérése */
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* === ÁLLAPOTTÉR === */
+
+/*Konstansok*/
+// juhok mérete
+
+/*Kép*/
+
+
+/*Változók (objektumok)*/
+// az 1. juh adatai
+
+
+// az 2. juh adatai
+
+
+// az 3. juh adatai
+
+
+// a ház adatai
+
+
+/* === IDŐALAPÚ ANIMÁCIÓS CIKLUS === */
+
+
+function következő() {
+    frissítés();
+    rajzolás();
+    requestAnimationFrame(következő);
+}
+
+következő(); // az animáció elindítása
+
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = 'lightblue';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // talaj
+    
+
+    // ház alapja
+    
+
+    // háztető
+    
+
+    // ház ajtaja
+    
+
+    // juh1
+    
+
+    // juh2
+    
+
+    // juh3
+    
+}
+
+function frissítés() {
+    
+}
+
+/* === ESEMÉNYEK === */
+
+
+
+/* === SEGÉDFÜGGVÉNYEK === */
+
+// ütközés
+function ütköznek(téglalap1, téglalap2) {
+    return ! (
+        téglalap2.x + téglalap2.szélesség &lt;= téglalap1.x ||
+        téglalap2.y + téglalap2.magasság &lt;= téglalap1.y ||
+        téglalap2.x >= téglalap1.x + téglalap1.szélesség ||
+        téglalap2.y >= téglalap1.y + téglalap1.magasság
+    )
+}
+                </code>
+            </pre>
+
+            <p class="feladat"><b>✅Feladat</b><br>A talaj magassága kb. hanyad része a játéktér magasságának? Hány px magas a talaj? A ház bal oldala hol helyezkedik el? A ház alja a talaj magasságához képest milyen magasan helyezkedik el? A házfal magassága hányszorosa a talaj magasságának? A házfal szélessége hányszorosa a talaj magasságának? Milyen széles a tető? Milyen széles az ajtó? Vízszintesen hová van igazítva az ajtó bal oldala?</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <ol>
+                    <li><b>A talaj magassága kb. hanyad része a játéktér magasságának?</b> A talaj a játéktér magasságának tized része.</li>
+                    <li><b>Hány px magas a talaj?</b> 40px.</li>
+                    <li><b>A ház bal oldala hol helyezkedik el?</b> Vízszintesen a játéktér felénél.</li>
+                    <li><b>A ház alja a talaj magasságához képest milyen magasan helyezkedik el?</b> A talaj magasságának felénél.</li>
+                    <li><b>A házfal magassága hányszorosa a talaj magasságának?</b> 2,5.</li>
+                    <li><b>A házfal szélessége hányszorosa a talaj magasságának?</b> 3.</li>
+                    <li><b>Milyen széles a tető?</b> A ház szélességével megegyező.</li>
+                    <li><b>Milyen széles az ajtó?</b> A talaj magasságával megegyező.</li>
+                    <li><b>Vízszintesen hová van igazítva az ajtó bal oldala?</b> A házhoz képest vízszintesen középre (360px).</li>
+                </ol>
+            </details>
+
+            <p>Láthatjuk tehát, hogy <b>minden a talaj magasságának a többszöröse vagy annak valahanyad része</b> - mindent ehhez igazítunk. Ezért érdemes ezt az értéket egy <b>konstans</b>ban eltárolni.</p>
+
+            <pre>
+                <code>
+/* === ÁLLAPOTTÉR === */
+
+/*Konstansok*/
+<span class="kodkiemeles">const M = 40;</span> // juhok mérete
+                </code>
+            </pre>
+
+            <h4>Szereplők</h4>
+
+            <p>Szükségünk lesz <b>szereplőkre</b>. Ezek a szereplők időnként vagy folyamatosan mozogni fognak valamilyen meghatározott szabály alapján (juhok), ezért a helyzetüket leíró adatokat érdemes <b>változókban</b> eltárolni, hogy azok módosítása esetén a következő képkocka a legfrissebb változatot mutassa. Azonban a szereplőket nemcsak a mozgás miatt, hanem más okokból is (pl. ütközés ellenőrzése) érdemes változókkal leírni. Sőt! Az összetartozó adatokat érdemes <b>egységbe zárni</b>.</p>
+
+            <p>Mit jelent az <b>egységbe zárás</b>? Azt, hogy bizonyos adatok csak egy konkrét szereplőhöz tartoznak. Vegyük példaként a hajókat. Minden hajónak van neve, iránya és sebessége (közös tulajdonságok), de ezek az adatok minden hajó esetén egyediek:</p>
+
+            <ul>
+                <li><b>Hajónév:</b> Kék Horizont</li>
+                <li><b>Irány:</b> Északnyugat (315°)</li>
+                <li><b>Sebesség:</b> 18 csomó</li>
+            </ul>
+            <ul>
+                <li><b>Hajónév:</b> Szélvész</li>
+                <li><b>Irány:</b> Délkelet (135°)</li>
+                <li><b>Sebesség:</b> 24 csomó</li>
+            </ul>
+
+            <p>JavaScriptben ezt a következőképpen fogalmazzuk meg:</p>
+
+            <pre>
+                <code>
+let hajo1 = {
+    <span class="kodkiemeles">nev</span>: 'Kék Horizont',
+    <span class="kodkiemeles">irany</span>: 315,
+    <span class="kodkiemeles">sebesseg</span>: 18
+}
+
+let hajo2 = {
+    <span class="kodkiemeles">nev</span>: 'Szélvész',
+    <span class="kodkiemeles">irany</span>: 135,
+    <span class="kodkiemeles">sebesseg</span>: 24
+}
+                </code>
+            </pre>
+
+            <p>Ezeket az egységeket <b>objektum</b>oknak nevezzük, a bennük lévő kulcs-érték párokat pedig <b>adattagoknak</b>. Látjuk, hogy több azonos nevű adattag is van, de ez azért nem okoz gondot, mert különböző objektumokba vannak zárva.</p>
+
+            <p>Tehát a <span class="kodreszlet">let</span> kulcsszó után megadjuk az objektum nevét, majd az <span class="kodreszlet">=</span> jel után <span class="kodreszlet">{}</span> jelek között felsoroljuk az adattagokat. Az adattagok egy kulcs-érték párból állnak, melyeket <span class="kodreszlet">:</span>-tal választunk el. Az adattagokat vesszővel elválasztva soroljuk fel.</p>
+
+            <p>Ilyen objektumokra lesz szükség a juhok és a ház esetén is. Minden objektum a játék egy szereplője lesz, tehát létre kell hoznunk a <b>juh1</b>, a <b>juh2</b> és a <b>juh3</b>, valamint a <b>ház</b> objektumokat. Minden szereplőről tudnunk kell az ő <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> pozícióját, valamit a <span class="kodreszlet">szélesség</span>ét és <span class="kodreszlet">magasság</span>át - többek között az ütközés vizsgálata miatt. Nézzük meg, hogy néz ki a juh1 létrehozása!</p>
+
+            <pre>
+                <code>
+/*Változók (objektumok)*/
+<span class="kodkiemeles">let juh1 = {    // az 1. juh adatai
+    x: M,
+    y: M * 8 + M / 2,
+    szélesség: M,
+    magasság: M,
+}</span>
+                </code>
+            </pre>
+
+            <p>Most importáljuk a juhot ábrázoló képet és rajzoljuk ki a <span class="kodreszlet">juh1</span> szereplőt (objektumot)!</p>
+
+            <pre>
+                <code>
+/* === ÁLLAPOTTÉR === */
+
+/*Konstansok*/
+const M = 40; // juhok mérete
+
+/*Kép*/
+<span class="kodkiemeles">let juhkép = new Image();
+juhkép.src = 'juh.png';</span>
+                </code>
+            </pre>
+
+            <pre>
+                <code>
+function rajzolás() {
+    ...
+
+    // juh1
+    <span class="kodkiemeles">ctx.drawImage(juhkép, juh1.x, juh1.y, juh1.szélesség, juh1.magasság);</span>
+
+    ...
+}
+                </code>
+            </pre>
+
+            <p>Jól látható, hogy a <b>juh1</b> objektum kirajzolásánál nem konkrét adatokat írtunk be, hanem valamilyen változókra hivatkoztunk. Ezek a változók a <span class="kodreszlet">juh1</span> objektum egy-egy adattagja, összetevője. Ezekre az adatokra úgy hivatkozhatunk, hogy az objektum neve után pontot ütve megadjuk az adattag nevét. Pl. a juh1 x adattagjára így lehet hivatkozni: "<span class="kodreszlet">juh1.x</span>".</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/mihaly-objektumkirajzolas-juh1.png">
+                    <figcaption>A juh1 kirajzolása a <span class="kodreszlet">juh1</span> objektum alapján</figcaption>
+                </figure>
+            </div>
+
+            <p class="feladat"><b>✅Feladat</b><br><b>Hozzuk létre</b> a <span class="kodreszlet">juh2</span>, a <span class="kodreszlet">juh3</span> és a <span class="kodreszlet">ház</span> szereplőket is szorosan egymás mellé helyezve:<br>juh2 vízszintes helye: M * 2,<br>juh3 vízszintes helye: M * 3,<br>ház vízszintes helye: 300,<br>ház függőleges helye: canvas.height - M * 3,<br>ház szélessége: M * 3,<br>ház magassága: M * 2.5,<br><b>Rajzoljuk ki</b> ezeket a szereplőket, a talajt, a háztetőt és az ajtót!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <p>A további három szereplő <b>létrehozása</b>:</p>
+                <pre>
+                    <code>
+/*Változók (objektumok)*/
+let juh1 = {    // az 1. juh adatai
+    x: M,
+    y: M * 8 + M / 2,
+    szélesség: M,
+    magasság: M,
+}
+
+<span class="kodkiemeles">let juh2 = {    // az 2. juh adatai
+    x: M * 2,
+    y: M * 8 + M / 2,
+    szélesség: M,
+    magasság: M,
+}
+
+let juh3 = {    // az 3. juh adatai
+    x: M * 3,
+    y: M * 8 + M / 2,
+    szélesség: M,
+    magasság: M,
+}
+
+let ház = {    // a ház adatai
+    x: 300,
+    y: canvas.height - M * 3,
+    szélesség: M * 3,
+    magasság: M * 2.5,
+}</span>
+                    </code>
+                </pre>
+                <p>A további szereplők <b>kirajzolása</b>:</p>
+                <pre>
+                    <code>
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = 'lightblue';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // talaj
+    <span class="kodkiemeles">ctx.fillStyle = 'green';
+    ctx.fillRect(0, canvas.height - M, canvas.width, M);</span>
+
+    // ház alapja
+    <span class="kodkiemeles">ctx.fillStyle = 'beige';
+    ctx.fillRect(ház.x, ház.y, ház.szélesség, ház.magasság);</span>
+
+    // háztető
+    <span class="kodkiemeles">ctx.beginPath();
+    ctx.moveTo(300, canvas.height - M * 3);
+    ctx.lineTo(300 + M * 1.5, canvas.height - M * 3 * 2);
+    ctx.lineTo(300 + M * 3, canvas.height - M * 3);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fillStyle = 'brown';
+    ctx.fill();</span>
+
+    // ház ajtaja
+    <span class="kodkiemeles">ctx.fillStyle = 'brown';
+    ctx.fillRect(360, canvas.height - M * 2, M, M * 1.5);</span>
+
+    // juh1
+    ctx.drawImage(juhkép, juh1.x, juh1.y, juh1.szélesség, juh1.magasság);
+
+    // juh2
+    <span class="kodkiemeles">ctx.drawImage(juhkép, juh2.x, juh2.y, juh2.szélesség, juh2.magasság);</span>
+
+    // juh3
+    <span class="kodkiemeles">ctx.drawImage(juhkép, juh3.x, juh3.y, juh3.szélesség, juh3.magasság);</span>
+}
+                    </code>
+                </pre>
+            </details>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/mihaly-objektumkirajzolas-minden.png">
+                    <figcaption>A szereplők és alakzatok kirajzolása az objektumok alapján</figcaption>
+                </figure>
+            </div>
+
+            <h4>Az időalapú animációs ciklus</h4>
+
+            <p>Korábban már használtuk az animációs ciklust, amely rendelkezésre áll a kiindulófájlban. Már tudjuk, hogy az animáció nem más, mint képkockák (frame-ek) <b>egymásutáni gyors lejátszása</b>, ami a mozgókép hatását kelti. Ezzel a technológiával találkozhattok, amikor tévéztek, videót készítetek a telefonotokkal vagy számítógépes játékokkal játszotok.</p>
+
+            <p>Előfordult már veled, hogy egy pillanatra <b>megakadt</b> egy számítógépes játék? Ez gyakran a gép teljesítményére vagy (online játékok esetén) a gyenge internetkapcsolatra vezethető vissza. Ezek elég bosszantóak lehetnek, és bárkivel előfordulhatnak. A következő két opció közül te melyiket tapasztaltad:</p>
+
+            <ol>
+                <li>a játék onnan folytatódott, ahol megakadt (a mozgó objektumok <b>nem mozdultak</b> a megakadás alatt)</li>
+                <li>a játék tovább ment a háttérben, és amikor újra frissült a kép, akkor a mozgó objektumok <b>az új helyükön jelentek meg</b> (vagyis ott, ahol megakadás nélkül is lettek volna)?</li>
+            </ol>
+
+            <p>Játékkészítőként meg kell bizonyosodnunk róla, hogy a játék akkor is az aktuális állapotot mutatja, ha a megakadás miatt nem frissülne egy ideig a kép, vagyis ne engedjük, hogy az internetsebesség vagy a gépünk teljesítménye befolyásolja a játék sebességét. Ehelyett a szereplők pozíciójának módosításához vegyük alapul a két képkocka (két frissítés) között eltelt időt. Ezt nevezzük <b>delta time</b>-nak, röviden <b>dt</b>-nek. Ezt másodpercben adjuk meg, a kiszámítása pedig úgy történik, hogy az aktuális időből kivonjuk az előző időt, majd ezt elosztjuk 1000-rel, hogy a két képkocka között eltelt időt másodpercben kapjuk meg. Ehhez a játék indításának idejét (amit a <span class="kodreszlet">performance.now()</span> paranccsal kérdezhetünk le) elmentjük az <span class="kodreszlet">előzőIdő</span> nevű változóba az animációs ciklus indítása <b>előtt</b>. A cikluson belül az aktuális időt elmentjük az <span class="kodreszlet">aktuálisIdő</span> változóba. A fenti számítás eredményét beletesszük a <span class="kodreszlet">dt</span> nevű változóba, majd az <span class="kodreszlet">előzőIdő</span>t egyenlővé tesszük az <span class="kodreszlet">aktuálisIdő</span>vel. A <span class="kodreszlet">dt</span>-t pedig paraméterül adjuk a <span class="kodreszlet">frissítés(dt)</span> függvénynek, mivel erre az értékre szükségünk lesz a szereplők mozgatásánál.</p>
+
+            <p class="feladat"><b>✅Feladat</b><br>Minden frissítésnél írjuk ki a játék eleje óta eltelt időt!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+/* === ANIMÁCIÓS CIKLUS === */
+
+function következő() {
+    <span class="kodkiemeles">console.log(performance.now());</span>
+    frissítés()
+    rajzolás()
+    if (!vége) {
+        requestAnimationFrame(következő)
+    }
+}
+
+következő()
+                    </code>
+                </pre>
+
+                <p>Az alábbi képen az látható, hogy mennyi milliszekundum (ms) telt el a játék elindítása óta. <b>1000 ms = 1 mp</b></p>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/pont-idoalapu-performancenowkiirasa.png">
+                        <figcaption>A játék elindítása óta eltelt idő ms-ban</figcaption>
+                    </figure>
+                </div>
+            </details>
+
+            <p>A <b>kibővített, időalapú animációs ciklus</b>, tehát, <b>a következőképpen néz ki</b>:</p>
+
+            <pre>
+                <code>
+/* === IDŐALAPÚ ANIMÁCIÓS CIKLUS === */
+
+<span class="kodkiemeles">let előzőIdő = performance.now();</span>
+function következő() {
+    <span class="kodkiemeles">let aktuálisIdő = performance.now();
+    let dt = (aktuálisIdő - előzőIdő) / 1000; // az előző képkocka óta eltelt idő mp-ben
+    előzőIdő = aktuálisIdő;</span>
+    frissítés(<span class="kodkiemeles">dt</span>);
+    rajzolás();
+    requestAnimationFrame(következő);
+}
+
+következő(); // az animáció elindítása
+
+function rajzolás() {
+    ...
+}
+
+function frissítés(<span class="kodkiemeles">dt</span>) {
+    
+}
+                </code>
+            </pre>
+
+            <h4>A juhok időalapú mozgatása</h4>
+
+            <p>A korábbi játékokhoz és animációkhoz hasonlóan a mozgatást itt is a <span class="kodreszlet">frissítés(dt)</span> függvényben fogjuk megírni. Azonban a megoldás kiegészül azzal, hogy az elmozdulás értékét be kell szoroznunk a <span class="kodreszlet">dt</span>-vel annak érdekében, hogy az esetleges "laggolás" esetén is folyamatos legyen a mozgás a háttérben. A juhok mozogjanak különböző sebességgel!</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    <span class="kodkiemeles">juh1.x += 20 * dt;
+    juh2.x += 22 * dt;
+    juh3.x += 21 * dt;</span>
+}
+                </code>
+            </pre>
+
+            <h4>Ütközés (szereplők érintkezésének) vizsgálata</h4>
+
+            <p>A terelés akkor sikeres, ha minden juh a ház előtt van. A Scratch programozási nyelvben már találkozhattatok az <span class="kodreszlet">érinted: egérmutató?</span> paranccsal, amely igaz értéket ad vissza, ha az adott szereplő érinti az egérmutatót (vagy bármely más kiválasztott szereplőt).</p>
+            
+            <p>Ehhez hasonlóan működik a kiindulófájlban megírt <span class="kodreszlet">ütköznek(téglalap1, téglalap2)</span> függvény. Látjuk, hogy a függvény csak téglalapok ütközését (érintkezését) tudja vizsgálni, <b>ezért volt fontos az objektumokat a téglalap tulajdonságaival leírni</b> (balFelsőX, balFelsőY, szélesség, magasság). A függvény valójában két téglalap átfedését ellenőrzi vízszintesen és függőlegesen. Ez a függvény <span class="kodreszlet">igaz</span> értéket fog visszaadni, ha a <span class="kodreszlet">téglalap1</span> és a <span class="kodreszlet">téglalap2</span> objektumok kicsit is átfedik egymást (ütköznek), ezért jól használható <b>elágazások feltételeként</b> (ha t1 és t2 ütköznek, akkor...).</p>
+
+            <p><b>Most már van eszköz a kezünkben szereplők érintkezésének vizsgálatára.</b></p>
+
+            <pre>
+                <code>
+/* === SEGÉDFÜGGVÉNYEK === */
+
+// ütközés
+function ütköznek(téglalap1, téglalap2) {
+    return ! (
+        téglalap2.<span class="kodkiemeles">x</span> + téglalap2.<span class="kodkiemeles">szélesség</span> &lt;= téglalap1.<span class="kodkiemeles">x</span> ||
+        téglalap2.<span class="kodkiemeles">y</span> + téglalap2.<span class="kodkiemeles">magasság</span> &lt;= téglalap1.<span class="kodkiemeles">y</span> ||
+        téglalap2.<span class="kodkiemeles">x</span> >= téglalap1.<span class="kodkiemeles">x</span> + téglalap1.<span class="kodkiemeles">szélesség</span> ||
+        téglalap2.<span class="kodkiemeles">y</span> >= téglalap1.<span class="kodkiemeles">y</span> + téglalap1.<span class="kodkiemeles">magasság</span>
+    )
+}
+                </code>
+            </pre>
+
+            <h4>Terelés vége</h4>
+
+            <p>A terelés akkor sikeres, ha mindegyik juh a ház előtt van (=ütközik a házzal). Ekkor legyen vége az animációnak, álljon meg minden juh! Más szóval ne frissítsük tovább a képernyőt, tehát a <span class="kodreszlet">requestAnimationFrame(következő);</span>-nek fogalmazzunk meg egy feltételt: akkor frissítse a képernyőt, ha a ház még egyik juhval sem ütközik. Sejthető, hogy az <span class="kodreszlet">ütköznek(téglalap1, téglalap2)</span> függvényre lesz szükségünk, de pont az ellenkező jelentésére. A tagadást a <span class="kodreszlet">!</span> jellel tudjuk kifejezni. A <span class="kodreszlet">!ütköznek(juh1,ház)</span> jelentése "a juh1 és a ház <b>nem</b> ütköznek". Ezt mindhárom juh esetén vizsgálni kell, a feltételeket VAGY (<span class="kodreszlet">||</span>) logikai művelettel elválasztva.</p>
+
+            <pre>
+                <code>
+/* === IDŐALAPÚ ANIMÁCIÓS CIKLUS === */
+
+let előzőIdő = performance.now();
+function következő() {
+    let aktuálisIdő = performance.now();
+    let dt = (aktuálisIdő - előzőIdő) / 1000; // az előző képkocka óta eltelt idő mp-ben
+    előzőIdő = aktuálisIdő;
+    frissítés(dt);
+    rajzolás();
+    // ha van olyan, amelyik még nincs a ház előtt, akkor mehet tovább az animáció
+    <span class="kodkiemeles">if(!ütköznek(juh1,ház) || !ütköznek(juh2,ház) || !ütköznek(juh3,ház)) {</span>
+        requestAnimationFrame(következő);
+    <span class="kodkiemeles">}</span>
+}
+
+következő(); // az animáció elindítása
+                </code>
+            </pre>
+
+            <h4>Animációból játék</h4>
+
+            <p>Oldjuk meg, hogy az egyik juhot <b>a nyilakkal lehessen irányítani</b>!</p>
+
+            <p>A rajzolós projektből már ismerjük az egérmozgatás (<span class="kodreszlet">'mousemove'</span>) típusú eseményt, a Pont nevű játékból pedig a kattintás (<span class="kodreszlet">'click'</span>) eseményt. Most ismerkedjünk meg a billentyűlenyomást figyelő eseménnyel! Ehhez a <span class="kodreszlet">keydown</span> típust kell az eseményfigyelő paramétereként megadni. Ha a kiváltott esemény (<span class="kodreszlet">e</span>) billentyűje (<span class="kodreszlet">.key</span>) <span class="kodreszlet">"ArrowRight"</span>, akkor a <span class="kodreszlet">juh1</span> vízszintes pozícióját növeljük meg 1-gyel. (Itt sajnos nem tudjuk használni a <span class="kodreszlet">dt</span>-t, mert azt az animációs ciklusban hoztuk létre és csak a <span class="kodreszlet">frissítés(dt)</span> függvénynek adtuk át.) Ha szeretnénk, a console-ra kiírhatjuk a lenyomott billentyű nevét.</p>
+
+            <pre>
+                <code>
+/* === ESEMÉNYEK === */
+
+<span class="kodkiemeles">document.addEventListener('keydown', e => {
+    if (e.key == "ArrowRight") {
+        console.log(e.key);
+        juh1.x += 1;
+    }
+})</span>
+                </code>
+            </pre>
+
+            <p>Most már nem kell automatikusan mozgatnunk a <span class="kodreszlet">juh1</span> szereplőt, így ezt a sort kommenteljük vagy töröljük ki!</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    <span class="kodkiemeles">//</span>juh1.x += 20 * dt;
+    juh2.x += 22 * dt;
+    juh3.x += 21 * dt;
+}
+                </code>
+            </pre>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladatok</b></p>
+                <p>⬅️ A <span class="kodreszlet">juh1</span> szereplőt balra is lehessen mozgatni a balra nyíllal.</p>
+                <p>🐦 Amíg a juhok a ház felé tartanak, addig repüljön be egy fecske a jobb oldalról (a játéktéren kívülről)! A fecskét külön objektumként hozd létre, és egy fecske képe jelenjen meg a juhok méretével megegyező méretben! Képeket a <a href="https://www.flaticon.com/" target="_blank">flaticon.com</a> oldalon kereshetsz a "swallow" kulcsszóval.</p>
+            </div>
+            
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Pac-man - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Pac-man 👻</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Ebben a projektben a híres <b>Pac-Man</b> játékot készítjük el, ennek értelmében a játék célja ugyanaz: összegyűjteni az összes érmét 🪙 anélkül, hogy a szellemek 👻 elkapnának. A csavar azonban az, hogy a hatalmas játéktérnek csak egy bizonyos részét látjuk egyszerre 🔍. Neked sikerül összegyűjteni az összes érmét?</p>
+            
+            <a href="../15 Pacman/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+
+            <h3>HTML</h3>
+
+            <p>A kiinduló HTML fájl.</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Pac-man&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Pac-man&lt;/h1&gt;
+    &lt;canvas width="600" height="400"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            
+            <h3>JavaScript</h3>
+            
+            <p>A kiinduló JavaScript fájl.</p>
+
+            <pre>
+                <code>
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* === ÁLLAPOTTÉR === */
+
+/*Pálya tárolása*/
+let pálya = [
+    "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+    "F    MF       FF    F S      F",
+    "F F FFFFFFFFF FF FFFFFF FFF FF",
+    "F  S  FS            F   F    F",
+    "FFF FFF FFFFFFFFFFF FFFFFF F F",
+    "F    EF       FF  F F   E  F F",
+    "F FFF F FFFFFFFFF   FFFFF FFFF",
+    "F   F    F F FFFFFFS         F",
+    "F  S  F    F        FFF FFF FF",
+    "FFF FFFFFF FF FF FFFFFFFFFFFFF",
+    "FFF FFFFFF FF FF FFFFFFFFFFFFF",
+    "F   FFF       FF  F   F      F",
+    "F F F FFFFFFF FFF F FFFFF FFFF",
+    "F       F    SFF      F  S   F",
+    "FFF F F FFF FFFFFFFFF F FF FFF",
+    "F  FFE SF F F FFF F  S S    FF",
+    "F F F F F F F FFF FFF F F F FF",
+    "F    S  F             F F F EF",
+    "FFF F FFF FFF FFF FFFFF FFFFFF",
+    "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+    ]
+
+/*Konstansok*/
+const M = 40; // mezőméret
+
+const képek = {
+    pacman: new Image(),
+    szellemaktiv: new Image(),
+    szelleminaktiv: new Image(),
+    érme: new Image(),
+    extraérme: new Image(),
+    falkép: new Image()
+}
+
+képek.pacman.src = 'pacman.png';
+képek.szellemaktiv.src = 'szellemaktiv.png';
+képek.szelleminaktiv.src = 'szelleminaktiv.png';
+képek.érme.src = 'érme.png';
+képek.extraérme.src = 'extraérme.png';
+képek.falkép.src = 'fal.png';
+
+/*Változók*/
+let pacman = {
+    x: 0,
+    y: 0,
+    szélesség: M,
+    magasság: M,    
+    hi: 300, //haladás időtartama szomszédos mezőre (mértékegység: ms)
+    kezdx: 0, //haladás kezdő x pozíciója (mező)
+    kezdy: 0, //haladás kezdő y pozíciója (mező)
+    kezdi: 0, //haladás kezdő időpontja (ms)
+    végx: 0, //haladás végső x pozíciója (mező)
+    végy: 0 //haladás végső y pozíciója (mező)
+}
+
+let falak = [];
+let szellemek = [];
+let billentyűk = [];
+let érmék = [];
+let extrák = [];
+
+let mozog = false;
+let győzelem = false;
+let vereség = false;
+
+// pályabeállítás
+
+
+/* === ANIMÁCIÓS CIKLUS === */
+
+let előzőIdő = performance.now();
+
+következő(); // az animáció elindítása
+
+function következő() {
+    aktuálisIdő = performance.now();
+    let dt = (aktuálisIdő - előzőIdő) / 1000;
+    előzőIdő = aktuálisIdő;
+    frissítés(dt); // állapottér frissítése
+    rajzolás(); // képkocka újrarajzolása
+    if(!vereség && !győzelem) {
+        requestAnimationFrame(következő);
+    }
+}
+
+function rajzolás() {
+    // hány csempe van vízszintesen és függőlegesen
+    
+
+    // negyed kezdetének kiszámolása
+    
+
+    // háttér
+    
+
+    // elmentjük a jelenlegi állapotot
+    
+
+    // canvas eltolása
+    
+
+    // falak
+    
+
+    // érmék
+    
+
+    // extra érmék kirajzolása
+    
+
+    // pacman
+    
+
+    // szellemek
+    
+
+    // sáv
+    
+
+    // eredeti állapotot visszaállítása
+    
+
+    // nyertes szöveg
+    if(győzelem) {
+        ctx.font = '80px Courier New';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Nyertél', 130, 200);
+        ctx.fillText('Nyertél', 780, 200);
+        ctx.fillText('Nyertél', 130, 600);
+        ctx.fillText('Nyertél', 780, 600);
+    }
+    // vesztes szöveg
+    if(vereség) {
+        ctx.font = '80px Courier New';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Vesztettél', 70, 200);
+        ctx.fillText('Vesztettél', 740, 200);
+        ctx.fillText('Vesztettél', 70, 600);
+        ctx.fillText('Vesztettél', 740, 600);
+    }
+}
+
+function frissítés(dt) {
+    // Billentyűk figyelése
+    
+
+    // pacman irányítása    
+    
+
+    // szellemek mozgása
+    
+
+    // érme begyűjtése
+    
+
+    // visszaszámlálás
+    
+
+    // vereség
+    
+
+    // győzelem
+    
+}
+
+/* === ESEMÉNYEK === */
+
+// lenyomott billentyűk eltárolása
+document.addEventListener('keydown', e =&gt; {
+    billentyűk[e.key] = true;
+})
+
+document.addEventListener('keyup', e =&gt; {
+    billentyűk[e.key] = false;
+})
+
+function mozgasIranyban(x, y) {
+    const ujX = pacman.x + x;
+    const ujY = pacman.y + y;
+
+    // Ellenőrzés: a célpont a pálya határain belül van-e, és léphet-e oda
+    if (ujY &gt;= 0 && ujY &lt; pálya.length && ujX &gt;= 0 && ujX &lt; pálya[0].length && [" ", "M", "S", "A", "E", "B", "C"].includes(pálya[ujY][ujX])) {
+        pacman.végx = ujX;
+        pacman.végy = ujY;
+        pacman.kezdi = performance.now(); // Mozgás kezdési időpontja
+        pacman.kezdx = pacman.x;          // Jelenlegi pozíció mentése
+        pacman.kezdy = pacman.y;
+        mozog = true;
+    }
+}
+
+function ütköznek(téglalap1, téglalap2) {
+    return !(
+        téglalap2.x * M + téglalap2.szélesség &lt;= téglalap1.x * M ||
+        téglalap2.y * M + téglalap2.magasság &lt;= téglalap1.y * M ||
+        téglalap2.x * M &gt;= téglalap1.x * M + téglalap1.szélesség ||
+        téglalap2.y * M &gt;= téglalap1.y * M + téglalap1.magasság
+    )
+}
+                </code>
+            </pre>
+
+            <h4>Képek</h4>
+
+            <ul>
+                <li><a href="../15 Pacman kiindulás/érme.png" target="_blank">érme.png</a></li>
+                <li><a href="../15 Pacman kiindulás/extraérme.png" target="_blank">extraérme.png</a></li>
+                <li><a href="../15 Pacman kiindulás/fal.png" target="_blank">fal.png</a></li>
+                <li><a href="../15 Pacman kiindulás/pacman.png" target="_blank">pacman.png</a></li>
+                <li><a href="../15 Pacman kiindulás/szellemaktiv.png" target="_blank">szellemaktiv.png</a></li>
+                <li><a href="../15 Pacman kiindulás/szelleminaktiv.png" target="_blank">szelleminaktiv.png</a></li>
+            </ul>
+
+            <h4>A játék újdonsága: mászkálós játék</h4>
+
+            <p>Ez a játék a legtöbb dologban megegyezik a Kincskereső játékkal, de egy fontos szempontból eltér attól: ez egy mászkálós játék. Ezeknek a játékoknak a lényege a felfedezés, ami gyakran egyszerre több helyszínen (teremben) zajlik. Ebben a játékban ezt a típust ötvözzük a Pac-Man játékkal, és mivel ez a játék csak ebben a tekintetben tér el a Kincskeresőtől, jelen útmutatóban csak erről a "több játékterűségről" olvashatsz.</p>
+
+            <h4>Hogy néz ki az eredeti pálya?</h4>
+
+            <p>Az eredeti pálya egy <b>nagyobb terület</b>, melynek csak egy <b>negyedét</b> látjuk egyszerre. A canvas mérete megegyezik egy negyed méretével. Az alábbi képen látható a négy részre felosztott pálya.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/pacman-palya-terv.png">
+                    <figcaption>A teljes pálya</figcaption>
+                </figure>
+            </div>
+
+            <p>A negyedek négyzetrácsain történő mozgás változatlan, akárcsak a pálya bejárása és a szereplők pozícióinak beállítása a pályabejárás során. A trükk a pálya elemeinek kirajzolásában van.</p>
+
+            <h4>A <span class="kodreszlet">rajzolás()</span> függvény módosítása</h4>
+
+            <p>A pálya kirajzolása (minden szereplővel együtt) a megszokott módon történik, azonban a játékos helyzetétől függően el kell tolnunk a pályát a játéktéren. Ennek megértéséhez tekintsünk a játéktérre (a canvas-re) egy vonat ablakaként, a tájra pedig a pályaként. Utazás közben a szemünk előtt az ablak fix marad, csak a mögötte lévő táj változik. Ahogyan a táj az ablak mögött, úgy fog a pálya is elmozdulni a canvas mögött.</p>
+
+            <p>Ez az eltolás jelenti minden kirajzolás alapját, ezért először meg kell vizsgálnunk, hogy melyik negyedben van a játékos. Ettől függően a <span class="kodreszlet">(0, 0)</span>, a <span class="kodreszlet">(15, 0)</span>, a <span class="kodreszlet">(0, 10)</span>, vagy a<span class="kodreszlet">(15, 10)</span> <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> pozíciókkal rendelkező mezőtől kezdődően rajzolunk ki mindent.</p>
+
+            <p>Tároljuk el, hogy hány mező van egy negyedben vízszintesen és függőlegesen.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // hány csempe van vízszintesen és függőlegesen
+    <span class="kodkiemeles">const csempeszámX = canvas.width / M;
+    const csempeszámY = canvas.height / M;</span>
+    ...
+}
+                </code>
+            </pre>
+            
+            <p>Kezdjük a <b>vízszintes meghatározással</b>. A <span class="kodreszlet">pacman</span> szereplő <span class="kodreszlet">x</span> pozíciója ismert: <span class="kodreszlet">pacman.x</span>. Ezt osszuk el annyival, ahány mező van egy negyedben vízszintesen (<span class="kodreszlet">csempeszámX</span>). Ha a <span class="kodreszlet">pacman</span> a jobb oldali negyedek valamelyikéban van, vagyis az <span class="kodreszlet">x</span> pozíciója legalább <span class="kodreszlet">15</span>, akkor ez a hányados 1-nél nagyobb. Ellenkező esetben egy 0 és 1 közötti szám. Ezt kerekítsük lefelé, majd szorozzuk be a csempék vízszintes számával, és így vagy <span class="kodreszlet">0</span>-t vagy <span class="kodreszlet">15</span>-öt kapunk.</p>
+
+            <p>Ugyanezt végezzük el <b>függőlegesen is</b>.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // hány csempe van vízszintesen és függőlegesen
+    const csempeszámX = canvas.width / M;
+    const csempeszámY = canvas.height / M;
+
+    // negyed kezdetének kiszámolása
+    <span class="kodkiemeles">let negyedKezdX = Math.floor(pacman.x / csempeszámX) * csempeszámX;
+    let negyedKezdY = Math.floor(pacman.y / csempeszámY) * csempeszámY;</span>
+    ...
+}
+                </code>
+            </pre>
+
+            <p>Rajzoljuk ki a <b>fekete hátteret</b>, majd <b>mentsük el a jelenlegi állapotot</b> a <span class="kodreszlet">ctx.save()</span> paranccsal.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // hány csempe van vízszintesen és függőlegesen
+    const csempeszámX = canvas.width / M;
+    const csempeszámY = canvas.height / M;
+
+    // negyed kezdetének kiszámolása
+    let negyedKezdX = Math.floor(pacman.x / csempeszámX) * csempeszámX;
+    let negyedKezdY = Math.floor(pacman.y / csempeszámY) * csempeszámY;
+
+    // háttér
+    <span class="kodkiemeles">ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);</span>
+
+    // elmentjük a jelenlegi állapotot
+    <span class="kodkiemeles">ctx.save();</span>
+    ...
+}
+                </code>
+            </pre>
+
+            <p><b>Toljuk el</b> a canvast <b>negatív irányba</b> a fentebb kiszámolt értékekkel: vízszintesen 0 vagy 15 mezőnyivel (<span class="kodreszlet">negyedKezdX</span>), függőlegesen 0 vagy 10 mezőnyivel (<span class="kodreszlet">negyedKezdY</span>)</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // hány csempe van vízszintesen és függőlegesen
+    const csempeszámX = canvas.width / M;
+    const csempeszámY = canvas.height / M;
+
+    // negyed kezdetének kiszámolása
+    let negyedKezdX = Math.floor(pacman.x / csempeszámX) * csempeszámX;
+    let negyedKezdY = Math.floor(pacman.y / csempeszámY) * csempeszámY;
+
+    // háttér
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // elmentjük a jelenlegi állapotot
+    ctx.save();
+
+    // canvas eltolása
+    <span class="kodkiemeles">ctx.translate(-negyedKezdX * M, -negyedKezdY * M);</span>
+    ...
+}
+                </code>
+            </pre>
+
+            <p>Ezután jöhet <b>a szereplők és további elemek szokásos kirajzolása</b>.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // hány csempe van vízszintesen és függőlegesen
+    const csempeszámX = canvas.width / M;
+    const csempeszámY = canvas.height / M;
+
+    // negyed kezdetének kiszámolása
+    let negyedKezdX = Math.floor(pacman.x / csempeszámX) * csempeszámX;
+    let negyedKezdY = Math.floor(pacman.y / csempeszámY) * csempeszámY;
+
+    // háttér
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // elmentjük a jelenlegi állapotot
+    ctx.save();
+
+    // canvas eltolása
+    ctx.translate(-negyedKezdX * M, -negyedKezdY * M);
+
+    <span class="kodkiemeles">// falak
+    falak.forEach(fal => {
+        /* ctx.fillStyle = 'brown';
+        ctx.fillRect(fal.x * M, fal.y * M, fal.szélesség, fal.magasság); */
+        ctx.drawImage(képek.falkép, fal.x * M, fal.y * M, fal.szélesség, fal.magasság)
+    });
+
+    // érmék
+    érmék.forEach(érme => {
+        ctx.drawImage(képek.érme, érme.x * M, érme.y * M, érme.szélesség, érme.magasság);
+    });
+
+    // extra érmék kirajzolása
+    extrák.forEach(extra => {
+        ctx.drawImage(képek.extraérme, extra.x * M, extra.y * M, extra.szélesség, extra.magasság);
+    });
+
+    // pacman
+    if(!győzelem && !vereség){
+        ctx.drawImage(képek.pacman, pacman.x * M, pacman.y * M, pacman.szélesség, pacman.magasság);
+    } else if (győzelem) {
+        ctx.drawImage(képek.pacman, 230, 250, pacman.szélesség * 3, pacman.magasság * 3);
+        ctx.drawImage(képek.pacman, 830, 250, pacman.szélesség * 3, pacman.magasság * 3);
+        ctx.drawImage(képek.pacman, 230, 650, pacman.szélesség * 3, pacman.magasság * 3);
+        ctx.drawImage(képek.pacman, 830, 650, pacman.szélesség * 3, pacman.magasság * 3);
+    }
+
+    // szellemek
+    if(!győzelem && !vereség && !halhatatlan){
+        szellemek.forEach(szellem => {
+            ctx.drawImage(képek.szellemaktiv, szellem.x * M, szellem.y * M, szellem.szélesség, szellem.magasság);
+        });
+    } else if (!győzelem && !vereség && halhatatlan) {
+        szellemek.forEach(szellem => {
+            ctx.drawImage(képek.szelleminaktiv, szellem.x * M, szellem.y * M, szellem.szélesség, szellem.magasság);
+        });
+    }else if (vereség) {
+        ctx.drawImage(képek.szellemaktiv, 230, 250, M * 3, M * 3);
+        ctx.drawImage(képek.szellemaktiv, 830, 250, M * 3, M * 3);
+        ctx.drawImage(képek.szellemaktiv, 230, 650, M * 3, M * 3);
+        ctx.drawImage(képek.szellemaktiv, 830, 650, M * 3, M * 3);
+    }
+
+    // sáv
+    if (halhatatlan) {
+        ctx.fillStyle = 'green';
+        ctx.fillRect(10, 10, visszaszámlálás * 10, 20);
+        ctx.fillRect(10, 10 * M + 10, visszaszámlálás * 10, 20);
+        ctx.fillRect(15 * M + 10, 10, visszaszámlálás * 10, 20);
+        ctx.fillRect(15 * M + 10, 10 * M + 10, visszaszámlálás * 10, 20);
+    }</span>
+    ...
+}
+                </code>
+            </pre>
+
+            <p>Végül <b>állítsük vissza a canvas eredeti állapotát</b> a <span class="kodreszlet">ctx.restore()</span> paranccsal és írjuk ki a <b>nyertes</b> és <b>vesztes</b> szövegeket.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // hány csempe van vízszintesen és függőlegesen
+    const csempeszámX = canvas.width / M;
+    const csempeszámY = canvas.height / M;
+
+    // negyed kezdetének kiszámolása
+    let negyedKezdX = Math.floor(pacman.x / csempeszámX) * csempeszámX;
+    let negyedKezdY = Math.floor(pacman.y / csempeszámY) * csempeszámY;
+
+    // háttér
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // elmentjük a jelenlegi állapotot
+    ctx.save();
+
+    // canvas eltolása
+    ctx.translate(-negyedKezdX * M, -negyedKezdY * M);
+
+    // falak
+    falak.forEach(fal => {
+        /* ctx.fillStyle = 'brown';
+        ctx.fillRect(fal.x * M, fal.y * M, fal.szélesség, fal.magasság); */
+        ctx.drawImage(képek.falkép, fal.x * M, fal.y * M, fal.szélesség, fal.magasság)
+    });
+
+    // érmék
+    érmék.forEach(érme => {
+        ctx.drawImage(képek.érme, érme.x * M, érme.y * M, érme.szélesség, érme.magasság);
+    });
+
+    // extra érmék kirajzolása
+    extrák.forEach(extra => {
+        ctx.drawImage(képek.extraérme, extra.x * M, extra.y * M, extra.szélesség, extra.magasság);
+    });
+
+    // pacman
+    if(!győzelem && !vereség){
+        ctx.drawImage(képek.pacman, pacman.x * M, pacman.y * M, pacman.szélesség, pacman.magasság);
+    } else if (győzelem) {
+        ctx.drawImage(képek.pacman, 230, 250, pacman.szélesség * 3, pacman.magasság * 3);
+        ctx.drawImage(képek.pacman, 830, 250, pacman.szélesség * 3, pacman.magasság * 3);
+        ctx.drawImage(képek.pacman, 230, 650, pacman.szélesség * 3, pacman.magasság * 3);
+        ctx.drawImage(képek.pacman, 830, 650, pacman.szélesség * 3, pacman.magasság * 3);
+    }
+
+    // szellemek
+    if(!győzelem && !vereség && !halhatatlan){
+        szellemek.forEach(szellem => {
+            ctx.drawImage(képek.szellemaktiv, szellem.x * M, szellem.y * M, szellem.szélesség, szellem.magasság);
+        });
+    } else if (!győzelem && !vereség && halhatatlan) {
+        szellemek.forEach(szellem => {
+            ctx.drawImage(képek.szelleminaktiv, szellem.x * M, szellem.y * M, szellem.szélesség, szellem.magasság);
+        });
+    }else if (vereség) {
+        ctx.drawImage(képek.szellemaktiv, 230, 250, M * 3, M * 3);
+        ctx.drawImage(képek.szellemaktiv, 830, 250, M * 3, M * 3);
+        ctx.drawImage(képek.szellemaktiv, 230, 650, M * 3, M * 3);
+        ctx.drawImage(képek.szellemaktiv, 830, 650, M * 3, M * 3);
+    }
+
+    // sáv
+    if (halhatatlan) {
+        ctx.fillStyle = 'green';
+        ctx.fillRect(10, 10, visszaszámlálás * 10, 20);
+        ctx.fillRect(10, 10 * M + 10, visszaszámlálás * 10, 20);
+        ctx.fillRect(15 * M + 10, 10, visszaszámlálás * 10, 20);
+        ctx.fillRect(15 * M + 10, 10 * M + 10, visszaszámlálás * 10, 20);
+    }
+
+    <span class="kodkiemeles">// eredeti állapotot visszaállítása
+    ctx.restore();
+
+    // nyertes szöveg
+    if(győzelem) {
+        ctx.font = '80px Courier New';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Nyertél', 130, 200);
+        ctx.fillText('Nyertél', 780, 200);
+        ctx.fillText('Nyertél', 130, 600);
+        ctx.fillText('Nyertél', 780, 600);
+    }
+    // vesztes szöveg
+    if(vereség) {
+        ctx.font = '80px Courier New';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Vesztettél', 70, 200);
+        ctx.fillText('Vesztettél', 740, 200);
+        ctx.fillText('Vesztettél', 70, 600);
+        ctx.fillText('Vesztettél', 740, 600);
+    }</span>
+}
+                </code>
+            </pre>
+
+            <h4>Halhatatlanság</h4>
+
+            <p>A különleges érmék begyűjtése <b>10 másodpercnyi halhatatlanságot</b> jelent, amikor érinthetjük a szellemeket. Ezt több minden jelzi a játékban: a <b>szellemek jelmeze</b> és a játék bal felső sarkában megjelenő zöld <b>sáv</b>, ami a halhatatlanságból hátralévő időt mutatja vizuálisan. Nézzük meg ennek a saávnak a megvalósítását! Ehhez kellenek a <span class="kodreszlet">halhatatlan</span> és a <span class="kodreszlet">visszaszámlálás</span> változók. Előbbi annak tárolására szolgál, hogy még a halhatatlanság állapotában vagyunk-e (logikai változó), utóbbi pedig a hátralévő idő tárolására (valós szám).</p>
+
+            <pre>
+                <code>
+let mozog = false;
+let győzelem = false;
+let vereség = false;
+<span class="kodkiemeles">let halhatatlan = false;
+let visszaszámlálás = 0;</span>
+                </code>
+            </pre>
+
+            <p>Halhatatlanná az <b>extra érmék begyűjtésével</b> tudunk válni. Ekkor állítsuk be a <span class="kodreszlet">visszaszámlálás</span>t 10-re.</p>
+
+            <pre>
+                <code>
+// érme begyűjtése
+érmék.forEach(érme => {
+    if(ütköznek(érme, pacman)) {
+        érmék.splice(érmék.indexOf(érme), 1);
+    }
+});
+
+<span class="kodkiemeles">extrák.forEach(extra => {
+    if(ütköznek(extra, pacman)) {
+        extrák.splice(extrák.indexOf(extra), 1);
+        halhatatlan = true;
+        visszaszámlálás = 10;
+    }
+});</span>
+                </code>
+            </pre>
+
+            <p>Rajzoljuk ki a sávot <b>a hátralévő idő alapján</b> akkor, <b>ha éppen halhatatlanok vagyunk</b>. Ezt <b>négy</b> pozíción kell megtennünk a canvas eltolása miatt.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // szellemek
+    ...
+
+    // sáv
+    <span class="kodkiemeles">if (halhatatlan) {
+        ctx.fillStyle = 'green';
+        ctx.fillRect(10, 10, visszaszámlálás * 10, 20);
+        ctx.fillRect(10, 10 * M + 10, visszaszámlálás * 10, 20);
+        ctx.fillRect(15 * M + 10, 10, visszaszámlálás * 10, 20);
+        ctx.fillRect(15 * M + 10, 10 * M + 10, visszaszámlálás * 10, 20);
+    }</span>
+
+    // eredeti állapotot visszaállítása
+    ...
+}
+                </code>
+            </pre>
+
+            <p>Ha halhatatlanok vagyunk, <b>kezdődjön el a visszaszámlálás</b>. Ha lejárt az időnk, <b>többé nem</b> vagyunk halhatatlanok.</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    ...
+    // érme begyűjtése
+    ...
+
+    // visszaszámlálás
+    <span class="kodkiemeles">if (halhatatlan) {
+        visszaszámlálás -= dt;
+        console.log(visszaszámlálás);
+    }
+    if (visszaszámlálás &lt;= 0) {
+        halhatatlan = false;
+    }</span>
+
+    // vereség
+    ...
+}
+                </code>
+            </pre>
+
+            <p>A <span class="kodreszlet">halhatatlan</span> változó állapota a szellemek megjelenését is befolyásolja.</p>
+
+            <pre>
+                <code>
+// szellemek
+if(!győzelem && !vereség && <span class="kodkiemeles">!halhatatlan</span>){
+    szellemek.forEach(szellem => {
+        ctx.drawImage(képek.szellemaktiv, szellem.x * M, szellem.y * M, szellem.szélesség, szellem.magasság);
+    });
+} else if (!győzelem && !vereség && <span class="kodkiemeles">halhatatlan</span>) {
+    szellemek.forEach(szellem => {
+        ctx.drawImage(képek.szelleminaktiv, szellem.x * M, szellem.y * M, szellem.szélesség, szellem.magasság);
+    });
+} else if (vereség) {
+    ctx.drawImage(képek.szellemaktiv, 230, 250, M * 3, M * 3);
+    ctx.drawImage(képek.szellemaktiv, 830, 250, M * 3, M * 3);
+    ctx.drawImage(képek.szellemaktiv, 230, 650, M * 3, M * 3);
+    ctx.drawImage(képek.szellemaktiv, 830, 650, M * 3, M * 3);
+}
+                </code>
+            </pre>
+
+            <p>Csak akkor veszítsünk, ha a szellemekkel való ütközéskor <b>éppen nem</b> voltunk halhatatlanok.</p>
+
+            <pre>
+                <code>
+// vereség
+szellemek.forEach(szellem => {
+    if(ütköznek(szellem, pacman) && <span class="kodkiemeles">!halhatatlan</span>) {
+        vereség = true;
+    }
+});
+                </code>
+            </pre>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

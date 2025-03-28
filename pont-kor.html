@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Pont - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Pont - kör 🔴</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>Egy igazán <b>letisztult</b> játékkal ismerkedhetsz meg, amit ráadásul nehéz abba hagyni. A képernyőre <b>kattintással</b> kell eljutni a sárga pöttyig, melynek sikeres teljesítése esetén <b>pontot</b> kapsz. Azonban vigyázz a <b>fekete golyók</b>kal, mert ha eltalálnak, vége a játéknak. Vajon kinek sikerül a <b>legtöbb pontot</b> összegyűjteni?</p>
+
+            <a href="../5 Pont - kör/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+            
+            <h3>HTML</h3>
+
+            <p>Induljunk ki a már jól ismert alapstruktúrából, azonban a canvas szélességét és magasságát úgy határozzuk meg, hogy azok <b>egyenlőek</b> legyenek, tehát egy négyzet alakú vászonra lesz szükségünk.</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="hu"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Pont&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;style&gt;
+        canvas {
+            border: 1px solid black;
+        }
+    &lt;/style&gt;
+    &lt;h1&gt;Pont&lt;/h1&gt;
+    &lt;canvas width="400" height="400"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            <h3>JavaScript</h3>
+
+            <h4>Keretprogram</h4>
+
+            <p>Hozzuk létre az <span class="kodreszlet">index.js</span> állományt és <b>másoljuk be</b> az alábbi kommeltelt kódot! Ezt a keretprogramot fogjuk kiegészíteni. A forráskód tartalmazza a canvas elérését, a véletlen egészt generáló, illetve az ütközést ellenőrző függvényt.</p>
+            <pre>
+                <code>
+/*Canvas elérése*/
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* Konstansok */
+
+
+/* Változók */
+
+
+/* === ANIMÁCIÓS CIKLUS === */
+
+
+
+/* === ESEMÉNYEK === */
+
+/* === SEGÉDFÜGGVÉNYEK === */
+
+// véletlen egész
+function véletlenEgész(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+// ütközés
+function ütköznek(téglalap1, téglalap2) {
+    return ! (
+        téglalap2.x + téglalap2.szélesség <= téglalap1.x ||
+        téglalap2.y + téglalap2.magasság <= téglalap1.y ||
+        téglalap2.x >= téglalap1.x + téglalap1.szélesség ||
+        téglalap2.y >= téglalap1.y + téglalap1.magasság
+    )
+}
+                </code>
+            </pre>
+
+            <p class="feladat"><b>✅Feladat</b><br>Milyen <b>szereplőket</b> vélsz felfedezni ebben a játékban?<br>Milyen hasonló játékokat ismersz, ahol pöttyöket/köröket lehet irányítani?</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <ul>
+                    <li>lazac színű kör (irányítható szereplő)</li>
+                    <li>pici sárga kör (begyűjtendő szereplő)</li>
+                    <li>fekete kör (ellenség / akadály)</li>
+                </ul>
+            </details>
+
+            <h4>Háttér</h4>
+
+            <p>Töltsük be a <span class="kodreszlet">háttér.png</span> nevű képet! Színezzük a hátteret egy tetszőleges színre, majd állítsuk be a háttérképet!</p>
+
+            <pre>
+                <code>
+/* Konstansok */
+<span class="kodkiemeles">const háttérkép = new Image();
+háttérkép.src = 'háttér.png';</span>
+                </code>
+            </pre>
+
+            <pre>
+                <code>
+// háttér
+ctx.fillStyle = '#008f95';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.drawImage(háttérkép, 0, 0, canvas.width, canvas.height);
+                </code>
+            </pre>
+
+            <p>A háttérkép még nem jelent meg, de ezt könnyen kiküszöbölhetjük a már jól ismert <b>animációs ciklussal</b>.</p>
+
+            <pre>
+                <code>
+/* === ANIMÁCIÓS CIKLUS === */
+
+
+<span class="kodkiemeles">function következő() {
+    frissítés()
+    rajzolás()
+    requestAnimationFrame(következő)
+}
+
+következő()
+
+function rajzolás() {</span>
+    // háttér
+    ctx.fillStyle = '#008f95';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(háttérkép, 0, 0, canvas.width, canvas.height);
+<span class="kodkiemeles">}
+
+function frissítés() {
+    
+}</span>
+                </code>
+            </pre>
+
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/pont-hatter.png">
+                    <figcaption>A háttérkép kirajzolása animációs ciklusban</figcaption>
+                </figure>
+            </div>
+
+            <p>Az imént megírt kód már egy animáció, bár nem túl látványos. Ebben az animációban egy másodperc alatt többször ugyanaz a színes téglalap és háttérkép kerül kirajzolásra - ez elég statikus még.</p>
+
+            <h4>Szereplők</h4>
+
+            <p>Szükségünk lesz szereplőkre, azaz <b>kör</b>ökre. Ezek a szereplők időnként vagy folyamatosan mozogni fognak valamilyen meghatározott szabály alapján, ezért a helyzetüket leíró adatokat érdemes <b>változókban</b> eltárolni, hogy azok módosítása esetén a következő képkocka a legfrissebb változatot mutassa. Sőt! Az összetartozó adatokat érdemes <b>egységbe zárni</b>.</p>
+
+            <p>Mit jelent az egységbe zárás? Azt, hogy bizonyos adatok csak egy konkrét szereplőhöz tartoznak. Vegyük példaként a hajókat. Minden hajónak van neve, iránya és sebessége, de ezek az adatok minden hajó esetén egyediek:</p>
+
+            <ul>
+                <li><b>Hajónév:</b> Kék Horizont</li>
+                <li><b>Irány:</b> Északnyugat (315°)</li>
+                <li><b>Sebesség:</b> 18 csomó</li>
+            </ul>
+            <ul>
+                <li><b>Hajónév:</b> Szélvész</li>
+                <li><b>Irány:</b> Délkelet (135°)</li>
+                <li><b>Sebesség:</b> 24 csomó</li>
+            </ul>
+
+            <p>JavaScriptben ezt a következőképpen fogalmaznánk meg:</p>
+
+            <pre>
+                <code>
+let hajo1 = {
+    <span class="kodkiemeles">nev</span>: 'Kék Horizont',
+    <span class="kodkiemeles">irany</span>: 315,
+    <span class="kodkiemeles">sebesseg</span>: 18
+}
+
+let hajo2 = {
+    <span class="kodkiemeles">nev</span>: 'Szélvész',
+    <span class="kodkiemeles">irany</span>: 135,
+    <span class="kodkiemeles">sebesseg</span>: 24
+}
+                </code>
+            </pre>
+
+            <p>Ezeket az egységeket <b>objektum</b>oknak nevezzük.</p>
+
+            <p>Tehát a <span class="kodreszlet">let</span> kulcsszó után megadjuk az objektum nevét, majd az <span class="kodreszlet">=</span> jel után <span class="kodreszlet">{}</span> jelek között felsoroljuk az adattagokat. Az adattagok egy kulcs-érték párból állnak, melyeket <span class="kodreszlet">:</span>-tal választunk el. Az adattagokat vesszővel elválasztva soroljuk fel.</p>
+
+            <p>Ilyen objektumokra lesz szükség a körök esetén is. Minden objektum a játék egy szereplője lesz, tehát létre kell koznunk egy <b>játékos</b>t, egy <b>cél</b>t és egy <b>ellenség</b>et. Minden szereplőről tudnunk kell az ő <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> pozícióját, valamit a <span class="kodreszlet">szélesség</span>ét és <span class="kodreszlet">magasság</span>át - utóbbi kettőt az ütközés vizsgálata miatt. Nézzük meg, hogy néz ki a játékos létrehozása!</p>
+
+            <pre>
+                <code>
+/* Változók */
+
+let játékos = {
+    x: 40,
+    y: 50,
+    szélesség: 15,
+    magasság: 15
+}
+                </code>
+            </pre>
+
+            <p>Most rajzoljuk ki ezt a kört!</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = '#008f95';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(háttérkép, 0, 0, canvas.width, canvas.height);
+
+    // játékos kör kirajzolása
+    ctx.beginPath();
+    ctx.arc(<span class="kodkiemeles">játékos.x</span>, <span class="kodkiemeles">játékos.y</span>, <span class="kodkiemeles">játékos.szélesség</span>, 0, 2 * Math.PI);
+    ctx.fillStyle = '#eb6e80';
+    ctx.fill();
+}
+                </code>
+            </pre>
+
+            <p>Jól látható, hogy a kör kirajzolásánál nem konkrét adatokat írtunk be, hanem valamilyen változóra hivatkoztunk. Ez a változó a <span class="kodreszlet">játékos</span> objektum egy-egy adattagja, összetevője. Ezekre az adatokra úgy hivatkozhatunk, hogy az objektum neve után pontot ütve megadjuk az adattag nevét. Pl. a játékos x adattagjára így lehet hivatkozni: "<span class="kodreszlet">játékos.x</span>".</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/pont-korok-jatekos.png">
+                    <figcaption>A játékos kirajzolása a <span class="kodreszlet">játékos</span> objektum alapján</figcaption>
+                </figure>
+            </div>
+
+            <p class="feladat"><b>✅Feladat</b><br><b>Hozzuk létre</b> a <span class="kodreszlet">cél</span> és az <span class="kodreszlet">ellenség</span> szereplőket is!<br><b>Rajzoljuk is ki</b> ezeket a szereplőket!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <p>A további két szereplő <b>létrehozása</b>:</p>
+                <pre>
+                    <code>
+/* Változók */
+
+let játékos = {
+    x: 40,
+    y: 50,
+    szélesség: 10,
+    magasság: 10
+}
+
+<span class="kodkiemeles">let cél = {
+    x: 80,
+    y: 50,
+    szélesség: 5,
+    magasság: 5
+}
+
+let ellenség = {
+    x: 120,
+    y: 50,
+    szélesség: 15,
+    magasság: 15
+}</span>
+                    </code>
+                </pre>
+                <p>A további két szereplő <b>kirajzolása</b>:</p>
+                <pre>
+                    <code>
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = '#008f95';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(háttérkép, 0, 0, canvas.width, canvas.height);
+
+    <span class="kodkiemeles">// cél kör kirajzolása
+    ctx.beginPath();
+    ctx.arc(cél.x, cél.y, cél.szélesség, 0, 2 * Math.PI);
+    ctx.fillStyle = '#e9b000';
+    ctx.fill();</span>
+
+    // játékos kör kirajzolása
+    ctx.beginPath();
+    ctx.arc(játékos.x, játékos.y, játékos.szélesség, 0, 2 * Math.PI);
+    ctx.fillStyle = '#eb6e80';
+    ctx.fill();
+
+    <span class="kodkiemeles">// ellenség kör kirajzolása
+    ctx.beginPath();
+    ctx.arc(ellenség.x, ellenség.y, ellenség.szélesség, 0, 2 * Math.PI);
+    ctx.fillStyle = '#262228';
+    ctx.fill();</span>
+}
+                    </code>
+                </pre>
+            </details>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/pont-korok-alap.png">
+                    <figcaption>A szereplők kirajzolása az objektumok alapján</figcaption>
+                </figure>
+            </div>
+
+            <h4>Szereplők elhelyezése</h4>
+
+            <p>A szereplők sikeresen kirajzolásra kerültek, de láthatóan <b>még nem a játékban elfoglalt helyükön szerepelnek</b>. Érjük el a <span class="kodreszlet">cél</span> szereplő esetén, hogy bármelyik körcikkbe bekerülhessen a játék indításakor!</p>
+
+            <p>Ehhez, persze, tudnunk kellene, hogy mi ezeknek a mezőknek a középpontja. Egy kis kísérletezés után az alábbi koordináta-párokat kapjuk:</p>
+
+            <ul>
+                <li>x: 170, y: 130</li>
+                <li>x: 230, y: 130</li>
+                <li>x: 270, y: 170</li>
+                <li>x: 270, y: 230</li>
+                <li>x: 230, y: 270</li>
+                <li>x: 170, y: 270</li>
+                <li>x: 130, y: 230</li>
+                <li>x: 130, y: 170</li>
+            </ul>
+
+            <p>E közül a <b>8</b> számpáros közül kellene kiválasztani <b>egyet</b> véletlenszerűen. Sejthető, hogy valahogyan a véletlenszám-generálást lehetne használni, és azt is tudjuk már, hogyan lehet véletlenszámot generálni. De ez a tudás hogyan lesz itt a segítségünkre?</p>
+
+            <p>Emlékeztetőül, a <span class="kodreszlet">véletlenEgész(1, 8)</span> függvény egy véletlen számot fog adni 1 és 8 között a határokat is beleértve. Tegyük fel, hogy a függvény az 5-ös számot sorsolta ki. Milyen jó lenne, ha ebben az esetben a koordinátapárokat tartalmazó lista 5. elemét kapnánk meg, hogy oda helyezhessük le a <span class="kodreszlet">cél</span>t! Szerencsére van erre lehetőségünk akkor, ha egy <b>tömb</b>ben tároljuk el a koordinátapárokat. Ennek használatához nézzük meg, mi az a tömb.</p>
+
+            <p>A tömb pontosan olyan, mint egy bevásárlólista. Több elemet tárol egyszerre, például:</p>
+
+            <ol>
+                <li><span class="kodreszlet">'banán'</span></li>
+                <li><span class="kodreszlet">'alma'</span></li>
+                <li><span class="kodreszlet">'sajt'</span></li>
+                <li><span class="kodreszlet">'kenyér'</span></li>
+                <li><span class="kodreszlet">...</span></li>
+            </ol>
+
+            <p>Az alábbi kód azt mutatja, hogyan <b>hozhatunk létre</b> egy változót és hogyan egy üres tömböt.</p>
+
+            <pre>
+                <code>
+/*változó létrehozása*/
+let szám = 132;
+
+/*tömb létrehozása*/
+<span class="kodkiemeles">let bevásárlólista = [];</span>
+                </code>
+            </pre>
+
+            <p>A <span class="kodreszlet">let</span> kulcsszó után először megadjuk a tömb nevét (<span class="kodreszlet">bevásárlólista</span>), utána egy <span class="kodreszlet">=</span> jel után <span class="kodreszlet">[]</span> jelet teszünk. (A sort <span class="kodreszlet">;</span> jellel zárjuk, de ez elhagyható.)</p>
+
+            <p>Ha már egy bizonyos értékekkel feltöltött tömböt kívánunk létrehozni, akkor az alábbi módszer áll rendelkezésre:</p>
+
+            <pre>
+                <code>
+/*tömb létrehozása elemekkel*/
+let nyerőszámok = [5, 12, 46, 28, 30];
+                </code>
+            </pre>
+
+            <p>Jogosan merülhet fel a kérdés, hogy ezek az elemek tényleg benne vannak-e a tömbben. Ezzenőrizzük ezt azáltal, hogy a böngésző Console ablakában <b>kiírjuk</b> a tömböt.</p>
+
+            <pre>
+                <code>
+/*tömb kiírása a console-ra*/
+console.log(nyerőszámok);
+                </code>
+            </pre>
+
+            <p>Az <b>F12</b> billentyű megnyomása után már láthatjuk is a tömböt és annak tartalmát:</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/pont-tömb.png">
+                    <figcaption>A Console-on megjelenített tömb</figcaption>
+                </figure>
+            </div>
+
+            <p>Ez több információt is tudomásunkra hoz. Az <b>Array(5)</b> mutatja meg, hogy hány elem van a tömbben, vagyis milyen hosszú a tömb. Másrészt, a tömb elemei nem egyszerűen fel vannak sorolva, hanem <b>sorszám</b> is van rendelve hozzájuk. Ezt a sorszámot a programozásban <b>index</b>nek hívjuk.</p>
+
+            <p class="feladat"><b>✅Feladat</b><br>Mi az első elem indexe?<br>Mi az utolsó elem indexe?</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <p>Az első elem indexe <b>0</b>, az utolsóé <b>4</b></p>
+            </details>
+
+            <p>A tömb elemei felülírhatók más értékekkel. Az alábbi kód azt mutatja, hogy a tömb második indexű elemét átírjuk <span class="kodreszlet">12</span>-re.</p>
+
+            <pre>
+                <code>
+nyerőszámok[2] = 12;
+                </code>
+            </pre>
+
+            <p>Egy tömb egy adott indexű elemére úgy hivatkozhatunk (másként fogalmazva úgy érjük el), hogy a tömb nevét leírjuk, majd <span class="kodreszlet">[]</span> jelek közé írjuk azt az indexet, amelyik indexen lévő elemre kíváncsiak vagyunk.</p>
+
+            <p class="feladat"><b>✅Feladat</b><br>Írjuk ki ismét a console-ra a nyerőszámok tömböt, hogy megnézzük, valóvban átírtuk-e a második indexen lévő elemet!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+console.log(nyerőszámok);
+                    </code>
+                </pre>
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/pont-tömb-modositott.png">
+                        <figcaption>A Console-on megjelenített, módosított tömb</figcaption>
+                    </figure>
+                </div>
+            </details>
+
+            <p class="feladat"><b>✅Feladat</b><br>Írjuk ki a console-ra a nyerőszámok tömb első elemét!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+console.log(nyerőszámok[0]);
+                    </code>
+                </pre>
+                
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/pont-tömb-elsoelem.png">
+                        <figcaption>A <span class="kodreszlet">nyerőszámok</span> tömb első elemének kiírása a Console-ra</figcaption>
+                    </figure>
+                </div>
+            </details>
+
+            <p>Egy tömbben nemcsak számokat tárolhatunk, hanem szövegeket vagy egységbe zárt elemeket, azaz objektumokat is. <b>Az eddigi tudásunk alapján hogyan tároljuk el a koordinátapárokat?</b> Mivel számpárokról van szó, ezért érdemes őket egységbe zárni, tehát a válasz az, hogy <b>objektumokként</b> tároljuk őket!</p>
+
+            <p>Hozzuk létre a <span class="kodreszlet">helyek</span> nevű tömböt! Ebben a tömbben fogjuk tárolni azokat a koordinátapárokat, melyek a körcikkek közepét mutatják. Ezután egyesével fűzzük a tömb végére az újabb és újabb koordinátapárokat! Azt ezt megvalósító kódban a <span class="kodreszlet">helyek.push()</span> függvény azt jeleti, hogy a tömb végére fűzünk egy új elemet. Ezt az új elemet a függvény <span class="kodreszlet">()</span> jelei közé írjuk.</p>
+
+            <pre>
+                <code>
+/* Konstansok */
+const háttérkép = new Image();
+háttérkép.src = 'háttér.png';
+
+<span class="kodkiemeles">let helyek = [];
+
+helyek.push({x: 170, y: 130});
+helyek.push({x: 230, y: 130});
+helyek.push({x: 270, y: 170});
+helyek.push({x: 270, y: 230});
+helyek.push({x: 230, y: 270});
+helyek.push({x: 170, y: 270});
+helyek.push({x: 130, y: 230});
+helyek.push({x: 130, y: 170});</span>
+                </code>
+            </pre>
+
+            <p>A <span class="kodreszlet">push</span> függvény paraméterébe nem egy számot vagy szöveget írtunk, hanem egy objektumot, melynek van <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> adattagja. Az adattagok értéke a pontok x és y koordinátái, melyeket fentebb találod a felsorolásban.</p>
+
+            <p>Ezzel sikerült eltárolnunk mind a 8 pontot.</p>
+
+            <p class="feladat"><b>✅Feladat</b><br>Írjuk ki a <span class="kodreszlet">helyek</span> tömb első, harmadik és utolsó koordinátapárját!<br>Írjuk ki az utolsó koordinátapár <span class="kodreszlet">x</span> koordinátáját!<br>Írjuk ki az utolsó koordinátapár <span class="kodreszlet">y</span> koordinátáját!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+let helyek = [];
+
+helyek.push({x: 170, y: 130});
+helyek.push({x: 230, y: 130});
+helyek.push({x: 270, y: 170});
+helyek.push({x: 270, y: 230});
+helyek.push({x: 230, y: 270});
+helyek.push({x: 170, y: 270});
+helyek.push({x: 130, y: 230});
+helyek.push({x: 130, y: 170});
+
+<span class="kodkiemeles">console.log(helyek[0]);
+console.log(helyek[2]);
+console.log(helyek[7]);
+
+console.log(helyek[7].x);
+console.log(helyek[7].y);</span>
+                    </code>
+                </pre>
+                
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/pont-tömb-objektum.png">
+                        <figcaption>Objektumok, mint tömbelemek kiírása a Console-ra</figcaption>
+                    </figure>
+                </div>
+            </details>
+
+
+            <p>Nincs más hátra, mint kisorsolni egy véletlen indexet, és az ezen az indexen lévő koordinátákra letenni a kört.</p>
+
+            <p>Fontos kérdés, hogy mi a <b>legkisebb</b> és <b>legnagyobb</b> véletlenszám, amit kisorsolhatunk? Miért? ➡️ A legkisebb kisorsolható szám a <span class="kodreszlet">0</span>, a legnagyobb pedig <span class="kodreszlet">7</span>, mivel a tömb indexelése 0-val kezdődik és nyolc elem esetén a legnagyobb index 7.</p>
+
+            <p>Hozzuk létre az <span class="kodreszlet">újhely</span> változót fent, a változóknál:</p>
+            <pre>
+                <code>
+/* Változók */
+
+let játékos = {
+    ...
+}
+let cél = {
+    ...
+}
+let ellenség = {
+    ...
+}
+
+<span class="kodkiemeles">let újhely = 0;</span>
+                </code>
+            </pre>
+
+            <pre>
+                <code>
+function frissítés() {
+    <span class="kodkiemeles">újhely = véletlenEgész(0, 7);</span>
+    if (<span class="kodkiemeles">újhely == 0</span>) {
+        cél<span class="kodkiemeles">.x</span> = helyek[<span class="kodkiemeles">újhely</span>]<span class="kodkiemeles">.x</span>;
+        cél<span class="kodkiemeles">.y</span> = helyek[<span class="kodkiemeles">újhely</span>]<span class="kodkiemeles">.y</span>;
+    }
+    if (újhely == <span class="kodkiemeles">1</span>) {
+        cél.x = helyek[újhely].x;
+        cél.y = helyek[újhely].y;
+    }
+    if (újhely == <span class="kodkiemeles">2</span>) {
+        cél.x = helyek[újhely].x;
+        cél.y = helyek[újhely].y;
+    }
+    if (újhely == <span class="kodkiemeles">3</span>) {
+        cél.x = helyek[újhely].x;
+        cél.y = helyek[újhely].y;
+    }
+    if (újhely == <span class="kodkiemeles">4</span>) {
+        cél.x = helyek[újhely].x;
+        cél.y = helyek[újhely].y;
+    }
+    if (újhely == <span class="kodkiemeles">5</span>) {
+        cél.x = helyek[újhely].x;
+        cél.y = helyek[újhely].y;
+    }
+    if (újhely == <span class="kodkiemeles">6</span>) {
+        cél.x = helyek[újhely].x;
+        cél.y = helyek[újhely].y;
+    }
+    if (újhely == <span class="kodkiemeles">7</span>) {
+        cél.x = helyek[újhely].x;
+        cél.y = helyek[újhely].y;
+    }
+}
+                </code>
+            </pre>
+
+            <p>A fenti kóddal azt érjük el, hogy 1mp alatt sokszor kisorsolunk egy véletlenszámot 0 és 7 között, ezt beletesszük az <span class="kodreszlet">újhely</span> változóba, majd a <span class="kodreszlet">cél</span> szereplőt elhelyezzük a kisorsolt helyre. Ha <span class="kodreszlet">0</span>-át sorsolunk ki, akkor a <span class="kodreszlet">(170, 130)</span> koordináták kellenek, ha <span class="kodreszlet">1</span>-et, akkor <span class="kodreszlet">(230, 130)</span>, és így tovább. Ezért külön kell kezelnünk minden lehetséges sorszámot, és be kell állítanunk a <span class="kodreszlet">cél</span> <b>x</b> és <b>y</b> koordinátáit a <span class="kodreszlet">helyek[újhely]</span> <b>x</b> és <b>y</b> adattagjaira.</p>
+
+            <p>Hurrá! A <span class="kodreszlet">cél</span> folyamatosan új helyet keres magának és átugrik oda. Persze, ezt csak akkor tegye meg, ha össze tudtuk őt gyűjteni, vagyis ha érintkezik a <span class="kodreszlet">játékos</span>sal. Oldjuk meg azt, hogy csak akkor ugorjon át egy másik helyre, ha ütközik a <span class="kodreszlet">játékos</span>sal!</p>
+
+            <pre>
+                <code>
+function frissítés() {
+    <span class="kodkiemeles">if (ütköznek(játékos, cél)) {</span>
+        újhely = véletlenEgész(0, 7);
+        if (újhely == 0) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 1) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 2) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 3) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 4) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 5) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 6) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 7) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+    <span class="kodkiemeles">}</span>
+}                    
+                </code>
+            </pre>
+
+            <pre>
+                <code>
+/* === SEGÉDFÜGGVÉNYEK === */
+
+// véletlen egész
+function véletlenEgész(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+<span class="kodkiemeles">// ütközés
+function ütköznek(téglalap1, téglalap2) {
+    return ! (
+        téglalap2.x + téglalap2.szélesség <= téglalap1.x ||
+        téglalap2.y + téglalap2.magasság <= téglalap1.y ||
+        téglalap2.x >= téglalap1.x + téglalap1.szélesség ||
+        téglalap2.y >= téglalap1.y + téglalap1.magasság
+    )
+}</span>
+                </code>
+            </pre>
+
+            <p>Sajnos, még nem tudjuk kipróbálni, hogy sikerüle-e a "begyűjtés", mivel nem tudjuk mozgatni a <span class="kodreszlet">játékos</span>t. Oldjuk meg a játékos mozgatását!</p>
+
+            <h4>Játékos mozgatása</h4>
+
+            <p>Azt már megfigyelhetted, hogy a <span class="kodreszlet">játékos</span> meghatározott szabály szerint halad: <b>minden kattintásnál egyet jobbra lép.</b> Használjuk ki, hogy pontosan ilyen sorrendben tároltuk el a mezőközéppontokat: <b>következő mező = <span class="kodreszlet">helyek</span> tömb következő eleme</b>. Vagyis csak a <b>tömbindexet kell növelnünk egyel</b> minden kattintásnál.</p>
+
+            <p>Az aktuális tömbindex tárolásához hozzunk létre egy <span class="kodreszlet">akt</span> nevű változót a változóknál <span class="kodreszlet">0</span> kezdőértékkel!</p>
+
+            <pre>
+                <code>
+/* Változók */
+
+...
+
+let újhely = 0;
+<span class="kodkiemeles">let akt = 0;</span>
+                </code>
+            </pre>
+
+            <p>Most a már jól ismert kattintás eseményt kell megírnunk. Ennek megírásában vezessen minket a következő kérdés: mi történjen, amikor a vászonra kattintunk? Válasz: növekedjen <span class="kodreszlet">1</span>-gyel az <span class="kodreszlet">akt</span> változó értéke. Ha ez megtörtént, akkor az aktuális mezőközéppont koordinátáit adjuk át a játékos <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> adattagjainak!</p>
+
+            <pre>
+                <code>
+/* === ESEMÉNYEK === */
+
+document.addEventListener('click', function(e) {
+    akt += 1;
+    
+    játékos.x = helyek[akt].x;
+    játékos.y = helyek[akt].y;
+})
+                </code>
+            </pre>
+
+            <p>Szedjük össze háromszor a <span class="kodreszlet">cél</span>t!</p>
+
+            <p>Gyorsan tapasztalni fogjuk, hogy az első kör megtétele után megáll a játék és az alábbi <b>hibaüzenet</b>et kapjuk.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/pont-tömb-tulindexeles-hibauzenet.png">
+                    <figcaption>Hibaüzenet az első kör megtétele után</figcaption>
+                </figure>
+            </div>
+
+            <p>Ennek hátterében az áll, hogy az <span class="kodreszlet">akt</span> változó folyamatos növelése eljut odáig, hogy az értéke 8 lesz, aztán 9, 10, 11, ... , 100, stb. De ilyen indexű elem nincs a <span class="kodreszlet">helyek</span> tömbben, tehát egy olyan elemre akarunk hivatkozni, ami nem létezik. Ezt a jelenséget hívjuk <b>túlindexelésnek</b>. Ennek ellenére újabb és újabb köröket szeretnék megtenni a <span class="kodreszlet">játékos</span>sal, tehát valahogy kezelnem kell azt az esetet, amikor egy újabb kört kezdek meg. A megoldás megtalálásában a következő kérdések megválaszolása segíthet: Melyik indexű elemre hivatkozunk a kör utolsó mezőjén? <b>(7.)</b> Ha lépünk még egyet, melyik indexűre hivatkozzunk? <b>(0.)</b> Tehát mikor növelhetjük csak az <span class="kodreszlet">akt</span> változót? <b>(Ha annak értéke kisebb vagy egyenlő, mint 7.)</b> Módosítsuk ez alapján a kattintás eseményt kezelő függvényt!</p>
+
+            <pre>
+                <code>
+document.addEventListener('click', function(e) {
+    <span class="kodkiemeles">if (akt < 7) {</span>
+        akt += 1;
+    <span class="kodkiemeles">} else {
+        akt = 0;
+    }</span>
+    
+    játékos.x = helyek[akt].x;
+    játékos.y = helyek[akt].y;
+})
+                </code>
+            </pre>
+
+            <p>Az utolsó feladat az ellenség mozgásának megírása és a játék befejezése.</p>
+
+            <h4>Ellenség mozgatása</h4>
+
+            <p>Az ellenség mindig a játéktér <b>széle felől</b> tart annak <b>közepe fele</b>, majd ha eléri ezt a pontot (200, 200), akkor új helyet keres magának és újraindul. Ezek a helyek az oldalak <b>negyedelt pontjain</b> találhatók.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/pont-ellenseg-kezd-1.png">
+                    <figcaption>1</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/pont-ellenseg-kezd-2.png">
+                    <figcaption>2</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/pont-ellenseg-kezd-3.png">
+                    <figcaption>3</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/pont-ellenseg-kezd-4.png">
+                    <figcaption>4</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/pont-ellenseg-kezd-5.png">
+                    <figcaption>5</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/pont-ellenseg-kezd-6.png">
+                    <figcaption>6</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/pont-ellenseg-kezd-7.png">
+                    <figcaption>7</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/pont-ellenseg-kezd-8.png">
+                    <figcaption>8</figcaption>
+                </figure>
+            </div>
+
+            <p>Mivel az <span class="kodreszlet">ellenség</span> is véletlen helyről indul, a <span class="kodreszlet">cél</span>hoz hasonló módon keressünk neki véletlen helyet és jelenítsük meg ott. Az ellenség kisorsolt helyét tároljuk el az <span class="kodreszlet">újhely_ellenség</span> változóban, melyet hozzunk létre a változóknál <span class="kodreszlet">0</span> kezdőértékkel! Vegyük figyelembe, továbbá, hogy csak akkor kell új helyet keresni, ha elérte a játéktér közepét!</p>
+
+            <pre>
+                <code>
+/* Változók */
+
+...
+
+let újhely = 0;
+let akt = 0;
+<span class="kodkiemeles">let újhely_ellenség = 0;</span>
+                </code>
+            </pre>
+
+            <pre>
+                <code>
+function frissítés() {
+    if (ütköznek(játékos, cél)) {
+        újhely = véletlenEgész(0, 7);
+        if (újhely == 0) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 1) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 2) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 3) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 4) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 5) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 6) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 7) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+    }
+    
+    <span class="kodkiemeles">if (ellenség.x == 200 && ellenség.y == 200) {
+        újhely_ellenség = véletlenEgész(0, 7);
+        if (újhely_ellenség == 0) {
+            ellenség.x = canvas.width / 4;
+            ellenség.y = 0;
+        }
+        if (újhely_ellenség == 1) {
+            ellenség.x = canvas.width / 4 * 3;
+            ellenség.y = 0;
+        }
+        if (újhely_ellenség == 2) {
+            ellenség.x = canvas.width;
+            ellenség.y = canvas.height / 4;
+        }
+        if (újhely_ellenség == 3) {
+            ellenség.x = canvas.width;
+            ellenség.y = canvas.height / 4 * 3;
+        }
+        if (újhely_ellenség == 4) {
+            ellenség.x = canvas.width / 4 * 3;
+            ellenség.y = canvas.height;
+        }
+        if (újhely_ellenség == 5) {
+            ellenség.x = canvas.width / 4;
+            ellenség.y = canvas.height;
+        }
+        if (újhely_ellenség == 6) {
+            ellenség.x = 0;
+            ellenség.y = canvas.height / 4 * 3;
+        }
+        if (újhely_ellenség == 7) {
+            ellenség.x = 0;
+            ellenség.y = canvas.height / 4;
+        }
+    }</span>
+}
+                </code>
+            </pre>
+
+            <p>A megfelelő hely kisorsolása után elkezdhetjük mozgatni az <span class="kodreszlet">ellenség</span>et. Egyelőre statikusan mindig ugyanabba az irányba mozgassuk! Módosítsuk a <span class="kodreszlet">frissítés</span> függvényt úgy, hogy utolsó lépésként (a függvény végén) növeljük az <span class="kodreszlet">ellenség</span> <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> adattagját.</p>
+
+            <pre>
+                <code>
+function frissítés() {
+    if (ütköznek(játékos, cél)) {
+        ...
+    }
+    
+    if (ellenség.x == 200 && ellenség.y == 200) {
+        if (újhely_ellenség == 7) {
+            ellenség.x = 0;
+            ellenség.y = canvas.height / 4;
+        }
+    }
+    
+    <span class="kodkiemeles">ellenség.x += 1;
+    ellenség.y += 1;</span>
+}
+                </code>
+            </pre>
+
+            <p>Most már mozog az <span class="kodreszlet">ellenség</span>, de könnyű belátni, hogy a mozgás iránya az <span class="kodreszlet">ellenség</span> kezdőpozíciójától függ. Ugyanis ha az a játéktér felső felén van (tehát a függőleges pozíciója 200-nál kisebb), akkor lefelé kell haladnia, ellenkező esetben felfelé. Hasonlóképpen a vízszintes mozgásnál. Emiatt az <span class="kodreszlet">1</span>-gyel való növelés nem lesz megfelelő, sőt, az sem biztos, hogy <b>növelni</b> kell az <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> adattagot. Helyette inkább 2 <b>számított érték</b> lesz a megfelelő. Egy vízszintes és egy függőleges elmozdulás, melyeket jelöljenek a <span class="kodreszlet">v</span> és <span class="kodreszlet">f</span> változók.</p>
+
+            <pre>
+                <code>
+/* Változók */
+
+...
+
+let újhely = 0;
+let akt = 0;
+let újhely_ellenség = 0;
+<span class="kodkiemeles">let v = 0;  // vízszintes elmozdulás
+let f = 0;  // függőleges elmozdulás</span>
+                </code>
+            </pre>
+
+            <p>A <span class="kodreszlet">v</span> és <span class="kodreszlet">f</span> értékét minden új hely kisorsolása után azonnal újra kell számolni, ezért egészítsük ki azt az elágazást, amelyik azt ellenőrzi, hogy az <span class="kodreszlet">ellenség</span> elérte-e a játéktér közepét (<span class="kodreszlet">if (ellenség.x == 200 && ellenség.y == 200)</span>). Miután ebben az elágazásban beállítottuk az ellenség új helyét, számoljuk ki a vízszintes és függőleges elmozdulás értékét!</p>
+
+            <pre>
+                <code>
+function frissítés() {
+    if (ütköznek(játékos, cél)) {
+        ...
+    }
+
+    if (ellenség.x == 200 && ellenség.y == 200) {
+        ...
+        if (újhely_ellenség == 7) {
+            ellenség.x = 0;
+            ellenség.y = canvas.height / 4;
+        }
+        
+        <span class="kodkiemeles">v = (ellenség.x - 200) / 100 * -1;
+        f = (ellenség.y - 200) / 100 * -1;</span>
+    }
+    
+    ellenség.x +=  <span class="kodkiemeles">v</span>;
+    ellenség.y +=  <span class="kodkiemeles">f</span>;
+}
+                </code>
+            </pre>
+
+            <h4>A játék elvesztése</h4>
+
+            <p>A játék akkor ér véget, amikor az <span class="kodreszlet">ellenség</span> eltalálja a <span class="kodreszlet">játékos</span>t. Már jól tudjuk, hogy ennek ellenőrzéséhez ütközésvizsgálatra van szükség. Legyen egy változónk, amit annak tárolására fogunk használni, hogy megy-e még a játék vagy sem. Ha ütköznek, akkor ezt a változót (legyen a neve például <span class="kodreszlet">vége</span>) állítsuk <b>hamis</b>ra.</p>
+
+            <p>Az olyan változókat, amelyek igaz (<span class="kodreszlet">true</span>) vagy hamis (<span class="kodreszlet">false</span>) értéket tárolnak, <b>logikai változónak</b> nevezzük.</p>
+
+            <p>Kezdetben, ezt a változót állítsuk <span class="kodreszlet">false</span>-ra, ezzel jelezve, hogy a játék indulásakor még nincs vége a játéknak.</p>
+
+            <pre>
+                <code>
+let újhely = 0;
+let akt = 0;
+let újhely_ellenség = 0;
+let v = 0;  // vízszintes elmozdulás
+let f = 0;  // függőleges elmozdulás
+<span class="kodkiemeles">let vége = false;</span>
+                </code>
+            </pre>
+
+            <p>A <span class="kodreszlet">frissítés</span> függvényben vizsgáljuk az <span class="kodreszlet">ellenség</span> és a <span class="kodreszlet">játékos</span> ütközését! Ha ütköznek, a <span class="kodreszlet">vége</span> változót állítsuk igazra!</p>
+
+            <pre>
+                <code>
+function frissítés() {
+    if (ütköznek(játékos, cél)) {
+        ...
+    }
+
+    if (ellenség.x == 200 && ellenség.y == 200) {
+        ...
+        if (újhely_ellenség == 7) {
+            ellenség.x = 0;
+            ellenség.y = canvas.height / 4;
+        }
+        
+        v = (ellenség.x - 200) / 100 * -1;
+        f = (ellenség.y - 200) / 100 * -1;
+    }
+    
+    ellenség.x +=  v;
+    ellenség.y +=  f;
+
+    <span class="kodkiemeles">if (ütköznek(játékos, ellenség)) {
+        vége = true;
+    }</span>
+}
+                </code>
+            </pre>
+
+            <p>Csak attól, hogy a <span class="kodreszlet">vége</span> változó értékét átállítottuk, még nem lesz vége a játéknak! Azonban ennek az egy változónak az értékétől már több minden függhet. Például az, hogy folytatódjon-e a játék. Ha azt szeretnénk, hogy az <span class="kodreszlet">ellenség</span> és a <span class="kodreszlet">játékos</span> ütközésekor megálljon a játék, akkor az animációs ciklust kell módosítanunk.</p>
+
+            <p>Csak akkor hívjuk meg újra az animációs ciklust, <b>ha még nincs vége</b> a játéknak!</p>
+
+            <pre>
+                <code>
+function következő() {
+    frissítés()
+    rajzolás()
+    <span class="kodkiemeles">if (!vége) {</span>
+        requestAnimationFrame(következő)
+    <span class="kodkiemeles">}</span>
+}
+                </code>
+            </pre>
+
+            <p><b>Ezzel el is készültünk a játékkal!</b></p>
+            
+            <p class="feladat"><b>✅Feladat</b><br>Tartsd számon, mennyi pöttyöt tudtál begyűjteni! Ezt jelenítsd meg valahol a játéktéren!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+/*Canvas elérése*/
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* Konstansok */
+const háttérkép = new Image();
+háttérkép.src = 'háttér.png';
+
+let helyek = [];
+
+helyek.push({x: 170, y: 130});
+helyek.push({x: 230, y: 130});
+helyek.push({x: 270, y: 170});
+helyek.push({x: 270, y: 230});
+helyek.push({x: 230, y: 270});
+helyek.push({x: 170, y: 270});
+helyek.push({x: 130, y: 230});
+helyek.push({x: 130, y: 170});
+
+/*console.log(helyek[0]);
+console.log(helyek[2]);
+console.log(helyek[7]);
+
+console.log(helyek[7].x);
+console.log(helyek[7].y);*/
+
+
+
+/* Változók */
+
+let játékos = {
+    x: helyek[0].x,
+    y: helyek[0].y,
+    szélesség: 10,
+    magasság: 10
+}
+
+let cél = {
+    x: helyek[0].x,
+    y: helyek[0].y,
+    szélesség: 5,
+    magasság: 5
+}
+
+let ellenség = {
+    x: 200,
+    y: 200,
+    szélesség: 15,
+    magasság: 15
+}
+
+let újhely = 0;
+let akt = 0;
+<span class="kodkiemeles">let pont = -1;</span>
+let újhely_ellenség = 0;
+let v = 0;  // vízszintes elmozdulás
+let f = 0;  // függőleges elmozdulás
+let vége = false;
+
+/*let nyerőszámok = [5, 12, 46, 28, 30];
+console.log(nyerőszámok);
+nyerőszámok[2] = 12;
+console.log(nyerőszámok);
+console.log(nyerőszámok[0]);*/
+
+/* === ANIMÁCIÓS CIKLUS === */
+
+function következő() {
+    frissítés()
+    rajzolás()
+    if (!vége) {
+        requestAnimationFrame(következő)
+    }
+}
+
+következő()
+
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = '#008f95';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(háttérkép, 0, 0, canvas.width, canvas.height);
+
+    // cél kör kirajzolása
+    ctx.beginPath();
+    ctx.arc(cél.x, cél.y, cél.szélesség, 0, 2 * Math.PI);
+    ctx.fillStyle = '#e9b000';
+    ctx.fill();
+
+    // játékos kör kirajzolása
+    ctx.beginPath();
+    ctx.arc(játékos.x, játékos.y, játékos.szélesség, 0, 2 * Math.PI);
+    ctx.fillStyle = '#eb6e80';
+    ctx.fill();
+
+    // ellenség kör kirajzolása
+    ctx.beginPath();
+    ctx.arc(ellenség.x, ellenség.y, ellenség.szélesség, 0, 2 * Math.PI);
+    ctx.fillStyle = '#262228';
+    ctx.fill();
+
+    <span class="kodkiemeles">// pont
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(pont, 10, 30);</span>
+}
+
+function frissítés() {
+    if (ütköznek(játékos, cél)) {
+        <span class="kodkiemeles">pont += 1;</span>
+        újhely = véletlenEgész(0, 7);
+        if (újhely == 0) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 1) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 2) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 3) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 4) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 5) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 6) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+        if (újhely == 7) {
+            cél.x = helyek[újhely].x;
+            cél.y = helyek[újhely].y;
+        }
+    }
+    
+    if (ellenség.x == 200 && ellenség.y == 200) {
+        újhely_ellenség = véletlenEgész(0, 7);
+        if (újhely_ellenség == 0) {
+            ellenség.x = canvas.width / 4;
+            ellenség.y = 0;
+        }
+        if (újhely_ellenség == 1) {
+            ellenség.x = canvas.width / 4 * 3;
+            ellenség.y = 0;
+        }
+        if (újhely_ellenség == 2) {
+            ellenség.x = canvas.width;
+            ellenség.y = canvas.height / 4;
+        }
+        if (újhely_ellenség == 3) {
+            ellenség.x = canvas.width;
+            ellenség.y = canvas.height / 4 * 3;
+        }
+        if (újhely_ellenség == 4) {
+            ellenség.x = canvas.width / 4 * 3;
+            ellenség.y = canvas.height;
+        }
+        if (újhely_ellenség == 5) {
+            ellenség.x = canvas.width / 4;
+            ellenség.y = canvas.height;
+        }
+        if (újhely_ellenség == 6) {
+            ellenség.x = 0;
+            ellenség.y = canvas.height / 4 * 3;
+        }
+        if (újhely_ellenség == 7) {
+            ellenség.x = 0;
+            ellenség.y = canvas.height / 4;
+        }
+        
+        v = (ellenség.x - 200) / 100 * -1; // így biztosan lesz olyan pillanat, amikor a (200,200) ponton van
+        f = (ellenség.y - 200) / 100 * -1;
+    }
+    
+    ellenség.x += v;
+    ellenség.y += f;
+
+    if (ütköznek(játékos, ellenség)) {
+        vége = true;
+    }
+}
+
+
+
+/* === ESEMÉNYEK === */
+
+document.addEventListener('click', function(e) {
+    if (akt < 7) {
+        akt += 1;
+    } else {
+        akt = 0;
+    }
+    
+    játékos.x = helyek[akt].x;
+    játékos.y = helyek[akt].y;
+})
+
+
+/* === SEGÉDFÜGGVÉNYEK === */
+
+// véletlen egész
+function véletlenEgész(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+// ütközés
+function ütköznek(téglalap1, téglalap2) {
+    return ! (
+        téglalap2.x + téglalap2.szélesség <= téglalap1.x ||
+        téglalap2.y + téglalap2.magasság <= téglalap1.y ||
+        téglalap2.x >= téglalap1.x + téglalap1.szélesség ||
+        téglalap2.y >= téglalap1.y + téglalap1.magasság
+    )
+}
+                    </code>
+                </pre>
+            </details>
+
+            <p class="feladat"><b>✅Feladat</b><br>Szabd személyre a játékot a kedvenc színösszeállításoddal. Válogass kedvedre a <a href="https://www.canva.com/learn/website-color-schemes/" target="_blank">Canva oldalán</a>.</p>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladat</b><br>Hozz létre egy másik, gyorsabb ellenséget! ⚫</p>
+            </div>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladat</b><br>Érd el, hogy minden játékban véletlenszerű legyen az, hogy melyik irányba indul el a <span class="kodreszlet">játékos</span>! ⬅️🟠➡️</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

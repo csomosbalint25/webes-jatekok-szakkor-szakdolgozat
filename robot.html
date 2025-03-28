@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Robotlabirintus - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Robotlabirintus 🤖</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>A játék lényege, hogy a <b>nyíl</b> billentyűk segítségével <b>kijussunk</b> a Robottal a labirintusból. Viszont ebben a labirintusban nem falakkal, hanem <b>víz</b>zel 🌊 vagyunk körülvéve, vagyis ha beleesünk, akkor <b>vége</b> a játéknak. A küldetést megnehezíti, hogy az irányok <b>fel lettek cserélve</b>... Vajon <b>hány másodperc</b> ⌛ alatt sikerül teljesítened a küldetést? Hajrá!</p>
+            
+            <a href="../13 Robotlabirintus/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+
+            <h3>Négyzetrácsalapú játékok</h3>
+
+            <p>A számítógépes játékok egy csoportja a <b>négyzetrácsalapú játékok</b> (grid-based games). Ezekben a játékokban a játéktér négyzetrácsokra van felosztva, és minden szereplő csak ezeken a négyzetrácsokon, más szóval <b>mező</b>kön tud mozogni. Pontosabban mezőközéppontok között mozog. Ide tartoznak - többek között - az alábbi játékok:</p>
+
+            <ul>
+                <li>Sakk</li>
+                <li>Aknakereső</li>
+                <li>Pac-Man</li>
+                <li>The Legend of Zelda (korai verziók)</li>
+                <li>Fire Emblem</li>
+                <li>Labyrinth társasjáték</li>
+            </ul>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/fire-emblem.png">
+                    <figcaption>Fire Emblem</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/labirintus-tarsasjatek.jpg">
+                    <figcaption>Labyrinth társasjáték</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/zelda_a_zold_sapkas_fiu_kalandjai_4.jpg">
+                    <figcaption>The Legend of Zelda</figcaption>
+                </figure>
+            </div>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/pac-man.jpg">
+                    <figcaption>Pac-Man</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/aknakereso.png">
+                    <figcaption>Aknakereső</figcaption>
+                </figure>
+            </div>
+
+            <p>Ebben a projektben elkészítjük az <b>első négyzetrácsalapú játékunkat</b>.</p>
+            
+            <h3>HTML</h3>
+
+            <p>Induljunk ki a már jól ismert alapstruktúrából. A canvas szélességét és magasságát úgy határozzuk meg, hogy egy <b>360 px</b> széles és <b>320 px</b> magas játékteret kapjunk! Azért ekkorát, mert a négyzetrácsok alapja egy 40x40 px-es négyzet lesz. Ebből már látható, hogy a mi játékunk egy 9x8-as négyzetrács lesz.</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="<span class="kodkiemeles">hu</span>"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;<span class="kodkiemeles">Robotlabirintus</span>&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;<span class="kodkiemeles">Robotlabirintus</span>&lt;/h1&gt;
+    &lt;canvas width="<span class="kodkiemeles">360</span>" height="<span class="kodkiemeles">320</span>"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+            
+            <h3>JavaScript</h3>
+
+            <p>Induljunk ki az alábbi JavaScript kódból.</p>
+
+            <pre>
+                <code>
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* === ÁLLAPOTTÉR === */
+
+/*Pálya tárolása*/
+
+
+/*Konstansok*/
+// mezőméret
+
+let robotkép = new Image();
+robotkép.src = 'robot.png';
+
+/*Változók*/
+// robot
+
+
+// egyéb változók
+
+let vesztettél = false;
+let nyertél = false;
+
+
+
+/* === ANIMÁCIÓS CIKLUS === */
+
+
+következő(); // az animáció elindítása
+
+function következő() {
+    idő = performance.now();
+    frissítés(idő); // állapottér frissítése
+    rajzolás(); // képkocka újrarajzolása
+    requestAnimationFrame(következő);
+}
+
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = 'orange';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // vizek
+    
+
+    // robot
+    
+    
+    // nyertes szöveg
+    if(nyertél) {
+        ctx.font = '80px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('Nyertél', 50, 170);
+    }
+
+    // vízbe esés
+    if(vesztettél) {
+        ctx.font = '40px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('🌊Vízbe estél🌊', 30, 170);
+    }
+
+    // idő
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText('⌛: ...', 10, 30);
+}
+
+function frissítés(dt) {
+    // Billentyűk figyelése
+    
+
+    // robot csúsztatása
+    
+
+    // célba érés
+    
+}
+
+/* === ESEMÉNYEK === */
+
+// lenyomott billentyűk eltárolása
+document.addEventListener('keydown', e => {
+    billentyűk[e.key] = true;
+})
+
+document.addEventListener('keyup', e => {
+    billentyűk[e.key] = false;
+})
+                </code>
+            </pre>
+
+            <h4>A pálya kirajzolása</h4>
+
+            <p>A pálya négyzetrácsait érdemes kis mezőkként elképzelni, amit valamilyen minta alapján fogunk kirajzolni. A pálya alapjául egy narancssárga háttér fog szolgálni, amire elhelyezzük a víz mezőket és a robotot. Ezeket a mezőket azonosítsák a <span class="kodreszlet">V</span> (víz) és <span class="kodreszlet">R</span> (robot) betűk.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/robot-negyzetracs-betukkel-azon.png">
+                    <figcaption>Betűkkel azonosított mezők</figcaption>
+                </figure>
+            </div>
+
+            <p>Soronként nézve alkossunk szöveget a pályából úgy, hogy a betűket tartalmazó mezőket a benne lévő betűvel írjuk le, az üreseket pedig szóközzel. Így az első sor <span class="kodreszlet">"VVVVVVV_V"</span>, a második sor <span class="kodreszlet">"V_______V"</span> és így tovább. A szövegek abban hasonlítanak a tömbökre, hogy minden karakterének van indexe. Vagyis az első sort leíró szöveg 2. indexén <span class="kodreszlet">V</span> van, míg a második sor 7. indexén <span class="kodreszlet">_</span> (szóköz) van. Ennek köszönhetően minden mezőt be tudunk azonosítani egy <b>sor-index</b> számpárral. Annak érdekében, hogy a soroknak is legyen a kódban sorszáma, tároljuk el a sorokat leíró szövegeket egy tömbben. Így az előbbi számpár <b>tömbelem-tömbelemindex</b>re módosul.</p>
+
+            <pre>
+                <code>
+/*Pálya tárolása*/
+<span class="kodkiemeles">let pálya = [
+    "VVVVVVV V",
+    "V       V",
+    "V VV VV V",
+    "VVV     V",
+    "V   V V V",
+    "V VV  V V",
+    "VRV   V V",
+    "VVVVVVVVV"
+];</span>
+                </code>
+            </pre>
+
+            <p class="feladat"><b>✅Feladat</b><br>Gyakorlásként írjuk ki a console-ra a <span class="kodreszlet">pálya</span> tömb 4. indexen lévő elemét!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+                <pre>
+                    <code>
+console.log(pálya[4]);
+                    </code>
+                </pre>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/robot-palya-negyedik-sora-kiir-consolera.png">
+                        <figcaption>A <span class="kodreszlet">pálya</span> 4. indexű eleme a pálya 5. sora. A hibaüzenettel később foglalkozunk.</figcaption>
+                    </figure>
+                </div>
+
+            </details>
+
+            <p class="feladat"><b>✅Feladat</b><br>Most írjuk ki a console-ra a <span class="kodreszlet">pálya</span> tömb 7. sorának 2. karakterét!</p>
+
+            <details>
+                <summary>Megoldás</summary>
+
+                <p>Ezt úgy tehetjük meg, hogy a tömb neve után két <span class="kodreszlet">[ ][ ]</span> jelet teszünk. Az elsőbe írt szám a tömbindexet jelenti, a második pedig az adott szöveg (tömbelem) adott indexű karakterét.</p>
+
+                <pre>
+                    <code>
+console.log(pálya[4]);
+<span class="kodkiemeles">console.log(pálya[6][1]);</span>
+                    </code>
+                </pre>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/robot-palya-hetedik-sor-masodik-karakter-kiir-consolera.png">
+                        <figcaption>A kiírt <span class="kodreszlet">R</span> betű jelenti, hogy itt helyezkedik el a robot.</figcaption>
+                    </figure>
+                </div>
+
+            </details>
+
+            <p>A mintánk rendelkezésre áll, és már azt is tudjuk, hogyan érhetjük el az egyes elemeket, vagyis le tudjuk kérdezni, hogy az adott mezőre mi kerül. Persze nem szeretnénk minden mezőt egyenként lekérdezni, ezért írjunk egy programot a pálya sorfolytonos bejárására. A sorfolytonosság azt jelenti, hogy fentről lefelé, balról jobbra haladva megnézzük a mintát (tehát a <span class="kodreszlet">pálya</span> tömböt), és minden karakter vizsgálatakor eldöntjük, hogy kell-e oda tenni valamit (vizet vagy robotot). Erre fogjuk használni a <b>számlálós ciklus</b>t, vagy ahogyan sokan nevezik, a <span class="kodreszlet">for</span> ciklust.</p>
+
+            <div class="megjegyzes">
+                <p><b>💭Megjegyzés</b></p>
+                <h4>Számlálós ciklus</h4>
+
+                <p>Mit jelent a <b>ciklus</b> szó? A programozásban a ciklus vagy iteráció <b>ismétlést</b> jelent, vagyis ismétlődő feladatok megvalósítására szolgál. A számlálós ciklus szerkezete a JavaScriptben az alábbi:</p>
+
+                <pre>
+                    <code>
+<span class="kodkiemeles">for (let i = 0; i &lt; 10; i++) {</span>
+    console.log(i);
+<span class="kodkiemeles">}</span>
+                    </code>
+                </pre>
+
+                <p>A számlálós ciklust a <span class="kodreszlet">for</span> kulcsszóval kezdjük, mely után zárójelben megadunk három paramétert:</p>
+
+                <ol>
+                    <li>Mettől megy a ciklus. Itt definiáljuk (létrehozzuk) a ciklusváltozót, ami sok esetben az <span class="kodreszlet">i</span> nevet kapja. <b>A példában 0-tól megy a ciklus.</b></li>
+                    <li>Meddig menjen a ciklus. <b>A példában 10-ig megy a ciklus.</b></li>
+                    <li>Hányasával menjen a ciklus. <b>A példában egyesével lép a ciklus.</b></li>
+                </ol>
+
+                <p>Ezután <span class="kodreszlet">{ }</span> jelek között megfogalmazzuk azt (azokat) a parancsot (parancsokat), amit minden cikluslépésben végre kell hajtani. <b>A példában kiírjuk a ciklusváltozót (<span class="kodreszlet">i</span>).</b></p>
+
+                <p>A fenti példa eredménye a console-on:</p>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/robot-szamlalos-ciklus.png">
+                        <figcaption>Az <span class="kodreszlet">i</span> ciklusváltozó értéke 10 cikluslépésen (iteráción) keresztül.</figcaption>
+                    </figure>
+                </div>
+
+                <p>A ciklusokat egymásba is lehet építeni. Ebben az esetben fontos, hogy a ciklusváltozóknak különböző nevet adjunk.</p>
+
+                <pre>
+                    <code>
+<span class="kodkiemeles">for</span> (let i = 0; i &lt; 10; i++) {
+    <span class="kodkiemeles">for</span> (let <span class="kodkiemeles">j</span> = 0; <span class="kodkiemeles">j</span> &lt; 3; <span class="kodkiemeles">j</span>++) {
+        console.log(<span class="kodkiemeles">j</span>);
+    }
+}
+                    </code>
+                </pre>
+
+                <p>A fenti kódban a belső ciklus 0-tól 2-ig írja ki a számokat. Mindezt 10-szer teszi meg a külső ciklus miatt.</p>
+
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/robot-szamlalos-ciklus-egymasba-agyazott.png">
+                        <figcaption>Az egymásba ágyazott ciklus eredményének részlete</figcaption>
+                    </figure>
+                </div>
+
+                <p><b>Erre az egymásba ágyazott ciklusra lesz szükségünk nekünk is, mert nemcsak a sorokon (tömbön) kell végigmennünk, hanem az oszlopokon (tömbelemeken) is.</b></p>
+            </div>
+
+            <p>A sor az <span class="kodreszlet">y</span> pozíciót határozza meg, az oszlop pedig az <span class="kodreszlet">x</span>-et, ezért nevezzük el így a ciklusváltozókat. A külső ciklus a tömb hosszáig menjen, a belső pedig a sor hosszáig.</p>
+
+            <pre>
+                <code>
+// a pálya tömb bejárása sorfolytonosan
+<span class="kodkiemeles">for (let y = 0; y &lt; pálya.length; y++) {
+    for (let x = 0; x &lt; pálya[y].length; x++) {</span>
+        ...
+    <span class="kodkiemeles">}
+}</span>
+                </code>
+            </pre>
+
+            <p>A pályaminta alapján a robotnak és minden víznek be kell állítanunk az <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> pozícióját. Robotból csak egy van, vízből viszont sok, ezért a vizeket egy tömbben fogjuk tárolni. Hozzuk létre az <span class="kodreszlet">M</span> konstanst, a <span class="kodreszlet">robot</span> objektumot és a <span class="kodreszlet">vizek</span> tömböt. Állítsuk be a robot tulajdonságait és töltsük fel a tömböt.</p>
+
+            <pre>
+                <code>
+/*Konstansok*/
+// mezőméret
+<span class="kodkiemeles">const M = 40;</span>
+
+let robotkép = new Image();
+robotkép.src = 'robot.png';
+
+/*Változók*/
+// robot
+<span class="kodkiemeles">let robot = {
+    x: 0,
+    y: 0,
+    szélesség: M,
+    magasság: M
+}</span>
+
+// egyéb változók
+<span class="kodkiemeles">let vizek = [];</span>
+
+// a pálya tömb bejárása sorfolytonosan
+for (let y = 0; y &lt; pálya.length; y++) {
+    for (let x = 0; x &lt; pálya[y].length; x++) {
+        <span class="kodkiemeles">switch (pálya[y][x]) {
+            case "V":
+                vizek.push({ x: x, y: y, szélesség: M, magasság: M })
+                break;
+            case "R":
+                robot.x = x;
+                robot.y = y;
+                break;
+        }</span>
+    }    
+}
+                </code>
+            </pre>
+
+            <p>A fenti kódban a <span class="kodreszlet">switch</span> egy olyan elágazás, melynek számtalan esete lehet a mögötte zárójelben megfogalmazott feltétel alapján. Mi most kettőt kezelünk: attól függően, hogy az éppen vizsgált elem (<span class="kodreszlet">pálya[y][x]</span>) <span class="kodreszlet">"V"</span> vagy <span class="kodreszlet">"R"</span>,</p>
+
+            <ul>
+                <li>hozzáfűzzük a vizet a <span class="kodreszlet">vizek</span> tömbhöz eltárolva róla, hogy hanyadik mezőben lesz a víz vízszintesen (<span class="kodreszlet">x</span>) és függőlegesen (<span class="kodreszlet">y</span>), valamint hogy mekkora a <span class="kodreszlet">szélesség</span>e és <span class="kodreszlet">magasság</span>a, vagy</li>
+                <li>beállítjuk, hogy a <span class="kodreszlet">robot</span> melyik mezőből indul.</li>
+            </ul>
+
+            <p>A <span class="kodreszlet">break</span> az eset lezárására szolgáló kötelező elem.</p>
+
+            <p><b>Most már minden szereplőről tudjuk, hogy melyik mezőn helyezkedik el.</b> Például a vizek tömb 13. indexen lévő elemének (jelölve az alábbi rajzon) tulajdonságai:</p>
+
+            <ul>
+                <li><span class="kodreszlet">x</span>: 5</li>
+                <li><span class="kodreszlet">y</span>: 2</li>
+                <li><span class="kodreszlet">szélesség</span>: 40</li>
+                <li><span class="kodreszlet">magasság</span>: 40</li>
+            </ul>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/robot-negyzetracs-vizek-13-adatok.png">
+                    <figcaption>A <span class="kodreszlet">vizek</span> tömb 13. elemének tulajdonságai.</figcaption>
+                </figure>
+                <figure>
+                    <img src="képek/robot-vizek-13.png">
+                    <figcaption>A <span class="kodreszlet">vizek</span> tömb 13. elemének tulajdonságai.</figcaption>
+                </figure>
+            </div>
+
+            <p>A <b>kirajzolás</b>nál észben kell tartanunk, hogy a vizek és a <span class="kodreszlet">robot</span> <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> tulajdonságát még meg kell szoroznunk <span class="kodreszlet">M</span>-mel, hogy tényleg a megfelelő pixeltől kezdődően legyenek kirajzolva. Rajzoljunk a vizek helyére kék négyzetet, a robot helyére pedig a <span class="kodreszlet">robotkép</span>et!</p>
+
+            <div class="megjegyzes">
+                <p><b>💭Megjegyzés</b><br>A <span class="kodreszlet">forEach</span> vezérlési szerkezet automatikusan végigmegy a megadott tömbön. A számlálós ciklussal ellentétben itt nem kell gondoskodni a ciklusváltozó léptetéséről. Formája: <span class="kodreszlet"><i>tömb</i>.forEach(<i>tömbelem</i> => { <i>mitTegyünkAzAdottElemmel</i>; });</span>. A mi esetünkben: <span class="kodreszlet">vizek.forEach(víz => { <i>kirajzolás</i>; });</span>. Ez azt jelenti, hogy minden képernyőfrissítésnél végigmegy a vizek tömb <b>összes</b> elemén, és beleteszi az adott elemet a <span class="kodreszlet">víz</span> változóba. Az ezt követő <span class="kodreszlet">=></span> jel után <span class="kodreszlet">{ }</span> jelek között adjuk meg, hogy mit csinálunk az adott elemmel. Jelen esetben kirajzoljuk azt. A kirajzolásnál a <span class="kodreszlet">víz</span> objektumra hivatkozunk, mert ez az aktuális víz elem, amit ki kell rajzolnunk. A tömbbejárás ezen formájáról bővebben a <a href="https://www.w3schools.com/jsref/jsref_forEach.asp" target="_blank">w3schools.com</a> oldalon olvashatsz.</p>
+            </div>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = 'orange';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // vizek
+    <span class="kodkiemeles">ctx.fillStyle = 'lightblue';
+    vizek.forEach(víz => {
+        ctx.fillRect(víz.x * M, víz.y * M, víz.szélesség, víz.magasság);
+    });</span>
+
+    // robot
+    <span class="kodkiemeles">ctx.drawImage(robotkép, robot.x * M, robot.y * M, robot.szélesség, robot.magasság);</span>
+    
+    // nyertes szöveg
+    if(nyertél) {
+        ctx.font = '80px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('Nyertél', 50, 170);
+    }
+
+    // vízbe esés
+    if(vesztettél) {
+        ctx.font = '40px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('🌊Vízbe estél🌊', 30, 170);
+    }
+
+    // idő
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText('⌛: ...', 10, 30);
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/robot-vizek-es-robot-kirajzolas.png">
+                    <figcaption>A vizek és a <span class="kodreszlet">robot</span> kirajzolása</figcaption>
+                </figure>
+            </div>
+
+            <h4>A robot irányítása</h4>
+
+            <p>Most, hogy minden kirajzolásra került, készítsük el a <span class="kodreszlet">robot</span> <b>négyirányú</b> mozgását, mely a <b>nyíl billentyűkre</b> történjen.</p>
+
+            <p>Mint azt a tananyag elején olvashatjuk, a négyzetrácsalapú játékokban a szereplők csak négyzetrácsról négyzetrácsra tudnak mozogni, és egyszerre csak egy mezőt tudnak lépni a négy irány valamelyikében. Tapasztalataink alapján azt is megállapíthatjuk, hogy a mozgás valóban mozgás és nem teleportálás, vagyis nem elég átírnunk a <span class="kodreszlet">robot</span> <span class="kodreszlet">x</span> és <span class="kodreszlet">y</span> pozícióját, hanem a két mező között többször ki kell rajzolnunk azt.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/robot-mozgas.gif">
+                    <figcaption>A <span class="kodreszlet">robot</span>ot a két mező között folyamatosan kirajzoljuk, nem teleportál</figcaption>
+                </figure>
+            </div>
+
+            <p>A billentyűk figyelésére és eltárolására szolgáló függvények (<span class="kodreszlet">keydown</span> és <span class="kodreszlet">keyup</span> események) rendelkezésre állnak, azonban a <span class="kodreszlet">billentyűk</span> tömböt még létre kell hoznunk.</p>
+
+            <pre>
+                <code>
+// egyéb változók
+let vizek = [];
+<span class="kodkiemeles">let billentyűk = [];</span>
+
+let vesztettél = false;
+let nyertél = false;
+                </code>
+            </pre>
+
+            <p>A mozgás a lenyomott billentyűtől függ. Ha ez a felfelé mutató nyíl, akkor egy sorral fentebb mozog a <span class="kodreszlet">robot</span>, vagyis az ő <span class="kodreszlet">y</span> értéke egyel kisebb lesz, vízszintes pozíciója viszont nem változik. Tehát a jelenlegi helyzetéhez képest a vízszintes és függőleges pozíciója így változik: <span class="kodreszlet">(0, -1)</span>. Az összes eset:</p>
+
+            <ul>
+                <li><b>fel</b>: <span class="kodreszlet">(0, -1)</span></li>
+                <li><b>le</b>: <span class="kodreszlet">(0, 1)</span></li>
+                <li><b>jobbra</b>: <span class="kodreszlet">(1, 0)</span></li>
+                <li><b>balra</b>: <span class="kodreszlet">(-1, 0)</span></li>
+            </ul>
+
+            <p>Ezeket az eseményeket kezeljük le a <span class="kodreszlet">frissítés</span> függvényben, de a konkrét mozgást szervezzük ki a <span class="kodreszlet">mozgasIranyban(x, y)</span> függvénybe. Kiírással ellenőrizzük, hogy jó irányba mozdulnánk-e el. A kód végén definiáljuk (de még ne töltsük ki) a <span class="kodreszlet">mozgasIranyban(x, y)</span> függvényt, hogy ne kapjunk hibaüzenetet.</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // Billentyűk figyelése
+    <span class="kodkiemeles">if (billentyűk['ArrowDown']) {
+        mozgasIranyban(0, 1);
+        console.log('le');
+    }
+    if (billentyűk['ArrowUp']) {
+        mozgasIranyban(0, -1);
+        console.log('fel');
+    }
+    if (billentyűk['ArrowLeft']) {
+        mozgasIranyban(-1, 0);
+        console.log('balra');
+    }
+    if (billentyűk['ArrowRight']) {
+        mozgasIranyban(1, 0);
+        console.log('jobbra');
+    }</span>
+
+    // robot csúsztatása
+    
+
+    // célba érés
+    
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/robot-iranyok-kiirasa.png">
+                    <figcaption>A lenyomott gombok esetén kiírt szöveg</figcaption>
+                </figure>
+            </div>
+
+            <p>A <span class="kodreszlet">mozgasIranyban</span> függvényben előkészítjük a <span class="kodreszlet">robot</span> mozgását, de csak akkor, ha az új hely még a pályán belül van, és az adott mező szabad (<span class="kodreszlet">" "</span>) vagy a robot eredeti helye (<span class="kodreszlet">"R"</span>), különben vesztettünk.</p>
+
+            <pre>
+                <code>
+// lenyomott billentyűk eltárolása
+document.addEventListener('keydown', e => {
+    billentyűk[e.key] = true;
+})
+
+document.addEventListener('keyup', e => {
+    billentyűk[e.key] = false;
+})
+
+function mozgasIranyban(dx, dy) {
+    <span class="kodkiemeles">const ujX = robot.x + x;
+    const ujY = robot.y + y;
+
+    // Ellenőrzés: a célpont a pálya határain belül van-e, és üres helyre lép-e vagy az eredeti helyére
+    if (ujY >= 0 && ujY &lt; pálya.length && ujX >= 0 && ujX &lt; pálya[0].length && pálya[ujY][ujX] == " " || pálya[ujY][ujX] == "R") {
+        robot.végx = ujX;
+        robot.végy = ujY;
+        robot.kezdi = performance.now(); // Mozgás kezdési időpontja
+        robot.kezdx = robot.x;          // Jelenlegi pozíció mentése
+        robot.kezdy = robot.y;
+    } else {
+        vesztettél = true;
+    }</span>
+}
+                </code>
+            </pre>
+
+            <p>A fenti kódban a mozgás előkészítése még magyarázatra vár. A <span class="kodreszlet">robot</span> mozgása két végpont között történik. Ezen két pont között egyenletes sebességgel halad és minden lépés ugyanannyi ideig tart. Tegyük fel, hogy minden lépés 300 ms-ig (milliszekundumig) tart. Hívjuk ezt haladási időnek (<span class="kodreszlet">hi</span>), és tároljuk el a <span class="kodreszlet">robot</span> tulajdonságaként. Hogyan lehet megalkotni az egyenletes mozgást? Ha ismerjük, hogy honnan indul, hová érkezik és mennyi idő alatt, akkor könnyen kiszámíthatunk egy <b>arány</b>t, ami megmondja, hogy az idő múlásával hol kell éppen tartania. Ha az út 300 ms-ig tart, akkor 100 ms elteltével az út egyharmadánál kell tartania a <span class="kodreszlet">robot</span>nak. A fenti arány kiszámításához azonban (a billentyű lenyomásának pillanatában) ki kell számolnunk a <span class="kodreszlet">robot</span> új vízszintes és függőleges helyét (<span class="kodreszlet">végx</span> és <span class="kodreszlet">végy</span>), valamint el kell tárolnunk a jelenlegi vízszintes és függőleges helyét (<span class="kodreszlet">kezdx</span> és <span class="kodreszlet">kezdy</span>), továbbá a mozgás kezdetének idejét (<span class="kodreszlet">kezdi</span>). Ezek legyenek a <span class="kodreszlet">robot</span> <b>új tulajdonságai</b>, vagyis zárjuk ezeket is a <span class="kodreszlet">robot</span> objektumba.</p>
+
+            <p>A <span class="kodreszlet">robot</span> objektum bővítése:</p>
+
+            <pre>
+                <code>
+/*Változók*/
+// robot
+let robot = {
+    x: 0,
+    y: 0,
+    szélesség: M,
+    magasság: M<span class="kodkiemeles">,
+    hi: 300,    // haladás időtartama szomszédos mezőre (mértékegység: ms)
+    kezdx: 0,   // haladás kezdő x pozíciója (mező)
+    kezdy: 0,   // haladás kezdő y pozíciója (mező)
+    kezdi: 0,   // haladás kezdő időpontja (ms)
+    végx: 0,    // haladás végső x pozíciója (mező)
+    végy: 0     // haladás végső y pozíciója (mező)</span>
+}
+                </code>
+            </pre>
+
+            <p>Ezeket már a játék indulásakor be kell állítanunk a <span class="kodreszlet">robot</span> pályán elfoglalt helyének alapján.</p>
+
+            <pre>
+                <code>
+// a pálya tömb bejárása sorfolytonosan
+for (let y = 0; y &lt; pálya.length; y++) {
+    for (let x = 0; x &lt; pálya[y].length; x++) {
+        switch (pálya[y][x]) {
+            case "V":
+                vizek.push({ x: x, y: y, szélesség: M, magasság: M })
+                break;
+            case "R":
+                robot.x = x;
+                robot.y = y;
+                <span class="kodkiemeles">robot.kezdx = x;
+                robot.kezdy = y;
+                robot.végx = x;
+                robot.végy = y;</span>
+                break;
+        }
+    }    
+}
+                </code>
+            </pre>
+
+            <h4>A robot csúsztatása</h4>
+
+            <p>Minden adat rendelkezésünkre áll a <span class="kodreszlet">robot</span> mozgás közbeni folytonos kirajzolására. Számoljuk ki a mozgás kezdete (billentyűlenyomás) óra eltelt időt (<span class="kodreszlet">időKül</span>). Ha ez az eltelt idő még nem érte el a haladásra szánt időt (<span class="kodreszlet">hi</span>), akkor számoljuk ki az arányt, vagyis azt a helyet, ahol a robotnak tartania kell a haladásban és tegyük arra a helyre. Különben tegyük a <span class="kodreszlet">robot</span>ot a végső helyére.</p>
+
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // Billentyűk figyelése
+    ...
+
+    // robot csúsztatása
+    <span class="kodkiemeles">let időKül = idő - robot.kezdi;     // minden képernyőfrissítésnél kiszámolja, mennyi idő telt el a robot elindulása óta ms-ban
+    if(időKül &lt; robot.hi) {             // ha ez az időkülönbség kisebb, mint a haladás időtartama, akkor
+        let arány = időKül / robot.hi;  // ez alapján újraszámolunk egy arányt (0 és 1 közötti érték)
+        robot.x = robot.kezdx + (robot.végx - robot.kezdx) * arány;  // az aránnyal frissítjük a robot helyzetét
+        robot.y = robot.kezdy + (robot.végy - robot.kezdy) * arány;
+    } else {    // különben ha a robot indulása óta eltelt idő ms-ban nagyobb vagy egyenlő, mint az ő haladási ideje (vagyis amennyi ms alatt oda kell érnie a célba), akkor tegyük őt a célhelyre
+        robot.x = robot.végx;
+        robot.y = robot.végy;
+    }</span>
+
+    // célba érés
+    
+}
+                </code>
+            </pre>
+
+            <p>Próbáljuk ki a játékot és látni fogjuk, hogy az alábbi <b>hibaüzenetet</b> kapjuk.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/robot-mozgas-hiba.png">
+                    <figcaption>Hiba az új szabad mezőre lépéskor</figcaption>
+                </figure>
+            </div>
+
+            <p>A hiba oka az, hogy ahányszor megtörténik a képernyőfrissítés egy gomb lenyomva tartása alatt, annyiszor számítjuk ki az új helyet. Mivel a képernyőfrissítés elképesztő sokszor megy végbe rövid időn belül, ezért olyan helyet számolunk ki a robotnak, ami már messze nem a pálya része. Megoldás lehet, ha csak akkor számolunk újabb helyet, ha éppen nem mozog a robot. Erre vezessük be a <span class="kodreszlet">mozog</span> változót hamis kezdőértékkel, amely legyen igaz, ha a robot mozog, és hamis, ha nem mozog.</p>
+
+            <pre>
+                <code>
+// egyéb változók
+let vizek = [];
+let billentyűk = [];
+
+<span class="kodkiemeles">let mozog = false;</span>
+let vesztettél = false;
+let nyertél = false;
+                </code>
+            </pre>
+
+            <p>Csak akkor kezdhessünk bele újabb mozgásba, ha éppen nem mozgunk.</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // Billentyűk figyelése
+    <span class="kodkiemeles">if (!mozog) {</span>
+        if (billentyűk['ArrowDown']) {
+            mozgasIranyban(0, 1);
+        }
+        if (billentyűk['ArrowUp']) {
+            mozgasIranyban(0, -1);
+        }
+        if (billentyűk['ArrowLeft']) {
+            mozgasIranyban(-1, 0);
+        }
+        if (billentyűk['ArrowRight']) {
+            mozgasIranyban(1, 0);
+        }
+
+        ...
+    <span class="kodkiemeles">}</span>
+}
+                </code>
+            </pre>
+
+            <p>Állítsuk igazra a <span class="kodreszlet">mozog</span> változót a mozgás megkezdése előtt, pl. a <span class="kodreszlet">mozgasIranyban</span> függvényben.</p>
+
+            <pre>
+                <code>
+function mozgasIranyban(x, y) {
+    const ujX = robot.x + x;
+    const ujY = robot.y + y;
+
+    // Ellenőrzés: a célpont a pálya határain belül van-e, és üres helyre lép-e vagy az eredeti helyére
+    if (ujY >= 0 && ujY &lt; pálya.length && ujX >= 0 && ujX &lt; pálya[0].length && pálya[ujY][ujX] == " " || pálya[ujY][ujX] == "R") {
+        robot.végx = ujX;
+        robot.végy = ujY;
+        robot.kezdi = performance.now(); // Mozgás kezdési időpontja
+        robot.kezdx = robot.x;          // Jelenlegi pozíció mentése
+        robot.kezdy = robot.y;
+        <span class="kodkiemeles">mozog = true;</span>
+    } else {
+        vesztettél = true;
+    }
+}
+                </code>
+            </pre>
+
+            <p>Majd állítsuk vissza hamisra a mozgás befejezésekor.</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // Billentyűk figyelése
+    ...
+
+    // robot csúsztatása
+    let időKül = idő - robot.kezdi;     // minden képernyőfrissítésnél kiszámolja, mennyi idő telt el a robot elindulása óta ms-ban
+    if(időKül &lt; robot.hi) {             // ha ez az időkülönbség kisebb, mint a haladás időtartama, akkor
+        let arány = időKül / robot.hi;  // ez alapján újraszámolunk egy arányt (0 és 1 közötti érték)
+        robot.x = robot.kezdx + (robot.végx - robot.kezdx) * arány;  // az aránnyal frissítjük a robot helyzetét
+        robot.y = robot.kezdy + (robot.végy - robot.kezdy) * arány;
+    } else {    // különben ha a robot indulása óta eltelt idő ms-ban nagyobb vagy egyenlő, mint az ő haladási ideje (vagyis amennyi ms alatt oda kell érnie a célba), akkor tegyük őt a célhelyre
+        robot.x = robot.végx;
+        robot.y = robot.végy;
+        <span class="kodkiemeles">mozog = false;</span>
+    }
+
+    // célba érés
+    
+}
+                </code>
+            </pre>
+
+            <h4>Idő kiírása ⌛</h4>
+
+            <p>A játék kezdete óta eltelt időt az <span class="kodreszlet">idő</span> változó tartalmazza. Váltsuk át ezt a ms-ban tárolt értéket másodpercre, majd kerekítsük egészre és írjuk ki a "..." helyére.</p>
+
+            <pre>
+                <code>
+// idő
+ctx.font = '20px Arial';
+ctx.fillStyle = 'black';
+ctx.fillText('⌛:<span class="kodkiemeles">' + Math.floor(idő / 1000)</span>, 10, 30);
+                </code>
+            </pre>
+
+            <h4>Győzelem</h4>
+
+            <p>A játéknak két esetben van vége:</p>
+
+            <ol>
+                <li>ha beleestünk a vízbe, vagy</li>
+                <li><b>ha kijutottunk a labirintusból</b>.</li>
+            </ol>
+
+            <p>Utóbbi még kialakításra vár a <span class="kodreszlet">frissítés</span> függvényben. A célként szolgáló mező helye vízszintesen <span class="kodreszlet">7</span>, függőlegesen <span class="kodreszlet">0</span>, ezért ha a <span class="kodreszlet">robot</span> <span class="kodreszlet">x</span> <b>és</b> <span class="kodreszlet">y</span> pozíciója megegyezik ezzel a számpárossal, akkor a <span class="kodreszlet">nyertél</span> változó legyen igaz.</p>
+
+            <pre>
+                <code>
+// célba érés
+<span class="kodkiemeles">if(robot.x == 7 && robot.y == 0) {
+    nyertél = true;
+}</span>
+                </code>
+            </pre>
+
+            <p>Ekkor ne csak a "Nyertél" felirat jelenjen meg, hanem teljesen legyen vége a játéknak.</p>
+
+            <pre>
+                <code>
+/* === ANIMÁCIÓS CIKLUS === */
+
+következő(); // az animáció elindítása
+
+function következő() {
+    idő = performance.now();
+    frissítés(idő); // állapottér frissítése
+    rajzolás(); // képkocka újrarajzolása
+    <span class="kodkiemeles">if(!vesztettél && !nyertél) {</span>
+        requestAnimationFrame(következő);
+    <span class="kodkiemeles">}</span>
+}
+                </code>
+            </pre>
+
+            <p><b>Ezzel elkészültünk a játékkal.</b> 😎</p>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladat</b><br>Módosítsd úgy a <span class="kodreszlet">robot</span> mozgását úgy, hogy mindig az ellentétes irányba mozogjon.</p>
+
+                <details>
+                    <summary>Megoldás</summary>
+                        <pre>
+                            <code>
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* === ÁLLAPOTTÉR === */
+
+/*Pálya tárolása*/
+let pálya = [
+    "VVVVVVV V",
+    "V       V",
+    "V VV VV V",
+    "VVV     V",
+    "V   V V V",
+    "V VV  V V",
+    "VRV   V V",
+    "VVVVVVVVV"
+];
+
+/*Konstansok*/
+const M = 40; // mezőméret
+
+let robotkép = new Image();
+robotkép.src = 'robot.png';
+
+/*Változók*/
+// robot
+let robot = {
+    x: 0,
+    y: 0,
+    szélesség: M,
+    magasság: M,    
+    hi: 300,    // haladás időtartama szomszédos mezőre (mértékegység: ms)
+    kezdx: 0,   // haladás kezdő x pozíciója (mező)
+    kezdy: 0,   // haladás kezdő y pozíciója (mező)
+    kezdi: 0,   // haladás kezdő időpontja (ms)
+    végx: 0,    // haladás végső x pozíciója (mező)
+    végy: 0     // haladás végső y pozíciója (mező)
+}
+
+// egyéb változók
+let vizek = [];
+let billentyűk = [];
+
+let mozog = false;
+let vesztettél = false;
+let nyertél = false;
+
+
+// a pálya tömb bejárása sorfolytonosan
+for (let y = 0; y &lt; pálya.length; y++) {
+    for (let x = 0; x &lt; pálya[y].length; x++) {
+        switch (pálya[y][x]) {
+            case "V":
+                vizek.push({ x: x, y: y, szélesség: M, magasság: M })
+                break;
+            case "R":
+                robot.x = x;
+                robot.y = y;
+                robot.kezdx = x;
+                robot.kezdy = y;
+                robot.végx = x;
+                robot.végy = y;
+                break;
+        }
+    }    
+}
+
+
+/* === ANIMÁCIÓS CIKLUS === */
+
+//let idő = performance.now();
+
+következő(); // az animáció elindítása
+
+function következő() {
+    idő = performance.now();
+    frissítés(idő); // állapottér frissítése
+    rajzolás(); // képkocka újrarajzolása
+    if(!vesztettél && !nyertél) {
+        requestAnimationFrame(következő);
+    }
+}
+
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = 'orange';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // vizek
+    ctx.fillStyle = 'lightblue';
+    vizek.forEach(víz => {
+        ctx.fillRect(víz.x * M, víz.y * M, víz.szélesség, víz.magasság);
+    });
+
+    // robot
+    ctx.drawImage(robotkép, robot.x * M, robot.y * M, robot.szélesség, robot.magasság);
+    
+    // nyertes szöveg
+    if(nyertél) {
+        ctx.font = '80px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('Nyertél', 50, 170);
+    }
+
+    // vízbe esés
+    if(vesztettél) {
+        ctx.font = '40px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('🌊Vízbe estél🌊', 30, 170);
+    }
+    
+    // idő
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText('⌛: ' + Math.floor(idő / 1000), 10, 30);
+}
+
+function frissítés(dt) {
+    // Billentyűk figyelése
+    if (!mozog) {
+        if (billentyűk['ArrowDown']) {
+            mozgasIranyban(<span class="kodkiemeles">0, -1</span>);
+        }
+        if (billentyűk['ArrowUp']) {
+            mozgasIranyban(<span class="kodkiemeles">0, 1</span>);
+        }
+        if (billentyűk['ArrowLeft']) {
+            mozgasIranyban(<span class="kodkiemeles">1, 0</span>);
+        }
+        if (billentyűk['ArrowRight']) {
+            mozgasIranyban(<span class="kodkiemeles">-1, 0</span>);
+        }
+    }
+
+    // robot csúsztatása
+    let időKül = idő - robot.kezdi;     // minden képernyőfrissítésnél kiszámolja, mennyi idő telt el a robot elindulása óta ms-ban
+    if(időKül &lt; robot.hi) {             // ha ez az időkülönbség kisebb, mint a haladás időtartama, akkor
+        let arány = időKül / robot.hi;  // ez alapján újraszámolunk egy arányt (0 és 1 közötti érték)
+        robot.x = robot.kezdx + (robot.végx - robot.kezdx) * arány;  // az aránnyal frissítjük a robot helyzetét
+        robot.y = robot.kezdy + (robot.végy - robot.kezdy) * arány;
+    } else {    // különben ha a robot indulása óta eltelt idő ms-ban nagyobb vagy egyenlő, mint az ő haladási ideje (vagyis amennyi ms alatt oda kell érnie a célba), akkor tegyük őt a célhelyre
+        robot.x = robot.végx;
+        robot.y = robot.végy;
+        mozog = false;
+    }
+
+    // célba érés
+    if(robot.x == 7 && robot.y == 0) {
+        nyertél = true;
+    }
+}
+
+/* === ESEMÉNYEK === */
+
+// lenyomott billentyűk eltárolása
+document.addEventListener('keydown', e => {
+    billentyűk[e.key] = true;
+})
+
+document.addEventListener('keyup', e => {
+    billentyűk[e.key] = false;
+})
+
+function mozgasIranyban(x, y) {
+    const ujX = robot.x + x;
+    const ujY = robot.y + y;
+
+    // Ellenőrzés: a célpont a pálya határain belül van-e, és üres helyre lép-e
+    if (ujY >= 0 && ujY &lt; pálya.length && ujX >= 0 && ujX &lt; pálya[0].length && pálya[ujY][ujX] == " " || pálya[ujY][ujX] == "R") {
+        robot.végx = ujX;
+        robot.végy = ujY;
+        robot.kezdi = performance.now(); // Mozgás kezdési időpontja
+        robot.kezdx = robot.x;          // Jelenlegi pozíció mentése
+        robot.kezdy = robot.y;
+        mozog = true;
+    } else {
+        vesztettél = true;
+    }
+}
+                            </code>
+                        </pre>
+                </details>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

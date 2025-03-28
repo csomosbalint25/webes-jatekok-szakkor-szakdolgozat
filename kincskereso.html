@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="anyag.css" title="normal">
+    <!--<link rel="alternate stylesheet" type="text/css" href="nagybetus.css" title="nagybetus">-->
+    <link rel="icon" type="image" href="képek/favicon-curly-bracket.png">
+    <title>Kincskereső - Webes játékok szakkör</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html">Kezdőlap</a></li>
+            <li>Források</li>
+            <li>Óravázlatok</li>
+            <li>Rólunk</li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="cim">
+            <div>
+                <p><span></span>Szakköri segédanyag</p>
+                <h1>Kincskereső 🔑</h1>
+            </div>
+        </div>
+        
+        <div class="anyag">
+            <h2>Áttekintés</h2>
+
+            <div class="informacio-ido">
+                <figure>
+                    <img src="képek/óra.png">
+                </figure>
+                <p>45'</p>
+            </div>
+            <div class="informacio-szint">
+                <figure>
+                    <img src="képek/csillag.png">
+                </figure>
+                <p>könnyű</p>
+            </div>
+
+            <h3>A játék célja</h3>
+            <p>A <b>Kincs</b> 🪙 egy három lakattal lezárt <b>ládikában</b> 🔐 hever az idők kezdete óta. A ládika hollétéről egészen eddig semmit sem tudtak, de most eljött a lehetőség, hogy ez a Kincs napvilágot lásson. Ez a küldetés azonban nem ilyen egyszerű, mert <b>a szellemek 👻 rendületlenül őrzik</b> a kincset rejtő ládikát és az ahhoz vezető labirintust. Gyűjtsd össze 🧙 <b>mindhárom kulcsot</b> 🔑 a <b>megfelelő sorrendben</b> és nyisd ki a ládikát!</p>
+            
+            <a href="../14 Kincskereső/index.html">
+                <div class="megtekintes-gomb">
+                    <p>Interaktív példa</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="utmutato">
+            <h2>Útmutató</h2>
+
+            <p>Az útmutató a <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> fejlesztői környezethez készült.</p>
+
+            <h3>HTML</h3>
+
+            <p>Ebben a játékban (a Robotlabirintus nevű játékhoz hasonlóan) a játéktér 40x40 px-es mezőkből fog állni, melyek egy 10 soros és 15 oszlopos játékteret alkotnak. Ennek értelmében állítsuk be a játékteret <b>600</b> px szélesre és <b>400</b> px magasra. A HTML kódban szabjuk személyre a lap címét és nyelvét, valamint jelenítsük meg a játék nevét 1-es szintű címsorral.</p>
+
+            <pre>
+                <code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="<span class="kodkiemeles">hu</span>"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;<span class="kodkiemeles">Kincskereső</span>&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    <span class="kodkiemeles">&lt;h1&gt;Kincskereső&lt;/h1&gt;</span>
+    &lt;canvas width="<span class="kodkiemeles">600</span>" height="<span class="kodkiemeles">400</span>"&gt;&lt;/canvas&gt;
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </code>
+            </pre>
+
+            
+            <h3>JavaScript</h3>
+            
+            <p>Induljunk ki az alábbi <span class="kodreszlet">.js</span> <a href="../14 Kincskereső kiindulás/index.js" target="_blank">fájlból</a> és készítsük el a kincskereső játékot.</p>
+
+            <pre>
+                <code>
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+/* === ÁLLAPOTTÉR === */
+
+/*Pálya tárolása*/
+let pálya = [
+    "FFFFFFFFFFFFFFF",
+    "F  MFCS     FSF",
+    "F FFFFFFF FFF F",
+    "F   FS  F FFB F",
+    "FFF   F   FFF F",
+    "FE SF FFF  F  F",
+    "F F F  AF    FF",
+    "F F F F F FF  F",
+    "F     FS      F",
+    "FFFFFFFFFFFFFFF"
+]
+
+/*Konstansok*/
+const M = 40; // mezőméret
+
+// képek
+
+
+/*Változók*/
+// mágus
+let mágus = {
+    
+}
+// kulcsok és ládikák
+let arany = {
+    x: 0,
+    y: 0,
+    szélesség: M,
+    magasság: M,
+}
+
+
+// egyéb változók
+let falak = [];
+let szellemek = [];
+let billentyűk = [];
+
+let mozog = false;
+let győzelem = false;
+let vereség = false;
+
+// pálya bejárása, pályabeállítás
+
+
+/* === ANIMÁCIÓS CIKLUS === */
+
+let előzőIdő = performance.now();
+
+következő(); // az animáció elindítása
+
+function következő() {
+    aktuálisIdő = performance.now();
+    let dt = (aktuálisIdő - előzőIdő) / 1000;
+    előzőIdő = aktuálisIdő;
+    frissítés(dt); // állapottér frissítése
+    rajzolás(); // képkocka újrarajzolása
+    requestAnimationFrame(következő);
+}
+
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // falak
+    
+
+    //kulcsok
+    
+
+    //ládika
+    
+
+    // mágus
+    
+
+    // szellemek
+    
+
+    // nyertes szöveg
+    if(győzelem) {
+        ctx.font = '80px Times New Roman';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Nyertél', 180, 200);
+    }
+
+    // vesztes szöveg
+    if(vereség) {
+        ctx.font = '80px Times New Roman';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Vesztettél', 140, 200);
+    }
+}
+
+function frissítés(dt) {
+    // Billentyűk figyelése
+    if (!mozog) {
+        if (billentyűk['ArrowDown']) {
+            mozgasIranyban(0, 1);
+        }
+        if (billentyűk['ArrowUp']) {
+            mozgasIranyban(0, -1);
+        }
+        if (billentyűk['ArrowLeft']) {
+            mozgasIranyban(-1, 0);
+        }
+        if (billentyűk['ArrowRight']) {
+            mozgasIranyban(1, 0);
+        }
+    }
+
+    // mágus csúsztatása
+    
+
+    // kulcsok félvétele
+    
+
+    // ládika kinyitása
+    
+
+    // szellemek mozgása
+    
+
+    // játék vége
+    
+}
+
+/* === ESEMÉNYEK === */
+
+// lenyomott billentyűk eltárolása
+document.addEventListener('keydown', e => {
+    billentyűk[e.key] = true;
+})
+
+document.addEventListener('keyup', e => {
+    billentyűk[e.key] = false;
+})
+
+function mozgasIranyban(x, y) {
+    const ujX = mágus.x + x;
+    const ujY = mágus.y + y;
+
+    // Ellenőrzés: a célpont a pálya határain belül van-e, és léphet-e oda
+    if (pass) {
+        mágus.végx = ujX;
+        mágus.végy = ujY;
+        mágus.kezdi = performance.now(); // Mozgás kezdési időpontja
+        mágus.kezdx = mágus.x;          // Jelenlegi pozíció mentése
+        mágus.kezdy = mágus.y;
+        mozog = true;
+    }
+}
+
+function ütköznek(téglalap1, téglalap2) {
+    return !(
+        téglalap2.x * M + téglalap2.szélesség &lt;= téglalap1.x * M ||
+        téglalap2.y * M + téglalap2.magasság &lt;= téglalap1.y * M ||
+        téglalap2.x * M >= téglalap1.x * M + téglalap1.szélesség ||
+        téglalap2.y * M >= téglalap1.y * M + téglalap1.magasság
+    )
+}
+                </code>
+            </pre>
+
+            <p>A kiindulófájlban rendelkezésre áll</p>
+
+            <ul>
+                <li>a canvas és a contextus elérése,</li>
+                <li>a pálya eltárolása,</li>
+                <li>a konstans eltárolása,</li>
+                <li>az arany kulcsot leíró objektum,</li>
+                <li>a <span class="kodreszlet">falak</span>, <span class="kodreszlet">szellemek</span> és <span class="kodreszlet">billentyűk</span> tömb,</li>
+                <li>a <span class="kodreszlet">mozog</span>, <span class="kodreszlet">győzelem</span> és <span class="kodreszlet">vereség</span> változók,</li>
+                <li>az időalapú animációs ciklus,</li>
+                <li>a háttér, a nyertes és a vesztes szöveg kirajzolása,</li>
+                <li>a <span class="kodreszlet">frissítés(dt)</span> függvényben a billentyűk figyelése,</li>
+                <li>a lenyomott billentyűk eltárolása,</li>
+                <li>a <span class="kodreszlet">mozgasIranyban(x, y)</span> függvény egy része, valamint</li>
+                <li>az <span class="kodreszlet">ütköznek(téglalap1, téglalap2)</span> függvény.</li>
+            </ul>
+
+            <p>A kiindulófájl alapján a játék jelenlegi állapota alább látható.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/kincs-kiindulokep.png">
+                    <figcaption>A játék kezdeti állapota</figcaption>
+                </figure>
+            </div>
+
+            <h4>Képek eltárolása</h4>
+
+            <p>Ahogyan az a mintajátékban is látható, ebben a projektben <b>sok képet</b> fogunk használni. Ezeket érdemes az eddigieknél hatékonyabb módon, <b>objektumként</b> eltárolni, mely objektum adattagjai a képek nevei lesznek. Először töltsük le a képeket az <span class="kodreszlet">index.html</span> és az <span class="kodreszlet">index.js</span> fájlok mellé, majd hozzuk létre a <span class="kodreszlet">képek</span> objektumot és helyezzük el benne a képeket, végül adjuk meg azok forrásait.</p>
+
+            <ul>
+                <li><a href="../14 Kincskereső kiindulás/fal.png" target="_blank">fal.png</a></li>
+                <li><a href="../14 Kincskereső kiindulás/kulcs_arany.png" target="_blank">kulcs_arany.png</a></li>
+                <li><a href="../14 Kincskereső kiindulás/kulcs_bronz.png" target="_blank">kulcs_bronz.png</a></li>
+                <li><a href="../14 Kincskereső kiindulás/kulcs_ezüst.png" target="_blank">kulcs_ezüst.png</a></li>
+                <li><a href="../14 Kincskereső kiindulás/ládika_nyitott.png" target="_blank">ládika_nyitott.png</a></li>
+                <li><a href="../14 Kincskereső kiindulás/ládika_zárt.png" target="_blank">ládika_zárt.png</a></li>
+                <li><a href="../14 Kincskereső kiindulás/mágus.png" target="_blank">mágus.png</a></li>
+                <li><a href="../14 Kincskereső kiindulás/szellem.png" target="_blank">szellem.png</a></li>
+            </ul>
+
+            <pre>
+                <code>
+/*Konstansok*/
+const M = 40; // mezőméret
+
+<span class="kodkiemeles">const képek = {
+    mágus: new Image(),
+    fal: new Image(),
+    kulcs_arany: new Image(),
+    kulcs_ezüst: new Image(),
+    kulcs_bronz: new Image(),
+    ládika_zárt: new Image(),
+    ládika_nyitott: new Image(),
+    szellem: new Image()
+}
+
+képek.mágus.src = 'mágus.png';
+képek.fal.src = 'fal.png';
+képek.kulcs_arany.src = 'kulcs_arany.png';
+képek.kulcs_ezüst.src = 'kulcs_ezüst.png';
+képek.kulcs_bronz.src = 'kulcs_bronz.png';
+képek.ládika_zárt.src = 'ládika_zárt.png';
+képek.ládika_nyitott.src = 'ládika_nyitott.png';
+képek.szellem.src = 'szellem.png'</span>
+                </code>
+            </pre>
+
+            <h4>Szereplők létrehozása: <span class="kodreszlet">mágus</span>, <span class="kodreszlet">kulcsok</span>, <span class="kodreszlet">ládika</span></h4>
+
+            <p>A <span class="kodreszlet">mágus</span> adattagjai megegyeznek a korábbi <span class="kodreszlet">robot</span> adattagjaival, mert mozgásuk is hasonló lesz. Alakítsuk ki a <span class="kodreszlet">mágus</span> objektumot.</p>
+
+            <pre>
+                <code>
+/*Változók*/
+// mágus
+let mágus = {
+    <span class="kodkiemeles">x: 0,
+    y: 0,
+    szélesség: M,
+    magasság: M,    
+    hi: 300, //haladás időtartama szomszédos mezőre (mértékegység: ms)
+    kezdx: 0, //haladás kezdő x pozíciója (mező)
+    kezdy: 0, //haladás kezdő y pozíciója (mező)
+    kezdi: 0, //haladás kezdő időpontja (ms)
+    végx: 0, //haladás végső x pozíciója (mező)
+    végy: 0 //haladás végső y pozíciója (mező)</span>
+}
+                </code>
+            </pre>
+
+            <p>Az aranykulcsot leíró <span class="kodreszlet">arany</span> objektum mintájára hozzuk létre az <span class="kodreszlet">ezüst</span>, a <span class="kodreszlet">bronz</span> és a <span class="kodreszlet">ládika</span> objektumokat. Ezeknek nem szükséges kezdeti pozíciót megadni, mert ezeket a pályabejárás során fogjuk beállítani attól függően, hogy a pályát jelölő szövegben hol helyezkednek el az azokat jelölő betűk.</p>
+
+            <pre>
+                <code>
+// kulcsok és ládika
+let arany = {
+    x: 0,
+    y: 0,
+    szélesség: M,
+    magasság: M,
+}
+
+<span class="kodkiemeles">let ezüst = {
+    x: 0,
+    y: 0,
+    szélesség: M,
+    magasság: M,
+}
+
+let bronz = {
+    x: 0,
+    y: 0,
+    szélesség: M,
+    magasság: M,
+}
+
+let ládika = {
+    x: 0,
+    y: 0,
+    szélesség: M,
+    magasság: M,
+}</span>
+                </code>
+            </pre>
+
+            <h4>Pálya bejárása, pályabeállítás</h4>
+
+            <p>Járjuk be a pályát tartalmazó tömböt és vizsgáljuk meg a karaktereket. Ha az adott karakter</p>
+            
+            <ul>
+                <li><span class="kodreszlet">"F"</span>, akkor ott fal van, vagyis arra a helyre falat kell tenni. Az ezt a falat leíró objektumot hozzuk létre és fűzzük a <span class="kodreszlet">falak</span> tömb végére.</li>
+                <li><span class="kodreszlet">"M"</span>, akkor állítsuk be a <span class="kodreszlet">mágus</span> tulajdonságait.</li>
+                <li><span class="kodreszlet">"A"</span>, akkor állítsuk be az <span class="kodreszlet">arany</span> objektum helyét.</li>
+                <li><span class="kodreszlet">"E"</span>, akkor állítsuk be az <span class="kodreszlet">ezüst</span> objektum helyét.</li>
+                <li><span class="kodreszlet">"B"</span>, akkor állítsuk be a <span class="kodreszlet">bronz</span> objektum helyét.</li>
+                <li><span class="kodreszlet">"C"</span>, akkor állítsuk be a ládika helyét.</li>
+                <li><span class="kodreszlet">"S"</span>, akkor (a falakhoz hasonlóan) hozzuk létre a szellem objektumot és fűzzük hozzá a <span class="kodreszlet">szellemek</span> tömbhöz.</li>
+            </ul>
+
+            <pre>
+                <code>
+// pálya bejárása, pályabeállítás
+<span class="kodkiemeles">for (let y = 0; y &lt; pálya.length; y++) {
+    for (let x = 0; x &lt; pálya[y].length; x++) {
+        switch (pálya[y][x]) {
+            case "F":
+                falak.push({ x: x, y: y, szélesség: M, magasság: M })
+                break;
+            case "M":
+                mágus.x = x;
+                mágus.y = y;
+                mágus.kezdx = x;
+                mágus.kezdy = y;
+                mágus.végx = x;
+                mágus.végy = y;
+                break;
+            case "A":
+                arany.x = x;
+                arany.y = y;
+                break;
+            case "E":
+                ezüst.x = x;
+                ezüst.y = y;
+                break;
+            case "B":
+                bronz.x = x;
+                bronz.y = y;
+                break;
+            case "C":
+                ládika.x = x;
+                ládika.y = y;
+                break;
+            case "S":
+                szellemek.push({x: x, y: y, szélesség: M, magasság: M, hi: 1})
+                break;
+        }
+    }    
+}</span>
+                </code>
+            </pre>
+
+            <h4>A szereplők kirajzolása</h4>
+            
+            <p>Miután minden szereplő tulajdonságai rendelkezésünkre állnak, kirajzolhatjuk azokat a játéktérre. A falak és a szellemek esetén be kell járni az őket tartalmazó tömböt.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // falak
+    <span class="kodkiemeles">falak.forEach(fal => {
+        ctx.drawImage(képek.fal, fal.x * M, fal.y * M, fal.szélesség, fal.magasság);
+    });</span>
+    ...
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/kincs-falak-kirajz.png">
+                    <figcaption>A falak kirajzolása utáni állapot</figcaption>
+                </figure>
+            </div>
+
+            <p>A kulcsok kirajzolása.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // falak
+    falak.forEach(fal => {
+        ctx.drawImage(képek.fal, fal.x * M, fal.y * M, fal.szélesség, fal.magasság);
+    });
+
+    //kulcsok
+    <span class="kodkiemeles">ctx.drawImage(képek.kulcs_arany, arany.x * M, arany.y * M, arany.szélesség, arany.magasság);
+
+    ctx.drawImage(képek.kulcs_ezüst, ezüst.x * M, ezüst.y * M, ezüst.szélesség, ezüst.magasság);
+
+    ctx.drawImage(képek.kulcs_bronz, bronz.x * M, bronz.y * M, bronz.szélesség, bronz.magasság);</span>
+    ...
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/kincs-kulcsok-kirajz.png">
+                    <figcaption>A kulcsok kirajzolása utáni állapot</figcaption>
+                </figure>
+            </div>
+
+            <p>A ládika ás a mágus kirajzolása.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // falak
+    falak.forEach(fal => {
+        ctx.drawImage(képek.fal, fal.x * M, fal.y * M, fal.szélesség, fal.magasság);
+    });
+
+    //kulcsok
+    ctx.drawImage(képek.kulcs_arany, arany.x * M, arany.y * M, arany.szélesség, arany.magasság);
+
+    ctx.drawImage(képek.kulcs_ezüst, ezüst.x * M, ezüst.y * M, ezüst.szélesség, ezüst.magasság);
+
+    ctx.drawImage(képek.kulcs_bronz, bronz.x * M, bronz.y * M, bronz.szélesség, bronz.magasság);
+    
+
+    //ládika
+    <span class="kodkiemeles">ctx.drawImage(képek.ládika_zárt, ládika.x * M, ládika.y * M, ládika.szélesség, ládika.magasság);</span>
+
+    // mágus
+    <span class="kodkiemeles">ctx.drawImage(képek.mágus, mágus.x * M, mágus.y * M, mágus.szélesség, mágus.magasság);</span>
+    ...
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/kincs-ladika-magus-kirajz.png">
+                    <figcaption>A ládika és a mágus kirajzolása utáni állapot</figcaption>
+                </figure>
+            </div>
+
+            <p>A szellemek kirajzolása.</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    ...
+
+    // mágus
+    ctx.drawImage(képek.mágus, mágus.x * M, mágus.y * M, mágus.szélesség, mágus.magasság);
+
+    // szellemek
+    <span class="kodkiemeles">szellemek.forEach(szellem => {
+        ctx.drawImage(képek.szellem, szellem.x * M, szellem.y * M, szellem.szélesség, szellem.magasság);
+    });</span>
+
+    // nyertes szöveg
+    ...
+
+    // vesztes szöveg
+    ...
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/kincs-minden-szereplo-kirajz.png">
+                    <figcaption>A szellemek kirajzolása utáni állapot</figcaption>
+                </figure>
+            </div>
+
+            <h4>A mágus mozgása</h4>
+
+            <p>A lenyomott billentyűk eltárolása megtörtént, ahogyan a <span class="kodreszlet">mozgasIranyban(x, y)</span> függvény meghívása is. Azonban ezt a függvényt még ki kell egészítenünk az elágazás feltételével, illetve gondoskodnunk kell a <span class="kodreszlet">mágus</span> egyik mezőről a másikra csúsztatásáról a <span class="kodreszlet">frissítés(dt)</span> függvényben.</p>
+
+            <p>A négyzetrácsalapú, négyirányú mozgás elkezdésekor be kell állítanunk a mozgás kezdetének időpontját (<span class="kodreszlet">.kezdi</span>) és helyét (<span class="kodreszlet">.kezdx</span> és <span class="kodreszlet">kezdy</span>), az érkezés helyét (<span class="kodreszlet">.végx</span> és <span class="kodreszlet">.végy</span>) és a mozgásra szánt időt (<span class="kodreszlet">.hi</span>). Ezek rendelkezésre állnak, viszont beállításuk feltétele még hiányzik. Ezeket csak akkor állítsuk be, vagyis akkor kezdődhessen csak meg a mozgás, ha olyan mezőre akarunk lépni, ahova lehet. A legfontosabb feltétel, hogy a pályán belül maradjunk. A további szabad mezőket a pályán több karakter is jelöli: <span class="kodreszlet">" ", "M", "S", "A", "E", "B", "C"</span>. Ez alapján a feltétel lehetne a következő:</p>
+
+            <pre>
+                <code>
+if (ujY >= 0 && ujY &lt; pálya.length && ujX >= 0 && ujX &lt; pálya[0].length && pálya[ujY][ujX] == " " || pálya[ujY][ujX] == "M" || pálya[ujY][ujX] == "S" || pálya[ujY][ujX] == "A" || pálya[ujY][ujX] == "E" || pálya[ujY][ujX] == "B" || pálya[ujY][ujX] == "C")
+                </code>
+            </pre>
+
+            <p>Jól látszik a betűk ellenőrzésének feleslegesen ismétlődő ellenőrzése. Ezt rövidebben is megfogalmazhatjuk. Például, ha a célmező benne van a szabad mezőket jelölő betűk tömbjében, akkor léphetünk. Ez megvalósítható a <span class="kodreszlet"><i>tömb</i>.includes(<i>mit</i>)</span> paranccsal, ahol a <span class="kodreszlet">tömb</span> jelöli azt a tömböt, amiben keresünk, a <span class="kodreszlet">mit</span> pedig a keresednő dolgot. Vagyis a feltételünk legyen a következő:</p>
+
+            <pre>
+                <code>
+function mozgasIranyban(x, y) {
+    const ujX = mágus.x + x;
+    const ujY = mágus.y + y;
+
+    // Ellenőrzés: a célpont a pálya határain belül van-e, és léphet-e oda
+    if (<span class="kodkiemeles">ujY >= 0 && ujY &lt; pálya.length && ujX >= 0 && ujX &lt; pálya[0].length && [" ", "M", "S", "A", "E", "B", "C"].includes(pálya[ujY][ujX])</span>) {
+        mágus.végx = ujX;
+        mágus.végy = ujY;
+        mágus.kezdi = performance.now(); // Mozgás kezdési időpontja
+        mágus.kezdx = mágus.x;          // Jelenlegi pozíció mentése
+        mágus.kezdy = mágus.y;
+        mozog = true;
+    }
+}
+                </code>
+            </pre>
+
+            <div class="megjegyzes">
+                <p><b>💭Megjegyzés</b><br>A <span class="kodreszlet">pass</span> kifejezésnek nincs jelentése, csak arra szolgál, hogy ne adjon szintaktikai hibát a kód. Például az <span class="kodreszlet">if ()</span> elágazás feltételének helyét üresen hagyva hibaüzenetet kapunk, de ha beírjuk oda a <span class="kodreszlet">pass</span> kifejezést, akkor nem. A fenti kódban ezt cseréljük le a helyes ellenőrzésre.</p>
+            </div>
+
+            <p>A csúszó mozgás megegyezik a <span class="kodreszlet">robot</span> csúszó mozgásával, ezért másoljuk át onnan a kódot és módosítsuk úgy, hogy ezennel a <span class="kodreszlet">mágus</span> tulajdonságai alapján mozogjon. Figyeljünk arra is, hogy ebben a játékban az <span class="kodreszlet">aktuálisIdő</span> tartalmazza az aktuális időt, nem az <span class="kodreszlet">időKül</span>.</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // Billentyűk figyelése
+    ...
+
+    // <span class="kodkiemeles">mágus</span> csúsztatása
+    let időKül = <span class="kodkiemeles">aktuálisIdő</span> - <span class="kodkiemeles">mágus</span>.kezdi;    // minden képernyőfrissítésnél kiszámolja, mennyi idő telt el a robot elindulása óta ms-ban
+    if(időKül &lt; <span class="kodkiemeles">mágus</span>.hi) {             // ha ez az időkülönbség kisebb, mint a haladás időtartama, akkor
+        let arány = időKül / <span class="kodkiemeles">mágus</span>.hi;  // ez alapján újraszámolunk egy arányt (0 és 1 közötti érték)
+        <span class="kodkiemeles">mágus</span>.x = <span class="kodkiemeles">mágus</span>.kezdx + (<span class="kodkiemeles">mágus</span>.végx - <span class="kodkiemeles">mágus</span>.kezdx) * arány;  // az aránnyal frissítjük a mágus helyzetét
+        <span class="kodkiemeles">mágus</span>.y = <span class="kodkiemeles">mágus</span>.kezdy + (<span class="kodkiemeles">mágus</span>.végy - <span class="kodkiemeles">mágus</span>.kezdy) * arány;
+    } else {    // különben ha a mágus indulása óta eltelt idő ms-ban nagyobb vagy egyenlő, mint az ő haladási ideje (vagyis amennyi ms alatt oda kell érnie a célba), akkor tegyük őt a célhelyre
+        <span class="kodkiemeles">mágus</span>.x = <span class="kodkiemeles">mágus</span>.végx;
+        <span class="kodkiemeles">mágus</span>.y = <span class="kodkiemeles">mágus</span>.végy;
+        mozog = false;
+    }
+    ...
+}
+                </code>
+            </pre>
+
+            <p>Most már tudunk mozogni a mágussal. Vegyük fel a kulcsokat!</p>
+
+            <h4>Kulcsok felvétele</h4>
+
+            <p>A kulcsokat kétféleképpen is felvehetnénk:</p>
+
+            <ul>
+                <li>a velük történő ütközéskor, vagy</li>
+                <li>akkor, ha megérkeztünk arra a mezőre, ahol a kulcs van.</li>
+            </ul>
+
+            <p>A fenti két megoldás közül az utóbbi tűnik jó felhasználói élményt nyújtónak, mert <b>csak a mozgás befejezése után</b> veszi fel a kulcsot. Ezzel szemben az ütközés már a szomszédos mezőről történő lépés megkezdésekor felveszi (eltünteti) a kulcsot, ami kevésbé életszerű. Ezért minden lépés után (vagyis akkor, amikor már <span class="kodreszlet">!mozog</span>) vizsgáljuk meg, hogy valamelyik kulccsal egyazon mezőn tartózkodunk-e! Ha igen, akkor az adott logikai változót állítsuk igazra. Ehhez hozzuk létre az <span class="kodreszlet">arany_begyűjtve</span>, az <span class="kodreszlet">ezüst_begyűjtve</span> és a <span class="kodreszlet">bronz_begyűjtve</span> logikai változókat <span class="kodreszlet">false</span> kezdőértékkel. A kulcsok begyűjtésének <b>sorrend</b>jéről úgy gondoskodhatunk, hogy az aranykulcs begyűjtésének pillanatában egyik kulcs megléte sem szükséges, azonban az esüst kulcs begyűjtése csak akkor lehetséges, ha megvan az aranykulcs, valamint a bronz kulcs begyűjtésének előfeltétele az aranykulcs és az ezüstkulcs megléte.</p>
+
+            <pre>
+                <code>
+// egyéb változók
+let falak = [];
+let szellemek = [];
+let billentyűk = [];
+
+let mozog = false;
+let győzelem = false;
+let vereség = false;
+<span class="kodkiemeles">let arany_begyűjtve = false;
+let ezüst_begyűjtve = false;
+let bronz_begyűjtve = false;</span>
+                </code>
+            </pre>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // Billentyűk figyelése
+    ...
+
+    // mágus csúsztatása
+    ...
+
+    // kulcsok félvétele
+    <span class="kodkiemeles">if(!mozog && pálya[mágus.y][mágus.x] == "A"){
+        arany_begyűjtve = true;
+    }
+    if(!mozog && pálya[mágus.y][mágus.x] == "E" && arany_begyűjtve){
+        ezüst_begyűjtve = true;
+    }
+    if(!mozog && pálya[mágus.y][mágus.x] == "B" && arany_begyűjtve && ezüst_begyűjtve){
+        bronz_begyűjtve = true;
+    }</span>
+
+    // ládika kinyitása
+    
+
+    // szellemek mozgása
+    
+
+    // játék vége
+    
+}
+                </code>
+            </pre>
+
+            <p>Hogy meggyőződjünk arról, tényleg felvesszük-e a kulcsot, kiírhatjuk a <span class="kodreszlet"><i>valamilyenKulcs</i>_begyűjtve</span> változók értékét a console-ra. Ha igazra vált, akkor rendben van.</p>
+
+            <p>A mintajátékban azt láthatjuk, hogy a begyűjtés pillanatában átkerülnek a kulcsok a játéktér bal felső sarkába, itt sorakoznak fel. Vagyis a kulcsok kirajzolásnának helye a begyűjtés állapotát tároló változók értékétől függ. Valósítsuk meg ezt a kulcsok kirajzolását leíró kódrészletben:</p>
+
+            <pre>
+                <code>
+function rajzolás() {
+    // háttér
+    ...
+
+    // falak
+    ...
+
+    //kulcsok
+    <span class="kodkiemeles">if(!arany_begyűjtve){</span>
+        ctx.drawImage(képek.kulcs_arany, arany.x * M, arany.y * M, arany.szélesség, arany.magasság);
+    <span class="kodkiemeles">} else {
+        ctx.drawImage(képek.kulcs_arany, 0 * M, 0 * M, arany.szélesség, arany.magasság);
+    }
+    if(!ezüst_begyűjtve){</span>
+        ctx.drawImage(képek.kulcs_ezüst, ezüst.x * M, ezüst.y * M, ezüst.szélesség, ezüst.magasság);
+    <span class="kodkiemeles">} else {
+        ctx.drawImage(képek.kulcs_ezüst, 1 * M, 0 * M, ezüst.szélesség, ezüst.magasság);
+    }
+    if(!bronz_begyűjtve){</span>
+        ctx.drawImage(képek.kulcs_bronz, bronz.x * M, bronz.y * M, bronz.szélesség, bronz.magasság);
+    <span class="kodkiemeles">} else {
+        ctx.drawImage(képek.kulcs_bronz, 2 * M, 0 * M, bronz.szélesség, bronz.magasság);
+    }</span>
+    ...
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/kincs-kulcsok-begyujtve.png">
+                    <figcaption>A kulcsok kirajzolása a játéktér bal felső sarkában a begyűjtés után</figcaption>
+                </figure>
+            </div>
+            
+            <h4>A ládika kinyitása</h4>
+
+            <p>A ládika kinyitása csak akkor lehetséges, amikor a vele megegyező mezőre lépés pillanatában rendelkezünk mindhárom kulccsal. Ekkor a <span class="kodreszlet">győzelem</span> változó értéke legyen igaz:</p>
+
+            <pre>
+                <code>
+function frissítés(dt) {
+    // Billentyűk figyelése
+    ...
+
+    // mágus csúsztatása
+    ...
+
+    // kulcsok félvétele
+    ...
+
+    // ládika kinyitása
+    <span class="kodkiemeles">if(!mozog && pálya[mágus.y][mágus.x] == "C" && arany_begyűjtve && ezüst_begyűjtve && bronz_begyűjtve){
+        győzelem = true;
+    }</span>
+
+    // szellemek mozgása
+    
+
+    // játék vége
+    
+}
+                </code>
+            </pre>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/kincs-ladika-kinyitasa.png">
+                    <figcaption>A ládika kinyitása</figcaption>
+                </figure>
+            </div>
+
+
+            <h4>A szellemek mozgása</h4>
+
+            <p>Mozgassuk meg a szellemeket is! A szellemek mozgása <b>kétféle</b>: vízszintes és függőleges. Legyen minden páratlan szellem mozgása függőleges, minden párosé pedig vízszintes.</p>
+
+            <div class="megjegyzes">
+                <p><b>💭Megjegyzés</b></p>
+                <p>Honnan tudjuk, hogy egy szellem páros vagy páratlan? Ezt a tömbben elfoglalt helye mutatja meg. Pontosabban a szellem indexe. S hogy honnan tudjuk, hogy egy szellemnek mi az indexe? Lekérdezzük a <span class="kodreszlet"><i>tömb</i>.indexOf(<i>tömbelem</i>)</span> paranccsal. Honnan tudjuk eldönteni egy számról, hogy az páros vagy páratlan? Onnan, hogy ha az indexének 2-vel történő osztási maradéka 0, akkor páros, különben páratlan. Az osztási maradék megismeréséhez a <span class="kodreszlet">%</span> osztási műveletet kell használnunk.</p>
+            </div>
+
+            <p>A fenti magyarázat értelmében az alábbi vizsgálatot kell elvégezni a <span class="kodreszlet">frissítés(dt)</span> függvényben minden szellem esetén.</p>
+
+            <pre>
+                <code>
+// szellemek mozgása
+<span class="kodkiemeles">szellemek.forEach(szellem => {
+    if(szellemek.indexOf(szellem) % 2 == 1) {
+        szellem.y += szellem.hi * dt * 2;
+    } else {
+        szellem.x += szellem.hi * dt;
+    }
+});</span>
+                </code>
+            </pre>
+
+            <p>Hoppá! A szellemek kimennek a játéktérről! Akadályozzuk ezt meg egy újabb feltétel hozzáadásával.</p>
+
+            <div class="kepsor">
+                <figure>
+                    <img src="képek/kincs-szellem-kimegy.gif">
+                    <figcaption>A szellemek elhagyják a játékteret</figcaption>
+                </figure>
+            </div>
+
+            <pre>
+                <code>
+// szellemek mozgása
+szellemek.forEach(szellem => {
+    if(szellemek.indexOf(szellem) % 2 == 1) {
+        szellem.y += szellem.hi * dt * 2;
+    } else {
+        szellem.x += szellem.hi * dt;
+    }
+    <span class="kodkiemeles">falak.forEach(fal => {
+        if(ütköznek(szellem, fal)) {
+            szellem.hi *= -1;
+        }
+    });</span>
+});
+                </code>
+            </pre>
+
+            <h4>Vereség</h4>
+
+            <p>Ha szellemmel ütközünk, akkor veszítünk, ezért minden szellem esetén folyamatosan vizsgáljuk, hogy ütköznek-e a <span class="kodreszlet">mágus</span>sal! Ha igen, a <span class="kodreszlet">vereség</span> változó legyen igaz!</p>
+
+            <pre>
+                <code>
+// játék vége
+<span class="kodkiemeles">szellemek.forEach(szellem => {
+    if(ütköznek(szellem, mágus)) {
+        vereség = true;
+    }
+});</span>
+                </code>
+            </pre>
+
+            <h4>A játék vége</h4>
+
+            <p>Akár nyerünk, akár veszítünk, a játék álljon le!</p>
+
+            <pre>
+                <code>
+/* === ANIMÁCIÓS CIKLUS === */
+
+let előzőIdő = performance.now();
+
+következő(); // az animáció elindítása
+
+function következő() {
+    aktuálisIdő = performance.now();
+    let dt = (aktuálisIdő - előzőIdő) / 1000;
+    előzőIdő = aktuálisIdő;
+    frissítés(dt); // állapottér frissítése
+    rajzolás(); // képkocka újrarajzolása
+    <span class="kodkiemeles">if(!vereség && !győzelem) {</span>
+        requestAnimationFrame(következő);
+    <span class="kodkiemeles">}</span>
+}
+                </code>
+            </pre>
+
+            <p>A játék végén a ládika eltűnik, hiszen kinyitottuk, ezért a kirajzolásának lesz egy feltétele: csak akkor rajzoljuk ki, ha még nem nyertünk és nem veszítettünk.</p>
+
+            <pre>
+                <code>
+//ládika
+<span class="kodkiemeles">if(!győzelem && !vereség){</span>
+    ctx.drawImage(képek.ládika_zárt, ládika.x * M, ládika.y * M, ládika.szélesség, ládika.magasság);
+<span class="kodkiemeles">}</span>
+                </code>
+            </pre>
+
+            <p>Ha a játék véget ér, akkor a mágus és a szellem is eltűnik.</p>
+
+            <pre>
+                <code>
+// mágus
+<span class="kodkiemeles">if(!győzelem && !vereség){</span>
+    ctx.drawImage(képek.mágus, mágus.x * M, mágus.y * M, mágus.szélesség, mágus.magasság);
+<span class="kodkiemeles">}</span>
+
+// szellemek
+<span class="kodkiemeles">if(!győzelem && !vereség){</span>
+    szellemek.forEach(szellem => {
+        ctx.drawImage(képek.szellem, szellem.x * M, szellem.y * M, szellem.szélesség, szellem.magasság);
+    });
+<span class="kodkiemeles">}</span>
+                </code>
+            </pre>
+
+            <p>Attól függően, hogy nyertünk vagy veszítettünk, jelenjen meg újra a mágus vagy a szellem a felirat alatt.</p>
+
+            <pre>
+                <code>
+// mágus
+if(!győzelem && !vereség){
+    ctx.drawImage(képek.mágus, mágus.x * M, mágus.y * M, mágus.szélesség, mágus.magasság);
+} <span class="kodkiemeles">else if (győzelem) {
+    ctx.drawImage(képek.mágus, 230, 250, mágus.szélesség * 3, mágus.magasság * 3);
+}</span>
+
+// szellemek
+if(!győzelem && !vereség){
+    szellemek.forEach(szellem => {
+        ctx.drawImage(képek.szellem, szellem.x * M, szellem.y * M, szellem.szélesség, szellem.magasság);
+    });
+} <span class="kodkiemeles">else if (vereség) {
+    ctx.drawImage(képek.szellem, 230, 250, M * 3, M * 3);
+}</span>
+                </code>
+            </pre>
+
+            <p>Ezennel elkészültünk a teljes játékkal.</p>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladat</b><br>Alakítsd ki a saját pályádat saját akadályokkal a <a href="https://stmn.itch.io/ascii-map-editor" target="_blank">ASCII Map Editor</a> oldal segítségével. Ezen az oldalon beállíthatod, hányszor hanyas játékteret szeretnél, valamint egy speciális karakterrel fel is töltheted a cellákat. A "<b>switch format</b>" funkcióval válaszd ki azt a formátumot, ami tömbben (<span class="kodreszlet">[ ]</span>) tárolja a pályát.</p>
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/kincs-ascii-map-editor.png">
+                        <figcaption>Az ASCII Map Editor szerkesztőfelülete</figcaption>
+                    </figure>
+                </div>
+                <p>Az "<b>Extra features</b>" kipipálásával lehetőség van útvesztőt vagy kazamatát generálni.</p>
+                <div class="kepsor">
+                    <figure>
+                        <img src="képek/kincs-ascii-map-editor-generator.png">
+                        <figcaption>Pálya generálása az ASCII Map Editor szerkesztőfelületén</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="képek/kincs-maze-generator.png">
+                        <figcaption>Generált ASCII útvesztő</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="képek/kincs-dungeon-generator.png">
+                        <figcaption>Generált ASCII kazamata</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <div  class="feladatextra">
+                <p><b>✨EXTRA Feladat</b><br>A játék végén jelenjen meg egy <b>gomb</b>, amivel újra lehet kezdeni a játékot! 🔄️</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>
